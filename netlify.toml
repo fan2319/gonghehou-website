@@ -24,7 +24,4 @@
   [headers.values]
     Cache-Control = "no-cache"
 
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+# 不要加 /*  -> /index.html 200 的 SPA 重写，纯静态站用不上，会把 /admin/ 吞掉

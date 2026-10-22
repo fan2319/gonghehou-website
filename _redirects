@@ -1,1 +1,2 @@
-/*    /index.html   200
+# 纯静态站：不需要 SPA fallback
+# 留空即可，别写 /*  /index.html  200 —— 那会让 /admin/ 被吞掉
