@@ -1,0 +1,130 @@
+{
+  "hero_titles": {
+    "zh": "九江昭盛元科技有限公司",
+    "en": "Jiujiang Zhaoshengyuan Technology Co., Ltd.",
+    "ru": "ООО «Цзюцзян Чжаошэнъюань Технологии»"
+  },
+  "hero_subs": {
+    "zh": "跨境供应链 · 进出口代理 · 产地直采的中国货源伙伴",
+    "en": "Cross-border Supply Chain · Import & Export Agency · Your Sourcing Partner in China",
+    "ru": "Трансграничная логистика · ВЭД-агент · Партнёр по закупкам в Китае"
+  },
+  "hero_img": "assets/img/hero-bg.jpg",
+
+  "about_titles": {
+    "zh": "关于我们", "en": "About Us", "ru": "О компании"
+  },
+  "about_descs": {
+    "zh": "九江昭盛元科技有限公司注册于江西省九江市修水县。公司以供应链管理服务为核心，具备货物进出口、技术进出口与进出口代理经营资质，可自营并代理各类商品与技术的进出口业务。我们立足产地，做采购方与中国制造之间的那一段：选品、验货、集货、报关、运输、清关派送。",
+    "en": "Jiujiang Zhaoshengyuan Technology Co., Ltd. is registered in Xiushui County, Jiujiang, Jiangxi. Supply-chain management is our core business, and we are licensed for the import and export of goods and technology as well as import-export agency. Based at the source, we handle the stretch between a buyer and Chinese manufacturing: sourcing, inspection, consolidation, customs clearance, shipping, and last-mile delivery.",
+    "ru": "ООО «Цзюцзян Чжаошэнъюань Технологии» зарегистрировано в уезде Сюшуй, Цзюцзян, провинция Цзянси. Основное направление — управление цепями поставок; имеются лицензии на импорт и экспорт товаров и технологий, а также на агентскую ВЭД-деятельность. Мы находимся у источника и закрываем участок между покупателем и китайским производством: подбор, инспекция, консолидация, таможня, перевозка, доставка."
+  },
+  "about_img": "assets/img/about-2.jpg",
+
+  "qual_items": [
+    { "zh": "货物进出口", "en": "Import & export of goods", "ru": "Импорт и экспорт товаров" },
+    { "zh": "技术进出口", "en": "Import & export of technology", "ru": "Импорт и экспорт технологий" },
+    { "zh": "进出口代理", "en": "Import-export agency", "ru": "Агентская ВЭД-деятельность" },
+    { "zh": "供应链管理服务", "en": "Supply-chain management", "ru": "Управление цепями поставок" },
+    { "zh": "区块链技术相关软件和服务（非金融类）", "en": "Blockchain software & services (non-financial)", "ru": "Блокчейн-ПО и услуги (не финансовые)" },
+    { "zh": "工艺美术品及收藏品零售", "en": "Retail of arts, crafts & collectibles", "ru": "Розничная торговля изделиями искусства" }
+  ],
+  "qual_note": {
+    "zh": "以上均取自公司经营范围，可在国家企业信用信息公示系统核验。统一社会信用代码 91360424MAKJBPTM33。区块链相关服务仅限溯源防伪与单据存证，不涉及任何虚拟货币、代币发行或支付结算业务。",
+    "en": "All items above are taken from the company's registered business scope and can be verified on the National Enterprise Credit Information Publicity System. Unified Social Credit Code 91360424MAKJBPTM33. Blockchain-related services are limited to traceability, anti-counterfeiting and document attestation — no virtual currency, token issuance or payment settlement involved.",
+    "ru": "Все пункты взяты из зарегистрированного вида деятельности и проверяются в Национальной системе раскрытия корпоративной информации. Единый социальный код 91360424MAKJBPTM33. Услуги блокчейна ограничиваются прослеживаемостью, защитой от подделки и подтверждением документов — без виртуальных валют, выпуска токенов и платежей."
+  },
+
+  "cap_title": { "zh": "我们能做什么", "en": "What We Do", "ru": "Что мы делаем" },
+  "cap_lead": {
+    "zh": "从选品到清关派送，七个环节，一个对接人。",
+    "en": "From sourcing to customs clearance and delivery — seven steps, one point of contact.",
+    "ru": "От подбора до таможни и доставки — семь этапов, один контакт."
+  },
+  "cap_items": [
+    { "zh": "需求确认：品类、规格、目标市场、合规要求", "en": "Requirements: category, spec, target market, compliance", "ru": "Требования: категория, ТЗ, рынок, комплаенс" },
+    { "zh": "选品采购：产地直采，多家工厂比价与打样", "en": "Sourcing: direct from origin, multi-factory comparison", "ru": "Подбор: напрямую от источника, сравнение фабрик" },
+    { "zh": "验货质检：出货前检验，支持第三方验货", "en": "Inspection: pre-shipment check, third-party accepted", "ru": "Инспекция: проверка перед отгрузкой" },
+    { "zh": "仓储集货：多供应商货物合并，降低头程成本", "en": "Consolidation: merge suppliers to cut first-leg cost", "ru": "Консолидация: объединение поставщиков" },
+    { "zh": "出口报关：单证准备与申报", "en": "Export clearance: documentation and declaration", "ru": "Экспортная таможня: документы и декларирование" },
+    { "zh": "国际运输：海运 / 铁路 / 空运 / 公路", "en": "Transport: sea / rail / air / road", "ru": "Перевозка: море / ж/д / авиа / авто" },
+    { "zh": "清关派送：目的港清关与末端配送", "en": "Destination: customs clearance and last mile", "ru": "Назначение: таможня и последняя миля" }
+  ],
+  "cap_note": {
+    "zh": "时效与费用随季节、政策、舱位与目的国波动，我们不标示固定报价——请在询盘中说明品类、体积重量与目的港，我们给出实时方案。",
+    "en": "Transit times and costs move with season, policy, capacity and destination. We do not publish fixed rates — tell us the category, volume, weight and destination port and we will quote in real time.",
+    "ru": "Сроки и стоимость зависят от сезона, правил, наличия мест и страны назначения. Фиксированных тарифов не публикуем — укажите категорию, объём, вес и порт назначения."
+  },
+
+  "why_title": { "zh": "为什么选择我们", "en": "Why Work With Us", "ru": "Почему мы" },
+  "why_items": [
+    { "title": { "zh": "进出口资质齐备", "en": "Fully licensed for trade", "ru": "Полный набор лицензий" },
+      "text": { "zh": "经营范围含货物进出口、技术进出口与进出口代理，可直接组织跨境交付。", "en": "Our scope covers goods, technology and agency — we can organise cross-border delivery directly.", "ru": "Вид деятельности включает товары, технологии и агентскую ВЭД." } },
+    { "title": { "zh": "产地直采", "en": "Source-direct procurement", "ru": "Закупка у источника" },
+      "text": { "zh": "注册地位于修水县茶叶产区，减少中间环节。", "en": "Registered in Xiushui, a tea-producing county — fewer middlemen.", "ru": "Регистрация в чаепроизводящем уезде Сюшуй — меньше посредников." } },
+    { "title": { "zh": "供应链管理是主业", "en": "Supply chain is our core", "ru": "Управление поставками — профиль" },
+      "text": { "zh": "供应链管理服务在册，不是兼营。", "en": "Supply-chain management is registered as our core business, not a side line.", "ru": "Управление цепями поставок — основной вид деятельности." } },
+    { "title": { "zh": "溯源与单据存证", "en": "Traceability & attestation", "ru": "Прослеживаемость" },
+      "text": { "zh": "区块链相关服务用于溯源防伪与单据存证，非金融类，合规可控。", "en": "Blockchain services used only for traceability and document attestation — non-financial and compliant.", "ru": "Блокчейн только для прослеживаемости и документов — не финансовый." } },
+    { "title": { "zh": "多品类可拓展", "en": "Multi-category, extensible", "ru": "Мультикатегорийность" },
+      "text": { "zh": "茶叶已落地，瓷器与机电泵阀陆续上架，一个窗口对接多个品类。", "en": "Tea is live; porcelain and pumps are coming — one window for several categories.", "ru": "Чай уже доступен, фарфор и насосы — в работе." } },
+    { "title": { "zh": "中俄双语直接沟通", "en": "Direct contact in RU / EN / ZH", "ru": "Прямая связь на RU / EN / ZH" },
+      "text": { "zh": "俄罗斯号码与 Telegram 直达，不用等邮件来回。", "en": "A Russian phone number and Telegram — no waiting on email threads.", "ru": "Российский номер и Telegram — без долгой переписки." } }
+  ],
+
+  "term_title": { "zh": "合作条款", "en": "Terms of Trade", "ru": "Условия сотрудничества" },
+  "term_items": [
+    { "title": { "zh": "起订量", "en": "Minimum order", "ru": "Минимальный заказ" },
+      "text": { "zh": "按品类、规格与定制程度而定，现货低于定制。请以询盘确认为准。", "en": "Depends on category, spec and customisation; stock is lower than custom. Confirm by enquiry.", "ru": "Зависит от категории и ТЗ; сток ниже кастома." } },
+    { "title": { "zh": "样品", "en": "Samples", "ru": "Образцы" },
+      "text": { "zh": "支持寄样。样品费与运费按实际结算，大单确认后可抵扣货款。", "en": "Samples available; cost settled at actuals and credited against a confirmed bulk order.", "ru": "Образцы предоставляются; затраты засчитываются при заказе." } },
+    { "title": { "zh": "打样与交期", "en": "Sampling & lead time", "ru": "Образцы и сроки" },
+      "text": { "zh": "常规规格现货即发；定制包装确认设计稿后排产，周期下单前明确告知。", "en": "Standard specs ship from stock; custom packaging scheduled after artwork approval.", "ru": "Стандарт со склада; кастом после утверждения макета." } },
+    { "title": { "zh": "支付方式", "en": "Payment", "ru": "Оплата" },
+      "text": { "zh": "对公转账、信用证。新客户首单款到发货，长期客户可协商账期。", "en": "Bank transfer and L/C. First order prepaid; terms negotiable for long-term partners.", "ru": "Перевод и аккредитив. Первый заказ — предоплата." } },
+    { "title": { "zh": "包装与贴牌", "en": "Packaging & private label", "ru": "Упаковка и СТМ" },
+      "text": { "zh": "支持 LOGO 加印、包装设计与贴牌代工。使用客户商标需提供证明文件。", "en": "Logo printing, packaging design, contract manufacturing. Own trademark requires proof.", "ru": "Нанесение логотипа, разработка упаковки, СТМ." } },
+    { "title": { "zh": "出口与单证", "en": "Export & documents", "ru": "Экспорт и документы" },
+      "text": { "zh": "可提供营业执照、检测报告、原产地证及出口报关单证。", "en": "Business licence, test reports, certificate of origin and customs papers.", "ru": "Лицензии, протоколы, сертификат происхождения, таможня." } }
+  ],
+  "term_note": {
+    "zh": "本页条款为通用说明，不构成报价或要约。具体以正式合同为准。",
+    "en": "This page is general information and does not constitute an offer. The confirmed contract prevails.",
+    "ru": "Страница носит информационный характер и не является офертой."
+  },
+
+  "faq_list": [
+    { "q": { "zh": "你们是生产厂家还是贸易公司？", "en": "Are you a manufacturer or a trading company?", "ru": "Вы производитель или торговая компания?" },
+      "a": { "zh": "我们是供应链服务商，持有货物进出口、技术进出口与进出口代理资质。茶叶由修水本地持证生产企业供货，我们负责选品、验货、集货与出口交付。", "en": "We are a supply-chain service provider licensed for import and export of goods and technology, and for import-export agency. Tea is supplied by licensed local manufacturers in Xiushui; we handle sourcing, inspection, consolidation and export delivery.", "ru": "Мы — поставщик услуг в сфере цепей поставок с лицензиями на импорт/экспорт и агентскую ВЭД. Чай поставляют лицензированные местные производители Сюшуй; мы отвечаем за подбор, инспекцию, консолидацию и экспорт." } },
+    { "q": { "zh": "茶叶能否做袋泡茶、果茶、花草茶？", "en": "Can you supply tea bags, fruit and herbal teas?", "ru": "Поставляете ли пакетики, фруктовые и травяные чаи?" },
+      "a": { "zh": "可以。供货生产企业的食品生产许可证许可范围明确涵盖袋泡茶、调味茶（混合调味茶）、代用茶（叶类／花类／混合类）。", "en": "Yes. The supplying manufacturer's food production licence explicitly covers tea bags, blended (flavoured) tea and herbal tea (leaf / flower / blended).", "ru": "Да. Лицензия производителя явно покрывает пакетированный, купажированный и травяной чай." } },
+    { "q": { "zh": "你们涉及虚拟货币或区块链金融业务吗？", "en": "Do you deal in crypto or blockchain finance?", "ru": "Работаете ли вы с криптовалютой?" },
+      "a": { "zh": "不涉及。我们的区块链相关服务仅限溯源防伪与单据存证，属于非金融类，不涉及任何虚拟货币、代币发行或支付结算。", "en": "No. Blockchain-related services are limited to traceability, anti-counterfeiting and document attestation — non-financial, with no virtual currency, token issuance or payment settlement.", "ru": "Нет. Блокчейн-услуги ограничены прослеживаемостью и документами — без криптовалют и платежей." } },
+    { "q": { "zh": "除了茶叶，还能供应什么？", "en": "What else besides tea?", "ru": "Что ещё, кроме чая?" },
+      "a": { "zh": "瓷器与机电泵阀正在上架中。经营范围含工艺美术品及收藏品零售，可承接相关品类的询盘与打样。", "en": "Porcelain and pumps are being added. Our scope includes retail of arts, crafts and collectibles, so related enquiries and sampling are welcome.", "ru": "Фарфор и насосы добавляются. Вид деятельности включает розницу изделий искусства." } },
+    { "q": { "zh": "最小起订量是多少？", "en": "What is the MOQ?", "ru": "Каков минимальный заказ?" },
+      "a": { "zh": "按品类、规格与定制程度而定，现货门槛低于定制单。请在询盘中说明采购规模与销售渠道。", "en": "Depends on category, spec and customisation; stock items lower than custom runs. State your volume and channel in your enquiry.", "ru": "Зависит от категории и ТЗ. Укажите объём и канал в запросе." } },
+    { "q": { "zh": "运输方式与时效？", "en": "Shipping modes and transit times?", "ru": "Способы перевозки и сроки?" },
+      "a": { "zh": "海运、铁路、空运、公路均可安排。时效与费用随季节、政策、舱位与目的国波动，我们不标示固定报价，请联系获取实时方案。", "en": "Sea, rail, air and road are all available. Transit times and costs vary with season, policy, capacity and destination — we publish no fixed rates, please ask for a live quote.", "ru": "Море, ж/д, авиа, авто. Сроки и стоимость варьируются — запрашивайте актуальный расчёт." } },
+    { "q": { "zh": "能否出口俄罗斯？需要哪些单证？", "en": "Can you ship to Russia? What documents?", "ru": "Возможна ли поставка в Россию?" },
+      "a": { "zh": "可以。可提供营业执照、检测报告、原产地证及出口报关单证，并按目的国农残限量与检疫标准执行。", "en": "Yes. We supply business licence, test reports, certificate of origin and customs papers, and follow destination residue limits and phytosanitary rules.", "ru": "Да. Предоставляем документы и соблюдаем нормы страны назначения." } },
+    { "q": { "zh": "合作流程是怎样的？", "en": "How does the process work?", "ru": "Как проходит сотрудничество?" },
+      "a": { "zh": "需求确认 → 选品采购 → 验货质检 → 仓储集货 → 出口报关 → 国际运输 → 清关派送。全程一个对接人。", "en": "Requirements → sourcing → inspection → consolidation → export clearance → transport → clearance and delivery. One contact throughout.", "ru": "Требования → подбор → инспекция → консолидация → таможня → перевозка → доставка." } }
+  ],
+
+  "contact_phone_cn": "+86 188 7925 9179",
+  "contact_phone_ru": "+7 911 706 7084",
+  "contact_email_1": "fanwh188@gmail.com",
+  "contact_email_2": "m18879259179@163.com",
+  "contact_wechat": "AriFan02",
+  "contact_addr": {
+    "zh": "江西省九江市修水县",
+    "en": "Xiushui County, Jiujiang, Jiangxi, China",
+    "ru": "уезд Сюшуй, Цзюцзян, провинция Цзянси, Китай"
+  },
+  "footer_note": {
+    "zh": "九江昭盛元科技有限公司 · 统一社会信用代码 91360424MAKJBPTM33",
+    "en": "Jiujiang Zhaoshengyuan Technology Co., Ltd. · USCC 91360424MAKJBPTM33",
+    "ru": "ООО «Цзюцзян Чжаошэнъюань Технологии» · ЕСКК 91360424MAKJBPTM33"
+  }
+}

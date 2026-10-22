@@ -3,10 +3,223 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>公和厚 - 后台管理</title>
+  <title>昭盛元 · 后台管理</title>
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
+  <!-- Decap CMS 用 React 渲染预览面板，这里先加载同版本 React 供预览模板使用 -->
+  <script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin></script>
+
+  <style>
+    /* 预览面板里的视觉，与前台保持一致的观感 */
+    .zsy-preview { padding: 16px; font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; color: #152233; background: #f5f7fa; min-height: 100%; }
+    .zsy-preview h3.sec { font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase; color: #c8a55b; margin: 22px 0 10px; font-weight: 700; }
+    .zsy-preview h3.sec:first-child { margin-top: 0; }
+    .zsy-preview .hero-p { background: linear-gradient(140deg,#0f2438,#245a7a); color: #fff; border-radius: 12px; padding: 28px 22px; text-align: center; }
+    .zsy-preview .hero-p h1 { font-size: 22px; margin: 0 0 8px; line-height: 1.3; }
+    .zsy-preview .hero-p p { font-size: 14px; opacity: .9; margin: 0; }
+    .zsy-preview .card-p { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(20,40,60,.1); margin-bottom: 14px; display: flex; }
+    .zsy-preview .card-p .img { width: 130px; flex: 0 0 130px; background: #eef1f5; }
+    .zsy-preview .card-p .img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .zsy-preview .card-p .body { padding: 14px 16px; flex: 1; min-width: 0; }
+    .zsy-preview .card-p .cat { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: #c8a55b; font-weight: 700; }
+    .zsy-preview .card-p h4 { margin: 4px 0 2px; font-size: 16px; color: #1a3a5c; }
+    .zsy-preview .card-p .sub { font-size: 12px; color: #6b7a8a; font-weight: 600; display: block; margin-bottom: 8px; }
+    .zsy-preview .card-p p { font-size: 13px; color: #6b7a8a; line-height: 1.7; margin: 0 0 8px; }
+    .zsy-preview .card-p ul { list-style: none; padding: 0; margin: 0; }
+    .zsy-preview .card-p ul li { font-size: 12px; color: #6b7a8a; padding: 2px 0; }
+    .zsy-preview .card-p ul li b { color: #152233; margin-right: 6px; }
+    .zsy-preview .off { opacity: .5; filter: grayscale(1); }
+    .zsy-preview .badge { display: inline-block; background: #eee; color: #888; font-size: 11px; padding: 2px 8px; border-radius: 4px; margin-left: 8px; }
+    .zsy-preview .row { background: #fff; border-radius: 8px; padding: 12px 14px; margin-bottom: 8px; border-left: 3px solid #c8a55b; }
+    .zsy-preview .row b { display: block; color: #1a3a5c; font-size: 14px; margin-bottom: 3px; }
+    .zsy-preview .row span { font-size: 13px; color: #6b7a8a; line-height: 1.7; }
+    .zsy-preview .hint { font-size: 12px; color: #8a96a4; background: #fff; border: 1px dashed #dde3ea; border-radius: 8px; padding: 12px 14px; margin-top: 16px; line-height: 1.7; }
+    .zsy-preview .langbar { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+    .zsy-preview .langbar span { font-size: 11px; background: #1a3a5c; color: #fff; padding: 3px 10px; border-radius: 999px; }
+  </style>
 </head>
 <body>
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+  <script>
+  /* ============================================================
+     实时预览模板
+     —— 在后台编辑时，右侧面板按前台真实的排版渲染，
+        边打字边看到效果，不用保存、不用等 Netlify 重新部署。
+     ============================================================ */
+  (function () {
+    if (typeof CMS === 'undefined' || typeof React === 'undefined') return;
+    var h = React.createElement;
+
+    /* 取出 Decap 的条目数据（Immutable），转成普通 JS */
+    function val(entry, path, lang) {
+      try {
+        var node = entry;
+        for (var i = 0; i < path.length; i++) {
+          if (node == null) return '';
+          node = node.get ? node.get(path[i]) : node[path[i]];
+        }
+        if (node == null) return '';
+        if (typeof node === 'string') return node;
+        if (node.toJS) node = node.toJS();
+        if (typeof node === 'object') {
+          if (lang) return node[lang] || node.zh || node.en || node.ru || '';
+          return node;
+        }
+        return String(node);
+      } catch (e) { return ''; }
+    }
+    function arr(entry, path) {
+      try {
+        var node = entry;
+        for (var i = 0; i < path.length; i++) {
+          if (node == null) return [];
+          node = node.get ? node.get(path[i]) : node[path[i]];
+        }
+        if (node == null) return [];
+        if (node.toJS) node = node.toJS();
+        return Array.isArray(node) ? node : [];
+      } catch (e) { return []; }
+    }
+    function pick(v, lang) {
+      if (v == null) return '';
+      if (typeof v === 'string') return v;
+      return v[lang] || v.zh || v.en || v.ru || '';
+    }
+
+    /* 把相对路径补成可访问地址（CMS 预览里相对路径可能解析不到图片） */
+    function src(p) {
+      if (!p) return null;
+      if (p.indexOf('http') === 0 || p.indexOf('data:') === 0 || p.indexOf('blob:') === 0) return p;
+      return window.location.origin + '/' + p.replace(/^\/+/, '');
+    }
+
+    /* ---------- 产品中心预览 ---------- */
+    function ProductPreview(props) {
+      var e = props.entry;
+      var LANGS = ['zh', 'en', 'ru'];
+      var cats = arr(e, ['categories']);
+      var items = arr(e, ['products']).slice().sort(function (a, b) {
+        return (a.order || 99) - (b.order || 99);
+      });
+
+      return h('div', { className: 'zsy-preview' },
+        h('div', { className: 'hint' },
+          '实时预览 —— 左侧改动会立刻反映在这里。商品按「排序」数字从小到大排列；把「上架」取消勾选会在这里变灰，前台直接隐藏。'),
+
+        h('h3', { className: 'sec' }, '商品列表 (' + items.length + ')'),
+        items.map(function (p, i) {
+          var specs = (p.specs || []).map(function (s, j) {
+            return h('li', { key: j },
+              h('b', null, pick(s.k, 'zh')), pick(s.v, 'zh'));
+          });
+          return h('div', { className: 'card-p' + (p.published === false ? ' off' : ''), key: p.id || i },
+            h('div', { className: 'img' },
+              src(p.image) ? h('img', { src: src(p.image), alt: '' }) : null),
+            h('div', { className: 'body' },
+              h('span', { className: 'cat' }, p.category || '-'),
+              h('h4', null, pick(p.name, 'zh'),
+                p.published === false ? h('span', { className: 'badge' }, '已下架') : null),
+              h('span', { className: 'sub' }, pick(p.subtitle, 'zh')),
+              h('p', null, pick(p.desc, 'zh')),
+              specs.length ? h('ul', null, specs) : null,
+              h('div', { className: 'langbar' },
+                LANGS.map(function (L) {
+                  return h('span', { key: L }, L.toUpperCase() + ': ' + (pick(p.name, L) || '—'));
+                }))));
+        }),
+
+        h('h3', { className: 'sec' }, '品类分组'),
+        cats.map(function (c, i) {
+          return h('div', { className: 'row', key: c.key || i },
+            h('b', null, c.key || '(缺标识)'),
+            h('span', null, [c.zh, c.en, c.ru].filter(Boolean).join(' / ') || '—'));
+        })
+      );
+    }
+
+    /* ---------- 站点内容预览 ---------- */
+    function SitePreview(props) {
+      var e = props.entry;
+      return h('div', { className: 'zsy-preview' },
+        h('div', { className: 'hint' },
+          '实时预览 —— 首屏、关于、能力、条款、FAQ 均按前台样式渲染。中英俄三语都会显示，方便检查有没有漏翻。'),
+
+        h('h3', { className: 'sec' }, '首屏'),
+        h('div', { className: 'hero-p', style: val(e, ['hero_img']) ? {
+          backgroundImage: 'linear-gradient(180deg,rgba(15,36,56,.72),rgba(26,58,92,.82)),url(' + src(val(e, ['hero_img'])) + ')',
+          backgroundSize: 'cover', backgroundPosition: 'center'
+        } : null },
+          h('h1', null, val(e, ['hero_titles'], 'zh') || '（未填写）'),
+          h('p', null, val(e, ['hero_subs'], 'zh') || '')),
+        h('div', { className: 'langbar', style: { marginTop: '10px' } },
+          ['zh', 'en', 'ru'].map(function (L) {
+            return h('span', { key: L }, L.toUpperCase() + ': ' + (val(e, ['hero_titles'], L) || '—'));
+          })),
+
+        h('h3', { className: 'sec' }, '关于我们'),
+        h('div', { className: 'row' },
+          h('b', null, val(e, ['about_titles'], 'zh') || '（未填写）'),
+          h('span', null, val(e, ['about_descs'], 'zh') || '')),
+
+        h('h3', { className: 'sec' }, '经营范围 (' + arr(e, ['qual_items']).length + ')'),
+        arr(e, ['qual_items']).map(function (q, i) {
+          return h('div', { className: 'row', key: i }, h('span', null, pick(q, 'zh') || '—'));
+        }),
+
+        h('h3', { className: 'sec' }, '服务能力 (' + arr(e, ['cap_items']).length + ')'),
+        arr(e, ['cap_items']).map(function (c, i) {
+          return h('div', { className: 'row', key: i },
+            h('b', null, (i + 1) + '. ' + (pick(c, 'zh') || '—')));
+        }),
+
+        h('h3', { className: 'sec' }, '为什么选择我们 (' + arr(e, ['why_items']).length + ')'),
+        arr(e, ['why_items']).map(function (w, i) {
+          return h('div', { className: 'row', key: i },
+            h('b', null, pick(w && w.title, 'zh') || '—'),
+            h('span', null, pick(w && w.text, 'zh') || ''));
+        }),
+
+        h('h3', { className: 'sec' }, '合作条款 (' + arr(e, ['term_items']).length + ')'),
+        arr(e, ['term_items']).map(function (x, i) {
+          return h('div', { className: 'row', key: i },
+            h('b', null, pick(x && x.title, 'zh') || '—'),
+            h('span', null, pick(x && x.text, 'zh') || ''));
+        }),
+
+        h('h3', { className: 'sec' }, '常见问题 (' + arr(e, ['faq_list']).length + ')'),
+        arr(e, ['faq_list']).map(function (f, i) {
+          return h('div', { className: 'row', key: i },
+            h('b', null, pick(f && f.q, 'zh') || '—'),
+            h('span', null, pick(f && f.a, 'zh') || ''));
+        }),
+
+        h('h3', { className: 'sec' }, '联系方式'),
+        h('div', { className: 'row' },
+          h('span', null,
+            '电话：' + (val(e, ['contact_phone_cn']) || '—') + ' / ' + (val(e, ['contact_phone_ru']) || '—') +
+            '　邮箱：' + (val(e, ['contact_email_1']) || '—') +
+            '　微信：' + (val(e, ['contact_wechat']) || '—')))
+      );
+    }
+
+    try {
+      CMS.registerPreviewTemplate('products', ProductPreview);
+      CMS.registerPreviewTemplate('site', SitePreview);
+      /* 注入前台样式，让预览面板的观感和真实页面一致 */
+      CMS.registerPreviewStyle(window.location.origin + '/assets/css/style.css');
+    } catch (err) {
+      console.warn('预览模板注册失败，后台仍可正常使用（预览会退回默认样式）', err);
+    }
+  })();
+
+  /* Netlify Identity：从邀请邮件进来时，登录后自动跳回后台 */
+  if (window.netlifyIdentity) {
+    window.netlifyIdentity.on('init', function (user) {
+      if (!user) {
+        window.netlifyIdentity.on('login', function () { document.location.href = '/admin/'; });
+      }
+    });
+  }
+  </script>
 </body>
 </html>

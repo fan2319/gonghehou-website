@@ -1,226 +1,256 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-i18n="title">公和厚茶业 - 中国茶叶B2B供应商</title>
-    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-    <style>
-        :root { --primary: #2f5d3f; --gold: #c8a55b; --bg: #f8f9fa; --text-main: #212529; --text-light: #6c757d; --border: #dee2e6; }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg); color: var(--text-main); line-height: 1.6; scroll-behavior: smooth; }
-        a { text-decoration: none; color: inherit; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-        section { padding: 90px 0; }
-        .section-title { text-align: center; color: var(--primary); font-size: 2.2rem; margin-bottom: 50px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
-        
-        /* 导航栏 */
-        header.nav-header { position: fixed; top: 0; left: 0; width: 100%; background: rgba(255,255,255,0.95); backdrop-filter: blur(5px); border-bottom: 1px solid var(--border); z-index: 1000; height: 70px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        .nav-inner { display: flex; justify-content: space-between; align-items: center; height: 100%; }
-        .logo { font-size: 1.5rem; font-weight: 800; color: var(--primary); }
-        .nav-links { display: flex; gap: 25px; }
-        .nav-links a { font-size: 0.95rem; font-weight: 600; color: var(--text-main); transition: color 0.3s; }
-        .nav-links a:hover { color: var(--gold); }
-        .lang-switch button { background: none; border: 1px solid var(--primary); color: var(--primary); padding: 4px 10px; cursor: pointer; border-radius: 4px; font-size: 0.85rem; margin-left: 5px; font-weight: 600; }
-        .lang-switch button.active { background: var(--primary); color: #fff; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title id="pageTitle">九江昭盛元科技有限公司 | 跨境供应链 · 茶叶出口</title>
+<meta name="description" content="九江昭盛元科技有限公司：供应链管理服务、货物与技术进出口、进出口代理。茶叶产地直采，可选袋泡茶、果茶、花草茶与 OEM/ODM 贴牌代工。">
+<link rel="icon" href="assets/img/logo-zsy.png">
+<link rel="stylesheet" href="assets/css/style.css">
 
-        /* 首屏 Hero */
-        #hero { height: 80vh; display: flex; align-items: center; background-color: var(--primary); background-size: cover; background-position: center; position: relative; }
-        #hero::before { content: ''; position: absolute; top:0; left:0; right:0; bottom:0; background: linear-gradient(rgba(15,35,22,0.8), rgba(47,93,63,0.7)); z-index: 1; }
-        #hero .container { position: relative; z-index: 2; text-align: center; color: #fff; }
-        #hero h1 { font-size: 3.5rem; margin-bottom: 20px; color: var(--gold); font-weight: 800; }
-        #hero p { font-size: 1.3rem; max-width: 800px; margin: 0 auto 30px; opacity: 0.9; }
-        .btn-primary { display: inline-block; background: var(--gold); color: #fff; padding: 12px 30px; border-radius: 30px; font-weight: 700; text-transform: uppercase; transition: transform 0.3s; }
-        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="九江昭盛元科技有限公司">
+<meta property="og:title" content="九江昭盛元科技有限公司 | 跨境供应链 · 茶叶出口">
+<meta property="og:description" content="进出口资质齐备，产地直采。茶叶、瓷器、机电泵阀，一个窗口对接。">
+<meta property="og:image" content="assets/img/hero-bg.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#1a3a5c">
 
-        /* 产品与卡片设计升级 */
-        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px; }
-        .card { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.08); transition: transform 0.3s; }
-        .card:hover { transform: translateY(-5px); }
-        .card-img-wrapper { height: 250px; background: #eee; overflow: hidden; }
-        .card-img-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
-        .card:hover .card-img-wrapper img { transform: scale(1.05); }
-        .card-content { padding: 30px; }
-        .card-content h3 { color: var(--primary); font-size: 1.4rem; margin-bottom: 10px; }
-        .card-content .subtitle { color: var(--gold); font-size: 0.9rem; font-weight: 600; margin-bottom: 15px; display: block; }
-        .card-content p { color: var(--text-light); font-size: 0.95rem; margin-bottom: 20px; }
-        .btn-outline { display: block; text-align: center; border: 2px solid var(--primary); color: var(--primary); padding: 10px; border-radius: 6px; font-weight: 600; transition: all 0.3s; }
-        .btn-outline:hover { background: var(--primary); color: #fff; }
+<noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
 
-        /* 表格与表单基础样式保留 */
-        .table-wrapper { width: 100%; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { padding: 18px; text-align: left; border-bottom: 1px solid var(--border); }
-        th { background: var(--primary); color: #fff; font-weight: 600; }
-        .form-control { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 6px; margin-bottom: 20px; }
-        textarea.form-control { min-height: 120px; }
-        .submit-btn { background: var(--primary); color: #fff; border: none; padding: 15px; width: 100%; border-radius: 6px; font-size: 1.1rem; font-weight: 600; cursor: pointer; }
-    </style>
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org","@type":"Organization",
+  "name":"九江昭盛元科技有限公司",
+  "alternateName":"Jiujiang Zhaoshengyuan Technology Co., Ltd.",
+  "description":"供应链管理服务；货物进出口、技术进出口、进出口代理。茶叶产地直采与出口交付。",
+  "address":{"@type":"PostalAddress","addressLocality":"修水县","addressRegion":"江西省","addressCountry":"CN"},
+  "contactPoint":[
+    {"@type":"ContactPoint","telephone":"+86-188-7925-9179","contactType":"sales","availableLanguage":["zh","en","ru"]},
+    {"@type":"ContactPoint","telephone":"+7-911-706-7084","contactType":"sales","areaServed":"RU","availableLanguage":["ru","en"]}
+  ],
+  "email":"fanwh188@gmail.com"
+}
+</script>
 </head>
 <body>
 
-    <header class="nav-header">
-        <div class="container nav-inner">
-            <div class="logo">公和厚</div>
-            <nav class="nav-links">
-                <a href="#about" data-i18n="nav_about">关于</a>
-                <a href="#products" data-i18n="nav_products">产品</a>
-                <a href="#specs" data-i18n="nav_spec">规格与代工</a>
-                <a href="#contact" data-i18n="nav_contact">联系询盘</a>
-            </nav>
-            <div class="lang-switch">
-                <button onclick="changeLang('zh')" id="btn-zh">中</button>
-                <button onclick="changeLang('en')" id="btn-en">EN</button>
-                <button onclick="changeLang('ru')" id="btn-ru">RU</button>
-            </div>
-        </div>
-    </header>
+<!-- ================= 导航 ================= -->
+<header class="topbar" id="topbar">
+  <div class="container">
+    <a class="brand" href="#home">
+      <img src="assets/img/logo-zsy.png" alt="ZSY" onerror="this.style.display='none'">
+      <span class="txt">昭盛元<small>ZHAOSHENGYUAN</small></span>
+    </a>
+    <nav class="navlinks" id="navlinks">
+      <a href="#about"      data-i18n="nav.about"></a>
+      <a href="#products"   data-i18n="nav.products"></a>
+      <a href="#capability" data-i18n="nav.capability"></a>
+      <a href="#why"        data-i18n="nav.why"></a>
+      <a href="#terms"      data-i18n="nav.terms"></a>
+      <a href="#faq"        data-i18n="nav.faq"></a>
+      <a href="#contact"    data-i18n="nav.contact"></a>
+    </nav>
+    <div class="right">
+      <div class="langswitch" id="langswitch">
+        <button type="button" data-lang="zh">中文</button>
+        <button type="button" data-lang="en">EN</button>
+        <button type="button" data-lang="ru">RU</button>
+      </div>
+      <button class="navtoggle" id="navtoggle" aria-label="Menu">☰</button>
+    </div>
+  </div>
+</header>
 
-    <section id="hero">
-        <div class="container">
-            <h1 id="hero-title">江西公和厚茶业有限公司</h1>
-            <p id="hero-sub">源头直供 · 专业代工 · 真实可信的中国茶叶B2B合作伙伴</p>
-            <a href="#contact" class="btn-primary" data-i18n="hero_btn">发送询盘 Request a Quote</a>
-        </div>
-    </section>
+<!-- ================= 首屏 ================= -->
+<section id="home" class="hero">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="container hero-inner">
+    <p class="eyebrow" data-i18n="hero.eyebrow"></p>
+    <h1 id="heroTitle"></h1>
+    <p class="lead" id="heroSub"></p>
+    <div class="hero-cta">
+      <a class="btn primary" href="#products" data-i18n="hero.cta1"></a>
+      <a class="btn ghost" href="#contact" data-i18n="hero.cta2"></a>
+    </div>
+    <ul class="hero-facts">
+      <li><b>2016+</b><span data-i18n="hero.f1"></span></li>
+      <li><b>3</b><span data-i18n="hero.f2"></span></li>
+      <li><b>4</b><span data-i18n="hero.f3"></span></li>
+      <li><b>RU / CN</b><span data-i18n="hero.f4"></span></li>
+    </ul>
+  </div>
+</section>
 
-    <section id="about" class="container">
-        <h2 class="section-title" data-i18n="about_title">关于工厂 About Us</h2>
-        <div style="display: flex; gap: 40px; flex-wrap: wrap; align-items: center;">
-            <div style="flex: 1; min-width: 300px;">
-                <p id="about-desc" style="font-size: 1.1rem; color: var(--text-light); margin-bottom: 20px;">数据加载中...</p>
-                <p style="font-weight: 600; color: var(--primary);">✔ 8730 亩高山自有茶园<br>✔ SC11436042410016 生产许可<br>✔ 支持 OEM/ODM 全链路代工</p>
-            </div>
-            <div style="flex: 1; min-width: 300px; text-align: center;">
-                <img id="about-img" src="" style="width: 100%; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); display: none;">
-            </div>
-        </div>
-    </section>
+<!-- ================= 关于 ================= -->
+<section id="about">
+  <div class="container wrap-center">
+    <p class="eyebrow" data-i18n="about.label"></p>
+    <h2 class="title" id="aboutTitle"></h2>
+    <div class="divider"></div>
+  </div>
+  <div class="container aboutgrid">
+    <div class="about-img"><img id="aboutImg" src="" alt="About" style="display:none"></div>
+    <div>
+      <p class="about-desc" id="aboutDesc"></p>
+      <h4 class="sub-h" data-i18n="about.qualTitle"></h4>
+      <ul class="qual-list" id="qualList"></ul>
+      <p class="note" id="qualNote"></p>
+    </div>
+  </div>
+</section>
 
-    <!-- 核心升级：现代化的 B2B 产品展示目录 -->
-    <section id="products" style="background:#fff;">
-        <div class="container">
-            <h2 class="section-title" data-i18n="prod_title">核心出口产品 Core Products</h2>
-            <div class="grid-3">
-                <!-- 产品 1 -->
-                <div class="card">
-                    <div class="card-img-wrapper"><img id="p1-img" src="https://via.placeholder.com/400x300?text=Upload+Image+in+Admin" alt="Ninghong Tea"></div>
-                    <div class="card-content">
-                        <h3 data-i18n="p1_name">宁红茶 Ninghong Black Tea</h3>
-                        <span class="subtitle" data-i18n="p1_sub">中华老字号 · 特金奖</span>
-                        <p data-i18n="p1_desc">香气甜香馥郁，滋味鲜嫩浓醇。适合高端礼盒与商务定制。</p>
-                        <a href="#contact" class="btn-outline" data-i18n="btn_inquire">获取报价 / Get Quote</a>
-                    </div>
-                </div>
-                <!-- 产品 2 -->
-                <div class="card">
-                    <div class="card-img-wrapper"><img id="p2-img" src="https://via.placeholder.com/400x300?text=Upload+Image+in+Admin" alt="Shuangjing Green Tea"></div>
-                    <div class="card-content">
-                        <h3 data-i18n="p2_name">双井绿茶 Shuangjing Green Tea</h3>
-                        <span class="subtitle" data-i18n="p2_sub">草茶第一</span>
-                        <p data-i18n="p2_desc">清香持久，鲜爽回甘。支持散茶与各种包装规格定制出口。</p>
-                        <a href="#contact" class="btn-outline" data-i18n="btn_inquire">获取报价 / Get Quote</a>
-                    </div>
-                </div>
-                <!-- 产品 3 -->
-                <div class="card">
-                    <div class="card-img-wrapper"><img id="p3-img" src="https://via.placeholder.com/400x300?text=Upload+Image+in+Admin" alt="Lushan Yunwu Tea"></div>
-                    <div class="card-content">
-                        <h3 data-i18n="p3_name">庐山云雾茶 Lushan Yunwu</h3>
-                        <span class="subtitle" data-i18n="p3_sub">中国十大名茶</span>
-                        <p data-i18n="p3_desc">香凛持久，醇厚味甘。出口俄罗斯等欧洲市场热门选择。</p>
-                        <a href="#contact" class="btn-outline" data-i18n="btn_inquire">获取报价 / Get Quote</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+<!-- ================= 产品中心（后台增删改查） ================= -->
+<section id="products" class="alt">
+  <div class="container wrap-center">
+    <p class="eyebrow" data-i18n="prod.label"></p>
+    <h2 class="title" data-i18n="prod.title"></h2>
+    <div class="divider"></div>
+    <p class="lead" data-i18n="prod.lead"></p>
+  </div>
+  <div class="container">
+    <div class="catfilter" id="catFilter"></div>
+    <div class="prodgrid" id="prodGrid"></div>
+    <div class="empty-note" id="prodEmpty" style="display:none"></div>
+    <p class="note" data-i18n="prod.note"></p>
+  </div>
+</section>
 
-    <!-- 简化版询盘区 -->
-    <section id="contact" class="container">
-        <h2 class="section-title" data-i18n="ct_title">联系我们 Contact Us</h2>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px;">
-            <form id="inquiry-form" style="background: #fff; padding: 40px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
-                <h3 style="margin-bottom: 20px; color: var(--primary);" data-i18n="f_title">发送询盘 Send Inquiry</h3>
-                <input type="text" name="name" class="form-control" placeholder="姓名 Name *" required>
-                <input type="text" name="contact" class="form-control" placeholder="联系方式 Email / WhatsApp *" required>
-                <textarea name="msg" class="form-control" placeholder="留言 Message (如：采购量、OEM需求等)"></textarea>
-                <button type="submit" class="submit-btn" data-i18n="f_submit">提交 Submit</button>
-            </form>
-            <div style="padding: 40px;">
-                <h3 style="margin-bottom: 20px; color: var(--primary);">Direct Contact</h3>
-                <p style="font-size: 1.1rem; line-height: 2;">
-                    <strong>Email:</strong> <a href="mailto:fanwh188@gmail.com">fanwh188@gmail.com</a><br>
-                    <strong>Phone:</strong> +86 188 7925 9179<br>
-                </p>
-                <div style="margin-top: 30px; display: flex; gap: 15px;">
-                    <a href="https://t.me/Fan2399" target="_blank" class="btn-outline">Telegram</a>
-                    <a href="https://wa.me/79117067084" target="_blank" class="btn-outline">WhatsApp</a>
-                </div>
-            </div>
-        </div>
-    </section>
+<!-- ================= 能力 ================= -->
+<section id="capability">
+  <div class="container wrap-center">
+    <p class="eyebrow" data-i18n="cap.label"></p>
+    <h2 class="title" id="capTitle"></h2>
+    <div class="divider"></div>
+    <p class="lead" id="capLead"></p>
+  </div>
+  <div class="container">
+    <ol class="steps" id="capList"></ol>
+    <p class="note" id="capNote"></p>
+  </div>
+</section>
 
-    <script>
-        let currentLang = localStorage.getItem('gonghehou_lang') || 'zh';
-        
-        const I18N = {
-            zh: { nav_about: "关于", nav_products: "产品", nav_spec: "OEM代工", nav_contact: "联系", hero_btn: "发送询盘", about_title: "关于工厂", prod_title: "核心出口产品", p1_name: "宁红茶", p1_sub: "中华老字号", p1_desc: "香气甜香馥郁，适合高端礼盒与商务定制。", p2_name: "双井绿茶", p2_sub: "高山有机", p2_desc: "支持散茶与各种包装规格定制出口。", p3_name: "庐山云雾茶", p3_sub: "中国十大名茶", p3_desc: "出口市场热门选择。", btn_inquire: "获取报价", ct_title: "联系我们", f_title: "发送询盘", f_submit: "提交询盘" },
-            en: { nav_about: "About", nav_products: "Products", nav_spec: "OEM/ODM", nav_contact: "Contact", hero_btn: "Request a Quote", about_title: "About Factory", prod_title: "Core Export Products", p1_name: "Ninghong Black Tea", p1_sub: "Time-Honored", p1_desc: "Sweet floral aroma. Perfect for business gifts.", p2_name: "Shuangjing Green Tea", p2_sub: "High Mountain Organic", p2_desc: "Available for bulk and OEM packaging.", p3_name: "Lushan Yunwu Tea", p3_sub: "Top 10 Chinese Tea", p3_desc: "Popular choice for Russian and EU markets.", btn_inquire: "Get Quote", ct_title: "Contact Us", f_title: "Send Inquiry", f_submit: "Submit" },
-            ru: { nav_about: "О нас", nav_products: "Продукты", nav_spec: "OEM/ODM", nav_contact: "Контакты", hero_btn: "Получить цитату", about_title: "О Заводе", prod_title: "Основные продукты", p1_name: "Черный чай Нинхун", p1_sub: "Исторический бренд", p1_desc: "Идеально для бизнеса.", p2_name: "Зеленый чай Шуанцзин", p2_sub: "Органический", p2_desc: "Доступно для OEM упаковки.", p3_name: "Чай Лушань Юньу", p3_sub: "Топ-10 Китая", p3_desc: "Популярно на рынке РФ.", btn_inquire: "Цена", ct_title: "Связаться", f_title: "Отправить запрос", f_submit: "Отправить" }
-        };
+<!-- ================= 为什么选择我们 ================= -->
+<section id="why" class="alt">
+  <div class="container wrap-center">
+    <h2 class="title" id="whyTitle"></h2>
+    <div class="divider"></div>
+  </div>
+  <div class="container grid-2" id="whyGrid"></div>
+</section>
 
-        let cmsGlobalData = null;
+<!-- ================= 合作条款 ================= -->
+<section id="terms">
+  <div class="container wrap-center">
+    <h2 class="title" id="termTitle"></h2>
+    <div class="divider"></div>
+  </div>
+  <div class="container grid-2" id="termGrid"></div>
+  <div class="container"><p class="note" id="termNote"></p></div>
+</section>
 
-        async function initSite() {
-            try {
-                const res = await fetch('data/content.json');
-                cmsGlobalData = await res.json();
-                renderI18n(); // 渲染文字
-                
-                // 渲染所有后台上传的图片
-                if(cmsGlobalData.hero_img) document.getElementById('hero').style.backgroundImage = `url(${cmsGlobalData.hero_img})`;
-                if(cmsGlobalData.about_img) {
-                    document.getElementById('about-img').src = cmsGlobalData.about_img;
-                    document.getElementById('about-img').style.display = 'block';
-                }
-                if(cmsGlobalData.p1_img) document.getElementById('p1-img').src = cmsGlobalData.p1_img;
-                if(cmsGlobalData.p2_img) document.getElementById('p2-img').src = cmsGlobalData.p2_img;
-                if(cmsGlobalData.p3_img) document.getElementById('p3-img').src = cmsGlobalData.p3_img;
+<!-- ================= FAQ ================= -->
+<section id="faq" class="alt">
+  <div class="container wrap-center">
+    <p class="eyebrow" data-i18n="faq.label"></p>
+    <h2 class="title" data-i18n="faq.title"></h2>
+    <div class="divider"></div>
+  </div>
+  <div class="container faqwrap" id="faqList"></div>
+</section>
 
-            } catch (err) { console.error("数据加载中...", err); }
-        }
+<!-- ================= 联系 ================= -->
+<section id="contact">
+  <div class="container wrap-center">
+    <p class="eyebrow" data-i18n="contact.label"></p>
+    <h2 class="title" data-i18n="contact.title"></h2>
+    <div class="divider"></div>
+    <p class="lead" data-i18n="contact.lead"></p>
+  </div>
+  <div class="container contactgrid">
+    <ul class="info-list">
+      <li><b data-i18n="contact.addr"></b><span id="cAddr"></span></li>
+      <li><b data-i18n="contact.phone"></b>
+        <span class="clickable">
+          <a id="cTelCn" href="tel:+8618879259179"></a> · <span class="tagline" data-i18n="contact.cn"></span><br>
+          <a id="cTelRu" href="tel:+79117067084"></a> · <span class="tagline" data-i18n="contact.ru"></span>
+        </span>
+      </li>
+      <li><b data-i18n="contact.wx"></b><span><span class="wxcopy" id="wxCopy" title="点击复制"></span></span></li>
+      <li><b data-i18n="contact.mail"></b>
+        <span class="clickable">
+          <a id="cMail1" href="mailto:fanwh188@gmail.com"></a><br>
+          <a id="cMail2" href="mailto:m18879259179@163.com"></a>
+        </span>
+      </li>
+      <li class="quickrow">
+        <a class="qbtn tg" href="https://t.me/Fan2399" target="_blank" rel="noopener">Telegram @Fan2399</a>
+        <a class="qbtn wa" href="https://wa.me/79117067084" target="_blank" rel="noopener">WhatsApp</a>
+        <a class="qbtn em" href="mailto:fanwh188@gmail.com">Email</a>
+      </li>
+    </ul>
 
-        function renderI18n() {
-            document.documentElement.lang = currentLang;
-            
-            // 渲染固定词汇
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                if (I18N[currentLang][key]) el.innerHTML = I18N[currentLang][key];
-            });
+    <form id="contactForm" class="cform">
+      <h4 data-i18n="contact.formTitle"></h4>
+      <input name="name"    data-i18n-ph="contact.fName"    required>
+      <input name="company" data-i18n-ph="contact.fCompany">
+      <input name="contact" data-i18n-ph="contact.fContact"  required>
+      <input name="country" data-i18n-ph="contact.fCountry">
+      <select name="qty">
+        <option data-i18n="contact.q1"></option>
+        <option data-i18n="contact.q2"></option>
+        <option data-i18n="contact.q3"></option>
+        <option data-i18n="contact.q4"></option>
+        <option data-i18n="contact.q5"></option>
+      </select>
+      <select name="type">
+        <option data-i18n="contact.t1"></option>
+        <option data-i18n="contact.t2"></option>
+        <option data-i18n="contact.t3"></option>
+        <option data-i18n="contact.t4"></option>
+        <option data-i18n="contact.t5"></option>
+      </select>
+      <textarea name="msg" rows="4" data-i18n-ph="contact.fMsg"></textarea>
+      <button type="submit" class="btn primary" data-i18n="contact.btn"></button>
+      <p class="formmsg" id="formmsg"></p>
+    </form>
+  </div>
+</section>
 
-            // 渲染 CMS 后台填写的长文本
-            if (cmsGlobalData) {
-                if(cmsGlobalData.hero_titles && cmsGlobalData.hero_titles[currentLang]) 
-                    document.getElementById('hero-title').innerText = cmsGlobalData.hero_titles[currentLang];
-                if(cmsGlobalData.hero_subs && cmsGlobalData.hero_subs[currentLang]) 
-                    document.getElementById('hero-sub').innerText = cmsGlobalData.hero_subs[currentLang];
-                if(cmsGlobalData.about_descs && cmsGlobalData.about_descs[currentLang]) 
-                    document.getElementById('about-desc').innerText = cmsGlobalData.about_descs[currentLang];
-            }
+<footer>
+  <div class="container">
+    <div class="fgrid">
+      <div>
+        <div class="fbrand">昭盛元 <small>ZHAOSHENGYUAN</small></div>
+        <p id="footerNote"></p>
+      </div>
+      <div>
+        <h5 data-i18n="footer.links"></h5>
+        <ul id="footerLinks"></ul>
+      </div>
+      <div>
+        <h5 data-i18n="footer.contact"></h5>
+        <ul class="foot-contact" id="footContact"></ul>
+      </div>
+    </div>
+    <div class="fbottom">
+      <span id="footerCopy"></span>
+    </div>
+  </div>
+</footer>
 
-            document.querySelectorAll('.lang-switch button').forEach(b => b.classList.remove('active'));
-            document.getElementById(`btn-${currentLang}`).classList.add('active');
-        }
+<div class="floatbar">
+  <a class="fb-tg" href="https://t.me/Fan2399" target="_blank" rel="noopener" title="Telegram @Fan2399" aria-label="Telegram">
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12s5.37 12 12 12 12-5.37 12-12S18.63 0 12 0zm5.56 8.34l-1.98 9.36c-.15.66-.54.82-1.09.51l-3.01-2.22-1.45 1.4c-.16.16-.3.3-.61.3l.21-3.04 5.55-5.02c.24-.21-.05-.33-.37-.12l-6.86 4.32-2.96-.92c-.64-.2-.66-.64.14-.95l11.55-4.45c.54-.2 1.01.13.83.83z"/></svg>
+  </a>
+  <a class="fb-wa" href="https://wa.me/79117067084" target="_blank" rel="noopener" title="WhatsApp" aria-label="WhatsApp">
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2zm0 18.15c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.264 8.264 0 01-1.26-4.38c0-4.54 3.7-8.23 8.25-8.23 2.2 0 4.27.86 5.82 2.42a8.183 8.183 0 012.41 5.83c0 4.54-3.7 8.22-8.23 8.22zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.24-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.47-1.38-1.72-.15-.25-.02-.38.11-.5.11-.11.25-.29.37-.43.13-.15.17-.25.25-.41.08-.17.04-.31-.02-.44-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.42h-.48c-.16 0-.43.06-.65.31-.23.25-.86.84-.86 2.05s.88 2.38 1 2.54c.12.17 1.74 2.66 4.22 3.73.59.25 1.05.4 1.41.52.59.19 1.13.16 1.56.1.47-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.06-.1-.23-.16-.48-.29z"/></svg>
+  </a>
+  <a class="fb-mail" href="mailto:fanwh188@gmail.com" title="Email" aria-label="Email">✉</a>
+  <a class="fb-top" href="#home" title="Top" aria-label="Top">↑</a>
+</div>
 
-        function changeLang(lang) {
-            currentLang = lang;
-            localStorage.setItem('gonghehou_lang', lang);
-            renderI18n();
-        }
-
-        window.addEventListener('DOMContentLoaded', initSite);
-    </script>
+<script src="assets/js/i18n.js"></script>
+<script src="assets/js/main.js"></script>
 </body>
 </html>

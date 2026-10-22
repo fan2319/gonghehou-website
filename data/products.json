@@ -1,0 +1,112 @@
+{
+  "categories": [
+    { "key": "tea",       "label": { "zh": "茶叶与茶制品", "en": "Tea & Tea Products", "ru": "Чай и чайная продукция" } },
+    { "key": "porcelain", "label": { "zh": "瓷器与工艺品", "en": "Porcelain & Crafts",  "ru": "Фарфор и изделия" } },
+    { "key": "machinery", "label": { "zh": "机电泵阀",     "en": "Pumps & Valves",     "ru": "Насосы и арматура" } }
+  ],
+
+  "emptyText": {
+    "zh": "该品类正在整理资料，即将上架。如需了解现有供应范围，请直接联系我们。",
+    "en": "This category is being prepared. For our current supply scope, please contact us directly.",
+    "ru": "Категория готовится к публикации. По текущему ассортименту — свяжитесь с нами."
+  },
+
+  "products": [
+    {
+      "id": "tea-ninghong",
+      "category": "tea",
+      "published": true,
+      "order": 1,
+      "image": "assets/img/product-ninghong.jpg",
+      "name": { "zh": "宁红茶", "en": "Ninghong Black Tea", "ru": "Красный чай Нинхун" },
+      "subtitle": { "zh": "修水原产地 · 工夫红茶", "en": "Origin Xiushui · Gongfu Black Tea", "ru": "Родина Сюшуй · Гунфу" },
+      "desc": {
+        "zh": "修水是中国工夫红茶发源地之一。宁红茶香气甜香馥郁，滋味鲜嫩浓醇，汤色红艳明亮，适合礼盒、商超与电商渠道。",
+        "en": "Xiushui is one of the birthplaces of Chinese Gongfu black tea. Ninghong offers a sweet, rich aroma with a fresh, mellow taste and brilliant red liquor — suited to gift boxes, retail and e-commerce.",
+        "ru": "Сюшуй — одна из родин китайского красного чая гунфу. Нинхун: сладкий насыщенный аромат, свежий мягкий вкус, ярко-красный настой. Подходит для подарков, ритейла и маркетплейсов."
+      },
+      "specs": [
+        { "k": { "zh": "常见规格", "en": "Sizes",            "ru": "Фасовка" },
+          "v": { "zh": "102g / 125g / 300g", "en": "102g / 125g / 300g", "ru": "102 г / 125 г / 300 г" } },
+        { "k": { "zh": "形态",     "en": "Format",           "ru": "Форма" },
+          "v": { "zh": "散茶 · 礼盒 · 袋泡", "en": "Loose · gift box · bags", "ru": "Рассыпной · набор · пакетики" } },
+        { "k": { "zh": "适用场景", "en": "Best for",         "ru": "Канал сбыта" },
+          "v": { "zh": "商务礼赠 · 商超 · 电商", "en": "Corporate gifting · retail · e-commerce", "ru": "Подарки · ритейл · маркетплейсы" } },
+        { "k": { "zh": "冲泡建议", "en": "Brewing",          "ru": "Заваривание" },
+          "v": { "zh": "95℃ · 3–5g/150ml · 3–5 次", "en": "95°C · 3–5g per 150ml · 3–5 infusions", "ru": "95 °C · 3–5 г на 150 мл · 3–5 раз" } }
+      ]
+    },
+    {
+      "id": "tea-shuangjing",
+      "category": "tea",
+      "published": true,
+      "order": 2,
+      "image": "assets/img/product-shuangjing.jpg",
+      "name": { "zh": "双井绿茶", "en": "Shuangjing Green Tea", "ru": "Зелёный чай Шуанцзин" },
+      "subtitle": { "zh": "高山云雾 · 清香回甘", "en": "High-mountain · Clean & Sweet", "ru": "Высокогорный · чистый вкус" },
+      "desc": {
+        "zh": "出自修水双井一带的高山茶园。清香持久，鲜爽回甘，汤色嫩绿明亮，适合日常饮用与商超渠道。",
+        "en": "From the high-mountain gardens around Shuangjing in Xiushui. A clean, lasting aroma with a fresh sweet finish and tender green liquor — for everyday drinking and retail.",
+        "ru": "Из высокогорных садов Шуанцзин в Сюшуй. Чистый стойкий аромат, свежее сладкое послевкусие, нежно-зелёный настой. Для ежедневного чаепития и ритейла."
+      },
+      "specs": [
+        { "k": { "zh": "常见规格", "en": "Sizes",    "ru": "Фасовка" },
+          "v": { "zh": "100g / 125g / 250g", "en": "100g / 125g / 250g", "ru": "100 г / 125 г / 250 г" } },
+        { "k": { "zh": "形态",     "en": "Format",   "ru": "Форма" },
+          "v": { "zh": "散茶 · 罐装 · 袋泡", "en": "Loose · caddy · bags", "ru": "Рассыпной · банка · пакетики" } },
+        { "k": { "zh": "适用场景", "en": "Best for", "ru": "Канал сбыта" },
+          "v": { "zh": "日常自饮 · 商超 · 电商", "en": "Everyday · retail · e-commerce", "ru": "Ежедневно · ритейл · маркетплейсы" } },
+        { "k": { "zh": "冲泡建议", "en": "Brewing",  "ru": "Заваривание" },
+          "v": { "zh": "85℃ · 3g/150ml · 3–4 次", "en": "85°C · 3g per 150ml · 3–4 infusions", "ru": "85 °C · 3 г на 150 мл · 3–4 раза" } }
+      ]
+    },
+    {
+      "id": "tea-lushan",
+      "category": "tea",
+      "published": true,
+      "order": 3,
+      "image": "assets/img/product-lushan.jpg",
+      "name": { "zh": "庐山云雾茶", "en": "Lushan Yunwu Tea", "ru": "Чай Лушань Юньу" },
+      "subtitle": { "zh": "中国十大名茶 · 高山云雾", "en": "Top-10 Chinese Tea · Cloud-grown", "ru": "Топ-10 чаёв Китая" },
+      "desc": {
+        "zh": "自 1959 年起位列中国十大名茶。香凛持久，醇厚味甘，是高端礼赠渠道的常选品类。",
+        "en": "Listed among China's Top Ten Teas since 1959. A high, long-lasting aroma and a mellow sweet taste — a standard choice for premium gifting.",
+        "ru": "С 1959 года входит в десятку лучших чаёв Китая. Высокий долгий аромат, мягкий сладкий вкус — стандартный выбор для премиальных подарков."
+      },
+      "specs": [
+        { "k": { "zh": "常见规格", "en": "Sizes",    "ru": "Фасовка" },
+          "v": { "zh": "100g / 125g / 250g", "en": "100g / 125g / 250g", "ru": "100 г / 125 г / 250 г" } },
+        { "k": { "zh": "形态",     "en": "Format",   "ru": "Форма" },
+          "v": { "zh": "散茶 · 礼盒", "en": "Loose · gift box", "ru": "Рассыпной · набор" } },
+        { "k": { "zh": "适用场景", "en": "Best for", "ru": "Канал сбыта" },
+          "v": { "zh": "高端礼赠 · 专柜 · 礼品渠道", "en": "Premium gifting · specialty counters", "ru": "Премиум-подарки · точки продаж" } },
+        { "k": { "zh": "冲泡建议", "en": "Brewing",  "ru": "Заваривание" },
+          "v": { "zh": "85℃ · 3g/150ml · 3–4 次", "en": "85°C · 3g per 150ml · 3–4 infusions", "ru": "85 °C · 3 г на 150 мл · 3–4 раза" } }
+      ]
+    },
+    {
+      "id": "tea-oem",
+      "category": "tea",
+      "published": true,
+      "order": 4,
+      "image": "assets/img/supply-1.jpg",
+      "name": { "zh": "袋泡茶 · 果茶 · 花草茶", "en": "Tea Bags · Fruit · Herbal", "ru": "Пакетики · фруктовые · травяные" },
+      "subtitle": { "zh": "OEM / ODM 贴牌代工", "en": "OEM / ODM Contract Manufacturing", "ru": "OEM / ODM контрактное производство" },
+      "desc": {
+        "zh": "合作生产企业持有食品生产许可证，许可范围明确涵盖袋泡茶、调味茶（混合调味茶）、代用茶（叶类／花类／混合类）。可做滤纸包、三角尼龙包与定制外盒。",
+        "en": "Our partner manufacturer holds a food production licence explicitly covering tea bags, blended (flavoured) tea and herbal tea (leaf / flower / blended). Filter paper sachets, nylon pyramid bags and custom outer boxes available.",
+        "ru": "Производственный партнёр имеет лицензию, явно покрывающую пакетированный, купажированный и травяной чай (листовой / цветочный / смешанный). Пакетики, нейлоновые пирамидки, брендированные коробки."
+      },
+      "specs": [
+        { "k": { "zh": "单包规格", "en": "Per sachet",  "ru": "На пакетик" },
+          "v": { "zh": "2g – 5g / 包", "en": "2g – 5g each", "ru": "2–5 г" } },
+        { "k": { "zh": "包装形式", "en": "Packaging",   "ru": "Упаковка" },
+          "v": { "zh": "滤纸包 · 三角尼龙包 · 定制外盒", "en": "Filter paper · nylon pyramid · custom box", "ru": "Фильтр · нейлон · коробка" } },
+        { "k": { "zh": "适用场景", "en": "Best for",    "ru": "Канал сбыта" },
+          "v": { "zh": "餐饮 · 酒店 · 新式茶饮 · 贴牌", "en": "Food service · hotels · private label", "ru": "HoReCa · отели · СТМ" } },
+        { "k": { "zh": "起订量",   "en": "MOQ",         "ru": "Мин. заказ" },
+          "v": { "zh": "按规格与定制程度而定，请询盘确认", "en": "Depends on spec and customisation", "ru": "Зависит от ТЗ" } }
+      ]
+    }
+  ]
+}
