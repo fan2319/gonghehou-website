@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="title">公和厚茶业 - 中国茶叶B2B供应商</title>
+    <!-- 引入 Netlify 登录组件 -->
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <style>
+        :root { --primary: #2f5d3f; --gold: #c8a55b; --bg: #faf8f3; --text-main: #333333; --text-light: #666666; --border: #e0e0e0; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: system-ui, -apple-system, sans-serif; background-color: var(--bg); color: var(--text-main); line-height: 1.6; overflow-x: hidden; scroll-behavior: smooth; }
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        section { padding: 80px 0; }
+        .section-title { text-align: center; color: var(--primary); font-size: 2rem; margin-bottom: 40px; font-weight: bold; }
+        
+        header.nav-header { position: fixed; top: 0; left: 0; width: 100%; background: var(--bg); border-bottom: 1px solid var(--border); z-index: 1000; height: 70px; }
+        .nav-inner { display: flex; justify-content: space-between; align-items: center; height: 100%; }
+        .logo { font-size: 1.5rem; font-weight: bold; color: var(--primary); }
+        .nav-links { display: flex; gap: 20px; }
+        .nav-links a { font-size: 0.95rem; font-weight: 500; transition: color 0.3s; }
+        .nav-links a:hover { color: var(--gold); }
+        .lang-switch { display: flex; gap: 10px; }
+        .lang-switch button { background: none; border: 1px solid var(--primary); color: var(--primary); padding: 2px 8px; cursor: pointer; border-radius: 4px; font-size: 0.85rem; }
+        .lang-switch button.active { background: var(--primary); color: #fff; }
+        .menu-toggle { display: none; background: none; border: none; font-size: 1.5rem; color: var(--primary); cursor: pointer; }
+
+        /* Hero 动态背景支持 */
+        #hero { padding: 150px 0 100px; background-color: var(--primary); background-size: cover; background-position: center; color: var(--bg); text-align: center; position: relative; }
+        #hero::before { content: ''; position: absolute; top:0; left:0; right:0; bottom:0; background: rgba(47, 93, 63, 0.7); z-index: 1; }
+        #hero .container { position: relative; z-index: 2; }
+        #hero h1 { font-size: 3rem; margin-bottom: 20px; color: var(--gold); }
+        #hero p { font-size: 1.2rem; max-width: 800px; margin: 0 auto; }
+
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; }
+        .card { background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .card h3 { color: var(--primary); margin-bottom: 15px; font-size: 1.3rem; }
+        .card .subtitle { color: var(--gold); font-size: 0.9rem; margin-bottom: 15px; display: block; }
+        
+        .table-wrapper { width: 100%; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid var(--border); }
+        th { background: var(--primary); color: #fff; }
+        .table-note { font-size: 0.85rem; color: var(--text-light); margin-top: 15px; text-align: right; }
+
+        @media (max-width: 768px) {
+            table, thead, tbody, th, td, tr { display: block; }
+            thead tr { display: none; }
+            tr { border: 1px solid var(--border); margin-bottom: 15px; border-radius: 8px; background: #fff; }
+            td { position: relative; padding-left: 50%; text-align: right; border: none; border-bottom: 1px solid #eee; }
+            td::before { content: attr(data-label); position: absolute; left: 15px; width: 45%; text-align: left; font-weight: bold; color: var(--primary); }
+        }
+
+        .timeline { border-left: 2px solid var(--gold); padding-left: 20px; margin-left: 10px; }
+        .timeline-item { margin-bottom: 25px; position: relative; }
+        .timeline-item::before { content: ''; position: absolute; left: -27px; top: 5px; width: 12px; height: 12px; background: var(--bg); border: 2px solid var(--gold); border-radius: 50%; }
+        .timeline-year { font-weight: bold; color: var(--primary); display: block; margin-bottom: 5px; }
+
+        .honors-group { margin-bottom: 30px; }
+        .honors-group h4 { color: var(--gold); margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 5px; }
+        .honors-group ul li { margin-bottom: 5px; font-size: 0.95rem; }
+
+        .faq-item { background: #fff; margin-bottom: 10px; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .faq-q { padding: 20px; cursor: pointer; font-weight: bold; color: var(--primary); display: flex; justify-content: space-between; }
+        .faq-q::after { content: '+'; font-size: 1.2rem; }
+        .faq-item.active .faq-q::after { content: '-'; }
+        .faq-a { padding: 0 20px 20px; display: none; color: var(--text-light); }
+        .faq-item.active .faq-a { display: block; }
+
+        .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 0.9rem; }
+        .form-control { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 4px; font-family: inherit; }
+        textarea.form-control { resize: vertical; min-height: 120px; }
+        .submit-btn { background: var(--primary); color: #fff; border: none; padding: 15px 30px; font-size: 1rem; cursor: pointer; border-radius: 4px; width: 100%; transition: background 0.3s; }
+        
+        .contact-info a { color: var(--primary); font-weight: bold; text-decoration: underline; margin-bottom: 10px; display: inline-block; }
+        .btn-quick { display: inline-block; padding: 8px 15px; border: 1px solid var(--primary); color: var(--primary); border-radius: 20px; margin: 5px 5px 0 0; font-size: 0.85rem; }
+        .copy-success { color: green; font-size: 0.85rem; display: none; margin-left: 10px; }
+        #form-error { display: none; background: #ffebee; color: #c62828; padding: 15px; border-radius: 4px; margin-top: 15px; }
+
+        @media (max-width: 992px) {
+            .contact-grid { grid-template-columns: 1fr; }
+            .nav-links { display: none; flex-direction: column; position: absolute; top: 70px; left: 0; width: 100%; background: var(--bg); box-shadow: 0 4px 6px rgba(0,0,0,0.1); padding: 20px; }
+            .nav-links.show { display: flex; }
+            .menu-toggle { display: block; }
+        }
+        .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body>
+
+    <header class="nav-header">
+        <div class="container nav-inner">
+            <div class="logo">公和厚</div>
+            <button class="menu-toggle" id="menu-btn">☰</button>
+            <nav class="nav-links" id="nav-menu">
+                <a href="#about" data-i18n="nav_about">关于</a>
+                <a href="#heritage" data-i18n="nav_heritage">千年茶史</a>
+                <a href="#products" data-i18n="nav_products">产品</a>
+                <a href="#garden" data-i18n="nav_garden">茶园</a>
+                <a href="#craft" data-i18n="nav_craft">工艺</a>
+                <a href="#quality" data-i18n="nav_quality">品质</a>
+                <a href="#capability" data-i18n="nav_cap">加工能力</a>
+                <a href="#terms" data-i18n="nav_terms">合作条款</a>
+                <a href="#contact" data-i18n="nav_contact">联系</a>
+            </nav>
+            <div class="lang-switch">
+                <button onclick="changeLang('zh')" id="btn-zh">中文</button>
+                <button onclick="changeLang('en')" id="btn-en">EN</button>
+                <button onclick="changeLang('ru')" id="btn-ru">RU</button>
+            </div>
+        </div>
+    </header>
+
+    <section id="hero" class="hero-section">
+        <div class="container fade-in">
+            <h1 data-i18n="hero_title">江西公和厚茶业有限公司</h1>
+            <p data-i18n="hero_sub">源头直供 · 专业代工 · 真实可信的中国茶叶B2B合作伙伴</p>
+        </div>
+    </section>
+
+    <section id="about" class="container fade-in">
+        <h2 class="section-title" data-i18n="about_title">关于我们</h2>
+        <p data-i18n="about_desc">加载中...</p>
+        <!-- 动态关于我们配图 -->
+        <div style="text-align: center; margin-top: 30px;" id="about-img-container" style="display:none;">
+            <img id="about-img" src="" alt="关于我们" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); display: none;">
+        </div>
+    </section>
+
+    <!-- 品牌释义 brand -->
+    <section id="brand" style="background:#fff;" class="fade-in">
+        <div class="container">
+            <h2 class="section-title" data-i18n="brand_title">品牌释义</h2>
+            <div class="grid-3">
+                <div class="card"><h3 data-i18n="brand_gong">公 (公道守信)</h3><p data-i18n="brand_gong_d">坚持公平交易，以诚信铸就长期商业基石。</p></div>
+                <div class="card"><h3 data-i18n="brand_he">和 (和气致祥)</h3><p data-i18n="brand_he_d">倡导合作共赢，和谐共生，以茶结交天下客。</p></div>
+                <div class="card"><h3 data-i18n="brand_hou">厚 (厚德载物)</h3><p data-i18n="brand_hou_d">脚踏实地，品质为本，承载深厚文化底蕴。</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 千年茶史 heritage -->
+    <section id="heritage" class="container fade-in">
+        <h2 class="section-title" data-i18n="heri_title">千年茶史</h2>
+        <div class="timeline">
+            <div class="timeline-item"><span class="timeline-year">北宋</span><p data-i18n="heri_1">双井茶入贡，欧阳修《归田录》誉「草茶第一」</p></div>
+            <div class="timeline-item"><span class="timeline-year">清道光年间</span><p data-i18n="heri_2">宁红茶创制，畅销欧洲</p></div>
+            <div class="timeline-item"><span class="timeline-year">1959</span><p data-i18n="heri_3">庐山云雾茶入选中国十大名茶</p></div>
+            <div class="timeline-item"><span class="timeline-year">2015</span><p data-i18n="heri_4">米兰世博会金奖</p></div>
+            <div class="timeline-item"><span class="timeline-year">2023</span><p data-i18n="heri_5">九江博览会 双金奖</p></div>
+            <div class="timeline-item"><span class="timeline-year">2025</span><p data-i18n="heri_6">国家高新技术企业认定</p></div>
+        </div>
+    </section>
+
+    <!-- 产品中心 products -->
+    <section id="products" style="background:#fff;" class="fade-in">
+        <div class="container">
+            <h2 class="section-title" data-i18n="prod_title">核心产品</h2>
+            <div class="grid-3">
+                <div class="card"><h3 data-i18n="p1_name">宁红茶</h3><span class="subtitle" data-i18n="p1_sub">中华老字号 · 宁红金毫</span><p data-i18n="p1_desc">甜香馥郁，鲜嫩浓醇</p></div>
+                <div class="card"><h3 data-i18n="p2_name">双井绿茶</h3><span class="subtitle" data-i18n="p2_sub">草茶第一</span><p data-i18n="p2_desc">清香持久，鲜爽回甘</p></div>
+                <div class="card"><h3 data-i18n="p3_name">庐山云雾茶</h3><span class="subtitle" data-i18n="p3_sub">中国十大名茶</span><p data-i18n="p3_desc">香凛持久，醇厚味甘</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 规格表 specs -->
+    <section id="specs" class="container fade-in">
+        <h2 class="section-title" data-i18n="spec_title">产品规格与包装</h2>
+        <div class="table-wrapper">
+            <table>
+                <thead><tr><th data-i18n="th_1">产品</th><th data-i18n="th_2">形态</th><th data-i18n="th_3">规格</th><th data-i18n="th_4">包装</th><th data-i18n="th_5">场景</th></tr></thead>
+                <tbody id="specs-body"></tbody>
+            </table>
+        </div>
+        <p class="table-note" data-i18n="spec_note">具体规格请询盘联系。</p>
+    </section>
+
+    <!-- 其他静态板块合并简化展示 (茶园/工艺/品质/加工) -->
+    <section id="garden" style="background:#fff;" class="fade-in">
+        <div class="container text-center"><h2 class="section-title" data-i18n="gar_title">生态茶园</h2><p data-i18n="gar_1">8730 亩高山有机茶园，海拔 938 米。</p></div>
+    </section>
+
+    <section id="honors" class="container fade-in">
+        <h2 class="section-title" data-i18n="why_title">为什么选择我们</h2>
+        <div class="grid-3">
+            <div class="card"><h3 data-i18n="w1_t">01 自有茶园</h3><p data-i18n="w1_d">源头可控。</p></div>
+            <div class="card"><h3 data-i18n="w2_t">02 许可覆盖四大类</h3><p data-i18n="w2_d">SC11436042410016。</p></div>
+            <div class="card"><h3 data-i18n="w4_t">04 10年经验</h3><p data-i18n="w4_d">代工经验丰富。</p></div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" style="background:#fff;" class="fade-in">
+        <div class="container">
+            <h2 class="section-title" data-i18n="faq_title">常见问题 (FAQ)</h2>
+            <div id="faq-list"></div>
+        </div>
+    </section>
+
+    <!-- 合作联系 contact -->
+    <section id="contact" class="container fade-in">
+        <h2 class="section-title" data-i18n="ct_title">合作联系</h2>
+        <div class="contact-grid">
+            <div>
+                <h3 style="margin-bottom:20px; color:var(--primary);" data-i18n="ct_form_title">发送询盘</h3>
+                <form id="inquiry-form">
+                    <div class="form-group"><label data-i18n="f_name">姓名 *</label><input type="text" name="name" class="form-control" required></div>
+                    <div class="form-group"><label data-i18n="f_cont">联系方式 *</label><input type="text" name="contact" class="form-control" required></div>
+                    <div class="form-group"><label data-i18n="f_qty">采购量</label><select name="qty" class="form-control" id="f_qty_sel"></select></div>
+                    <div class="form-group"><label data-i18n="f_msg">留言</label><textarea name="msg" class="form-control"></textarea></div>
+                    <button type="submit" class="submit-btn" data-i18n="f_submit">提交</button>
+                    <div id="form-error" data-i18n="f_error">提交失败，请直接通过右侧联系。</div>
+                </form>
+            </div>
+            <div>
+                <h3 style="margin-bottom:20px; color:var(--primary);" data-i18n="ct_info_title">直接联系我们</h3>
+                <div class="contact-info">
+                    <p data-i18n="ct_addr">地址：江西省修水县...</p>
+                    <p><strong>Phone:</strong> <a href="tel:+8618879259179">+86 188 7925 9179</a></p>
+                    <p><strong>Email:</strong> <a href="mailto:fanwh188@gmail.com">fanwh188@gmail.com</a></p>
+                    <div style="margin-top: 15px;">
+                        <button class="btn-quick" onclick="copyWeChat()">WeChat: AriFan02</button><span id="wx-msg" class="copy-success">✔</span>
+                        <!-- 您的新 TG 账号在这里 👇 -->
+                        <a href="https://t.me/Fan2399" target="_blank" class="btn-quick">Telegram</a>
+                        <a href="https://wa.me/79117067084" target="_blank" class="btn-quick">WhatsApp</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const ENDPOINT = 'https://gonghehou-form.tunnir243.workers.dev';
+        let currentLang = localStorage.getItem('gonghehou_lang') || 'zh';
+        
+        // 核心翻译字典（保留前端的复杂数据）
+        const I18N = {
+            zh: { title: "公和厚茶业", nav_about: "关于", brand_title: "品牌释义", prod_title: "核心产品", spec_title: "产品规格", gar_title: "茶园", faq_title: "常见问题", ct_title: "联系我们", f_submit: "提交" },
+            en: { title: "公和厚 Tea", nav_about: "About", brand_title: "Brand Core", prod_title: "Products", spec_title: "Specs", gar_title: "Garden", faq_title: "FAQ", ct_title: "Contact", f_submit: "Submit" },
+            ru: { title: "公和厚 Чай", nav_about: "О нас", brand_title: "Бренд", prod_title: "Продукты", spec_title: "Спецификации", gar_title: "Сад", faq_title: "FAQ", ct_title: "Контакты", f_submit: "Отправить" }
+        };
+
+        // 数据拉取与渲染
+        async function initSite() {
+            try {
+                // 去读取 CMS 后台保存的 JSON 数据
+                const res = await fetch('data/content.json');
+                const cmsData = await res.json();
+                
+                // 将 CMS 里的文案合并到当前语言字典里
+                Object.assign(I18N.zh, cmsData.zh);
+                Object.assign(I18N.en, cmsData.en);
+                Object.assign(I18N.ru, cmsData.ru);
+
+                renderI18n(); // 渲染文字
+
+                // 处理后台上传的图片
+                if (cmsData.zh.hero_img) {
+                    document.getElementById('hero').style.backgroundImage = `url(${cmsData.zh.hero_img})`;
+                }
+                if (cmsData.zh.about_img) {
+                    const imgEl = document.getElementById('about-img');
+                    imgEl.src = cmsData.zh.about_img;
+                    imgEl.style.display = 'inline-block';
+                }
+            } catch (err) { console.error("CMS 加载失败，请检查网络或部署状态", err); }
+        }
+
+        function renderI18n() {
+            document.documentElement.lang = currentLang;
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (I18N[currentLang][key]) el.innerHTML = I18N[currentLang][key];
+            });
+            document.querySelectorAll('.lang-switch button').forEach(b => b.classList.remove('active'));
+            document.getElementById(`btn-${currentLang}`).classList.add('active');
+        }
+
+        function changeLang(lang) {
+            currentLang = lang;
+            localStorage.setItem('gonghehou_lang', lang);
+            renderI18n();
+        }
+
+        function copyWeChat() {
+            navigator.clipboard.writeText("AriFan02").then(() => {
+                const m = document.getElementById("wx-msg"); m.style.display="inline"; setTimeout(()=>m.style.display="none",2000);
+            });
+        }
+
+        // 表单提交保持不变
+        document.getElementById('inquiry-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('.submit-btn');
+            btn.disabled = true; btn.innerText = "Submitting...";
+            const formData = Object.fromEntries(new FormData(e.target).entries());
+            formData.lang = currentLang;
+            try {
+                const res = await fetch(ENDPOINT, { method:'POST', body: JSON.stringify(formData) });
+                if(res.ok) { alert("Success!"); e.target.reset(); } else throw new Error();
+            } catch { document.getElementById('form-error').style.display='block'; }
+            finally { btn.disabled = false; btn.innerText = I18N[currentLang].f_submit; }
+        });
+
+        // 绑定 Netlify 身份验证重定向（登录后跳转回当前页）
+        if (window.netlifyIdentity) {
+            window.netlifyIdentity.on("init", user => {
+                if (!user) {
+                    window.netlifyIdentity.on("login", () => { document.location.href = "/admin/"; });
+                }
+            });
+        }
+
+        window.addEventListener('DOMContentLoaded', initSite);
+    </script>
+</body>
+</html>

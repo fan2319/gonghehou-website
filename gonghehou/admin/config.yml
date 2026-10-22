@@ -1,0 +1,28 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "assets/img"
+public_folder: "assets/img"
+
+collections:
+  - name: "pages"
+    label: "网站内容管理"
+    files:
+      - label: "首页图文配置"
+        name: "content"
+        file: "data/content.json"
+        fields:
+          - { label: "【中文】首屏大标题", name: "zh.hero_title", widget: "string" }
+          - { label: "【中文】首屏副标题", name: "zh.hero_sub", widget: "string" }
+          - { label: "首屏背景图 (三语通用)", name: "zh.hero_img", widget: "image", required: false }
+          - { label: "【中文】关于我们介绍", name: "zh.about_desc", widget: "text" }
+          - { label: "关于我们配图 (三语通用)", name: "zh.about_img", widget: "image", required: false }
+          
+          - { label: "【英文】首屏大标题", name: "en.hero_title", widget: "string" }
+          - { label: "【英文】首屏副标题", name: "en.hero_sub", widget: "string" }
+          - { label: "【英文】关于我们介绍", name: "en.about_desc", widget: "text" }
+          
+          - { label: "【俄文】首屏大标题", name: "ru.hero_title", widget: "string" }
+          - { label: "【俄文】首屏副标题", name: "ru.hero_sub", widget: "string" }
+          - { label: "【俄文】关于我们介绍", name: "ru.about_desc", widget: "text" }
