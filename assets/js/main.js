@@ -322,6 +322,20 @@
     });
   }
 
+  /* ============================================================
+     对外钩子：供管理后台在 iframe 里实时刷新预览
+     用法：iframe.contentWindow.ZSY.setData(siteObj, prodObj, 'zh')
+     ============================================================ */
+  window.ZSY = {
+    setData: function (site, prod, lang) {
+      if (site) SITE = site;
+      if (prod) PROD = prod;
+      if (lang && LANGS.indexOf(lang) > -1) cur = lang;
+      setLang(cur, true);
+    },
+    getLang: function () { return cur; }
+  };
+
   function boot() {
     setLang(detect(), true);
     initNav(); initWechat(); initForm();

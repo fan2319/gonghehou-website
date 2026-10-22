@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>昭盛元 · 中文管理后台</title>
+<style>
+:root{
+  --brand:#1a3a5c; --brand2:#245a7a; --gold:#c8a55b; --ink:#152233;
+  --muted:#6b7a8a; --line:#e2e8ef; --bg:#f5f7fa; --bg2:#fff;
+  --ok:#2f8f5b; --bad:#c0392b;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+ font:14px/1.7 -apple-system,"PingFang SC","Microsoft YaHei",sans-serif}
+button{font:inherit;cursor:pointer}
+input,textarea,select{font:inherit}
+
+/* ---------- 顶部 ---------- */
+.top{background:var(--brand);color:#fff;padding:0 18px;height:56px;
+ display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:50}
+.top h1{font-size:1.05rem;margin:0;font-weight:700}
+.top .sp{flex:1}
+.top button{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.28);
+ color:#fff;padding:7px 14px;border-radius:7px;font-size:.85rem;transition:.2s}
+.top button:hover{background:rgba(255,255,255,.26)}
+.top button.pri{background:var(--gold);color:#1a2a1a;border-color:var(--gold);font-weight:700}
+.top button.pri:hover{background:#d8b76b}
+
+/* ---------- 三栏 ---------- */
+.wrap{display:grid;grid-template-columns:190px minmax(0,1fr) minmax(0,1fr);
+ gap:0;height:calc(100vh - 56px)}
+.side{background:#fff;border-right:1px solid var(--line);overflow-y:auto;padding:12px 0}
+.side .t{font-size:.72rem;letter-spacing:1.4px;color:var(--gold);font-weight:700;
+ padding:12px 16px 6px;text-transform:uppercase}
+.side a{display:block;padding:9px 16px;font-size:.9rem;color:var(--ink);
+ border-left:3px solid transparent;transition:.15s}
+.side a:hover{background:var(--bg)}
+.side a.on{background:#eef4fa;border-left-color:var(--brand);color:var(--brand);font-weight:700}
+.side a .n{float:right;color:var(--muted);font-size:.78rem}
+
+.edit{overflow-y:auto;padding:20px 22px;background:#fff;border-right:1px solid var(--line)}
+.prev{overflow:hidden;display:flex;flex-direction:column;background:#eef1f5}
+.prevbar{background:#fff;border-bottom:1px solid var(--line);padding:8px 12px;
+ display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.prevbar b{font-size:.85rem;color:var(--brand)}
+.prevbar button{background:var(--bg);border:1px solid var(--line);border-radius:6px;
+ padding:5px 11px;font-size:.8rem;transition:.2s}
+.prevbar button:hover{border-color:var(--brand);color:var(--brand)}
+.prevbar button.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+.prevbar .sp{flex:1}
+.prevbar small{color:var(--muted);font-size:.76rem}
+#pvFrame{flex:1;width:100%;border:0;background:#fff}
+
+/* ---------- 编辑控件 ---------- */
+.grp{margin-bottom:26px}
+.grp>h3{font-size:.78rem;letter-spacing:1.6px;color:var(--gold);text-transform:uppercase;
+ margin:0 0 12px;padding-bottom:7px;border-bottom:1px solid var(--line);font-weight:700}
+.fld{margin-bottom:14px}
+.fld>label{display:block;font-size:.86rem;font-weight:700;color:var(--brand);margin-bottom:6px}
+.fld .hint{font-size:.76rem;color:var(--muted);margin-top:4px}
+
+/* 三语并排 */
+.trio{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.trio .cell{min-width:0}
+.trio .cell span{display:block;font-size:.72rem;color:var(--muted);font-weight:700;
+ margin-bottom:3px;padding-left:2px}
+.trio input,.trio textarea{width:100%;border:1px solid var(--line);border-radius:7px;
+ padding:8px 10px;font-size:.87rem;background:#fbfcfe;transition:.15s}
+.trio input:focus,.trio textarea:focus{outline:none;border-color:var(--brand);background:#fff;
+ box-shadow:0 0 0 3px rgba(26,58,92,.09)}
+.trio textarea{min-height:88px;resize:vertical;line-height:1.65}
+.trio .cell:nth-child(2) span::before{content:'EN · '}
+.trio .cell:nth-child(3) span::before{content:'RU · '}
+
+input.plain,textarea.plain,select.plain{width:100%;border:1px solid var(--line);
+ border-radius:7px;padding:8px 10px;font-size:.88rem;background:#fbfcfe}
+input.plain:focus,textarea.plain:focus,select.plain:focus{outline:none;
+ border-color:var(--brand);background:#fff}
+
+/* 列表条目 */
+.item{background:#fafbfc;border:1px solid var(--line);border-radius:9px;padding:12px;margin-bottom:9px;position:relative}
+.item .bar{display:flex;align-items:center;gap:6px;margin-bottom:8px}
+.item .bar .idx{font-size:.74rem;color:var(--muted);font-weight:700;min-width:18px}
+.item .bar .sp{flex:1}
+.item .bar button{background:#fff;border:1px solid var(--line);border-radius:6px;
+ width:26px;height:26px;font-size:.8rem;color:var(--muted);line-height:1}
+.item .bar button:hover{border-color:var(--brand);color:var(--brand)}
+.item .bar button.del:hover{border-color:var(--bad);color:var(--bad)}
+
+.addbtn{width:100%;border:1px dashed var(--brand);color:var(--brand);background:#fff;
+ border-radius:8px;padding:9px;font-size:.85rem;font-weight:700;transition:.2s}
+.addbtn:hover{background:#eef4fa}
+
+/* 图片 */
+.imgrow{display:flex;gap:10px;align-items:flex-start}
+.imgrow .thumb{width:88px;height:66px;border:1px solid var(--line);border-radius:7px;
+ background:#f0f3f6 center/cover no-repeat;flex-shrink:0}
+.imgrow .r{flex:1;min-width:0}
+.imgrow input{width:100%;border:1px solid var(--line);border-radius:7px;padding:7px 9px;font-size:.82rem}
+.imgrow .btns{display:flex;gap:6px;margin-top:6px}
+.imgrow .btns button{background:var(--bg);border:1px solid var(--line);border-radius:6px;
+ padding:5px 11px;font-size:.8rem}
+.imgrow .btns button:hover{border-color:var(--brand);color:var(--brand)}
+
+/* 开关 */
+.sw{display:flex;align-items:center;gap:7px;font-size:.86rem}
+.sw input{width:16px;height:16px}
+
+/* 提示条 */
+.bar-msg{position:fixed;left:50%;transform:translateX(-50%);bottom:22px;
+ background:var(--brand);color:#fff;padding:11px 22px;border-radius:9px;
+ font-size:.88rem;z-index:99;box-shadow:0 8px 24px rgba(20,40,60,.28);opacity:0;
+ transition:.25s;pointer-events:none}
+.bar-msg.show{opacity:1}
+
+.intro{background:#fff;border-radius:11px;padding:22px;border-left:4px solid var(--gold);
+ box-shadow:0 2px 10px rgba(20,40,60,.07)}
+.intro h2{margin:0 0 10px;font-size:1.1rem;color:var(--brand)}
+.intro p{margin:0 0 10px;color:var(--muted);font-size:.9rem}
+.intro ol{margin:0;padding-left:20px;color:var(--muted);font-size:.88rem}
+.intro li{margin-bottom:6px}
+
+@media(max-width:1200px){
+  .wrap{grid-template-columns:170px minmax(0,1fr);}
+  .prev{display:none}
+  .prev.mobile-show{display:flex;position:fixed;inset:56px 0 0 0;z-index:80}
+}
+@media(max-width:820px){
+  .wrap{grid-template-columns:1fr}
+  .side{display:none}
+  .trio{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <h1>昭盛元 · 中文管理后台</h1>
+  <span class="sp"></span>
+  <button onclick="loadFiles()">📂 载入 JSON</button>
+  <button onclick="exportJSON('site')">⬇ site.json</button>
+  <button onclick="exportJSON('products')">⬇ products.json</button>
+  <button onclick="exportSingle()">⬇ 单文件网页</button>
+  <button class="pri" onclick="toast('已记在本地浏览器；请在 Netlify 后台 Publish 才会上线')">💾 保存</button>
+</div>
+
+<div class="wrap">
+  <nav class="side" id="side"></nav>
+  <section class="edit" id="edit"></section>
+  <section class="prev" id="prev">
+    <div class="prevbar">
+      <b>实时预览</b>
+      <button class="on" onclick="pvLang('zh',this)">中文</button>
+      <button onclick="pvLang('en',this)">EN</button>
+      <button onclick="pvLang('ru',this)">RU</button>
+      <span class="sp"></span>
+      <button onclick="pvReload()">刷新</button>
+      <small>改内容即时生效</small>
+    </div>
+    <iframe id="pvFrame" title="预览"></iframe>
+  </section>
+</div>
+
+<div class="bar-msg" id="toast"></div>
+<input type="file" id="fileSite" accept=".json" style="display:none">
+<input type="file" id="fileProd" accept=".json" style="display:none">
+<input type="file" id="fileImg" accept="image/*" style="display:none">
+
+<script>window.__ZSY_SITE__={
+  "hero_titles": {
+    "zh": "九江昭盛元科技有限公司",
+    "en": "Jiujiang Zhaoshengyuan Technology Co., Ltd.",
+    "ru": "ООО «Цзюцзян Чжаошэнъюань Технологии»"
+  },
+  "hero_subs": {
+    "zh": "跨境供应链 · 进出口代理 · 产地直采的中国货源伙伴",
+    "en": "Cross-border Supply Chain · Import & Export Agency · Your Sourcing Partner in China",
+    "ru": "Трансграничная логистика · ВЭД-агент · Партнёр по закупкам в Китае"
+  },
+  "hero_img": "assets/img/hero-bg.jpg",
+
+  "about_titles": {
+    "zh": "关于我们", "en": "About Us", "ru": "О компании"
+  },
+  "about_descs": {
+    "zh": "九江昭盛元科技有限公司注册于江西省九江市修水县。公司以供应链管理服务为核心，具备货物进出口、技术进出口与进出口代理经营资质，可自营并代理各类商品与技术的进出口业务。我们立足产地，做采购方与中国制造之间的那一段：选品、验货、集货、报关、运输、清关派送。",
+    "en": "Jiujiang Zhaoshengyuan Technology Co., Ltd. is registered in Xiushui County, Jiujiang, Jiangxi. Supply-chain management is our core business, and we are licensed for the import and export of goods and technology as well as import-export agency. Based at the source, we handle the stretch between a buyer and Chinese manufacturing: sourcing, inspection, consolidation, customs clearance, shipping, and last-mile delivery.",
+    "ru": "ООО «Цзюцзян Чжаошэнъюань Технологии» зарегистрировано в уезде Сюшуй, Цзюцзян, провинция Цзянси. Основное направление — управление цепями поставок; имеются лицензии на импорт и экспорт товаров и технологий, а также на агентскую ВЭД-деятельность. Мы находимся у источника и закрываем участок между покупателем и китайским производством: подбор, инспекция, консолидация, таможня, перевозка, доставка."
+  },
+  "about_img": "assets/img/about-2.jpg",
+
+  "qual_items": [
+    { "zh": "货物进出口", "en": "Import & export of goods", "ru": "Импорт и экспорт товаров" },
+    { "zh": "技术进出口", "en": "Import & export of technology", "ru": "Импорт и экспорт технологий" },
+    { "zh": "进出口代理", "en": "Import-export agency", "ru": "Агентская ВЭД-деятельность" },
+    { "zh": "供应链管理服务", "en": "Supply-chain management", "ru": "Управление цепями поставок" },
+    { "zh": "区块链技术相关软件和服务（非金融类）", "en": "Blockchain software & services (non-financial)", "ru": "Блокчейн-ПО и услуги (не финансовые)" },
+    { "zh": "工艺美术品及收藏品零售", "en": "Retail of arts, crafts & collectibles", "ru": "Розничная торговля изделиями искусства" }
+  ],
+  "qual_note": {
+    "zh": "以上均取自公司经营范围，可在国家企业信用信息公示系统核验。统一社会信用代码 91360424MAKJBPTM33。区块链相关服务仅限溯源防伪与单据存证，不涉及任何虚拟货币、代币发行或支付结算业务。",
+    "en": "All items above are taken from the company's registered business scope and can be verified on the National Enterprise Credit Information Publicity System. Unified Social Credit Code 91360424MAKJBPTM33. Blockchain-related services are limited to traceability, anti-counterfeiting and document attestation — no virtual currency, token issuance or payment settlement involved.",
+    "ru": "Все пункты взяты из зарегистрированного вида деятельности и проверяются в Национальной системе раскрытия корпоративной информации. Единый социальный код 91360424MAKJBPTM33. Услуги блокчейна ограничиваются прослеживаемостью, защитой от подделки и подтверждением документов — без виртуальных валют, выпуска токенов и платежей."
+  },
+
+  "cap_title": { "zh": "我们能做什么", "en": "What We Do", "ru": "Что мы делаем" },
+  "cap_lead": {
+    "zh": "从选品到清关派送，七个环节，一个对接人。",
+    "en": "From sourcing to customs clearance and delivery — seven steps, one point of contact.",
+    "ru": "От подбора до таможни и доставки — семь этапов, один контакт."
+  },
+  "cap_items": [
+    { "zh": "需求确认：品类、规格、目标市场、合规要求", "en": "Requirements: category, spec, target market, compliance", "ru": "Требования: категория, ТЗ, рынок, комплаенс" },
+    { "zh": "选品采购：产地直采，多家工厂比价与打样", "en": "Sourcing: direct from origin, multi-factory comparison", "ru": "Подбор: напрямую от источника, сравнение фабрик" },
+    { "zh": "验货质检：出货前检验，支持第三方验货", "en": "Inspection: pre-shipment check, third-party accepted", "ru": "Инспекция: проверка перед отгрузкой" },
+    { "zh": "仓储集货：多供应商货物合并，降低头程成本", "en": "Consolidation: merge suppliers to cut first-leg cost", "ru": "Консолидация: объединение поставщиков" },
+    { "zh": "出口报关：单证准备与申报", "en": "Export clearance: documentation and declaration", "ru": "Экспортная таможня: документы и декларирование" },
+    { "zh": "国际运输：海运 / 铁路 / 空运 / 公路", "en": "Transport: sea / rail / air / road", "ru": "Перевозка: море / ж/д / авиа / авто" },
+    { "zh": "清关派送：目的港清关与末端配送", "en": "Destination: customs clearance and last mile", "ru": "Назначение: таможня и последняя миля" }
+  ],
+  "cap_note": {
+    "zh": "时效与费用随季节、政策、舱位与目的国波动，我们不标示固定报价——请在询盘中说明品类、体积重量与目的港，我们给出实时方案。",
+    "en": "Transit times and costs move with season, policy, capacity and destination. We do not publish fixed rates — tell us the category, volume, weight and destination port and we will quote in real time.",
+    "ru": "Сроки и стоимость зависят от сезона, правил, наличия мест и страны назначения. Фиксированных тарифов не публикуем — укажите категорию, объём, вес и порт назначения."
+  },
+
+  "why_title": { "zh": "为什么选择我们", "en": "Why Work With Us", "ru": "Почему мы" },
+  "why_items": [
+    { "title": { "zh": "进出口资质齐备", "en": "Fully licensed for trade", "ru": "Полный набор лицензий" },
+      "text": { "zh": "经营范围含货物进出口、技术进出口与进出口代理，可直接组织跨境交付。", "en": "Our scope covers goods, technology and agency — we can organise cross-border delivery directly.", "ru": "Вид деятельности включает товары, технологии и агентскую ВЭД." } },
+    { "title": { "zh": "产地直采", "en": "Source-direct procurement", "ru": "Закупка у источника" },
+      "text": { "zh": "注册地位于修水县茶叶产区，减少中间环节。", "en": "Registered in Xiushui, a tea-producing county — fewer middlemen.", "ru": "Регистрация в чаепроизводящем уезде Сюшуй — меньше посредников." } },
+    { "title": { "zh": "供应链管理是主业", "en": "Supply chain is our core", "ru": "Управление поставками — профиль" },
+      "text": { "zh": "供应链管理服务在册，不是兼营。", "en": "Supply-chain management is registered as our core business, not a side line.", "ru": "Управление цепями поставок — основной вид деятельности." } },
+    { "title": { "zh": "溯源与单据存证", "en": "Traceability & attestation", "ru": "Прослеживаемость" },
+      "text": { "zh": "区块链相关服务用于溯源防伪与单据存证，非金融类，合规可控。", "en": "Blockchain services used only for traceability and document attestation — non-financial and compliant.", "ru": "Блокчейн только для прослеживаемости и документов — не финансовый." } },
+    { "title": { "zh": "多品类可拓展", "en": "Multi-category, extensible", "ru": "Мультикатегорийность" },
+      "text": { "zh": "茶叶已落地，瓷器与机电泵阀陆续上架，一个窗口对接多个品类。", "en": "Tea is live; porcelain and pumps are coming — one window for several categories.", "ru": "Чай уже доступен, фарфор и насосы — в работе." } },
+    { "title": { "zh": "中俄双语直接沟通", "en": "Direct contact in RU / EN / ZH", "ru": "Прямая связь на RU / EN / ZH" },
+      "text": { "zh": "俄罗斯号码与 Telegram 直达，不用等邮件来回。", "en": "A Russian phone number and Telegram — no waiting on email threads.", "ru": "Российский номер и Telegram — без долгой переписки." } }
+  ],
+
+  "term_title": { "zh": "合作条款", "en": "Terms of Trade", "ru": "Условия сотрудничества" },
+  "term_items": [
+    { "title": { "zh": "起订量", "en": "Minimum order", "ru": "Минимальный заказ" },
+      "text": { "zh": "按品类、规格与定制程度而定，现货低于定制。请以询盘确认为准。", "en": "Depends on category, spec and customisation; stock is lower than custom. Confirm by enquiry.", "ru": "Зависит от категории и ТЗ; сток ниже кастома." } },
+    { "title": { "zh": "样品", "en": "Samples", "ru": "Образцы" },
+      "text": { "zh": "支持寄样。样品费与运费按实际结算，大单确认后可抵扣货款。", "en": "Samples available; cost settled at actuals and credited against a confirmed bulk order.", "ru": "Образцы предоставляются; затраты засчитываются при заказе." } },
+    { "title": { "zh": "打样与交期", "en": "Sampling & lead time", "ru": "Образцы и сроки" },
+      "text": { "zh": "常规规格现货即发；定制包装确认设计稿后排产，周期下单前明确告知。", "en": "Standard specs ship from stock; custom packaging scheduled after artwork approval.", "ru": "Стандарт со склада; кастом после утверждения макета." } },
+    { "title": { "zh": "支付方式", "en": "Payment", "ru": "Оплата" },
+      "text": { "zh": "对公转账、信用证。新客户首单款到发货，长期客户可协商账期。", "en": "Bank transfer and L/C. First order prepaid; terms negotiable for long-term partners.", "ru": "Перевод и аккредитив. Первый заказ — предоплата." } },
+    { "title": { "zh": "包装与贴牌", "en": "Packaging & private label", "ru": "Упаковка и СТМ" },
+      "text": { "zh": "支持 LOGO 加印、包装设计与贴牌代工。使用客户商标需提供证明文件。", "en": "Logo printing, packaging design, contract manufacturing. Own trademark requires proof.", "ru": "Нанесение логотипа, разработка упаковки, СТМ." } },
+    { "title": { "zh": "出口与单证", "en": "Export & documents", "ru": "Экспорт и документы" },
+      "text": { "zh": "可提供营业执照、检测报告、原产地证及出口报关单证。", "en": "Business licence, test reports, certificate of origin and customs papers.", "ru": "Лицензии, протоколы, сертификат происхождения, таможня." } }
+  ],
+  "term_note": {
+    "zh": "本页条款为通用说明，不构成报价或要约。具体以正式合同为准。",
+    "en": "This page is general information and does not constitute an offer. The confirmed contract prevails.",
+    "ru": "Страница носит информационный характер и не является офертой."
+  },
+
+  "faq_list": [
+    { "q": { "zh": "你们是生产厂家还是贸易公司？", "en": "Are you a manufacturer or a trading company?", "ru": "Вы производитель или торговая компания?" },
+      "a": { "zh": "我们是供应链服务商，持有货物进出口、技术进出口与进出口代理资质。茶叶由修水本地持证生产企业供货，我们负责选品、验货、集货与出口交付。", "en": "We are a supply-chain service provider licensed for import and export of goods and technology, and for import-export agency. Tea is supplied by licensed local manufacturers in Xiushui; we handle sourcing, inspection, consolidation and export delivery.", "ru": "Мы — поставщик услуг в сфере цепей поставок с лицензиями на импорт/экспорт и агентскую ВЭД. Чай поставляют лицензированные местные производители Сюшуй; мы отвечаем за подбор, инспекцию, консолидацию и экспорт." } },
+    { "q": { "zh": "茶叶能否做袋泡茶、果茶、花草茶？", "en": "Can you supply tea bags, fruit and herbal teas?", "ru": "Поставляете ли пакетики, фруктовые и травяные чаи?" },
+      "a": { "zh": "可以。供货生产企业的食品生产许可证许可范围明确涵盖袋泡茶、调味茶（混合调味茶）、代用茶（叶类／花类／混合类）。", "en": "Yes. The supplying manufacturer's food production licence explicitly covers tea bags, blended (flavoured) tea and herbal tea (leaf / flower / blended).", "ru": "Да. Лицензия производителя явно покрывает пакетированный, купажированный и травяной чай." } },
+    { "q": { "zh": "你们涉及虚拟货币或区块链金融业务吗？", "en": "Do you deal in crypto or blockchain finance?", "ru": "Работаете ли вы с криптовалютой?" },
+      "a": { "zh": "不涉及。我们的区块链相关服务仅限溯源防伪与单据存证，属于非金融类，不涉及任何虚拟货币、代币发行或支付结算。", "en": "No. Blockchain-related services are limited to traceability, anti-counterfeiting and document attestation — non-financial, with no virtual currency, token issuance or payment settlement.", "ru": "Нет. Блокчейн-услуги ограничены прослеживаемостью и документами — без криптовалют и платежей." } },
+    { "q": { "zh": "除了茶叶，还能供应什么？", "en": "What else besides tea?", "ru": "Что ещё, кроме чая?" },
+      "a": { "zh": "瓷器与机电泵阀正在上架中。经营范围含工艺美术品及收藏品零售，可承接相关品类的询盘与打样。", "en": "Porcelain and pumps are being added. Our scope includes retail of arts, crafts and collectibles, so related enquiries and sampling are welcome.", "ru": "Фарфор и насосы добавляются. Вид деятельности включает розницу изделий искусства." } },
+    { "q": { "zh": "最小起订量是多少？", "en": "What is the MOQ?", "ru": "Каков минимальный заказ?" },
+      "a": { "zh": "按品类、规格与定制程度而定，现货门槛低于定制单。请在询盘中说明采购规模与销售渠道。", "en": "Depends on category, spec and customisation; stock items lower than custom runs. State your volume and channel in your enquiry.", "ru": "Зависит от категории и ТЗ. Укажите объём и канал в запросе." } },
+    { "q": { "zh": "运输方式与时效？", "en": "Shipping modes and transit times?", "ru": "Способы перевозки и сроки?" },
+      "a": { "zh": "海运、铁路、空运、公路均可安排。时效与费用随季节、政策、舱位与目的国波动，我们不标示固定报价，请联系获取实时方案。", "en": "Sea, rail, air and road are all available. Transit times and costs vary with season, policy, capacity and destination — we publish no fixed rates, please ask for a live quote.", "ru": "Море, ж/д, авиа, авто. Сроки и стоимость варьируются — запрашивайте актуальный расчёт." } },
+    { "q": { "zh": "能否出口俄罗斯？需要哪些单证？", "en": "Can you ship to Russia? What documents?", "ru": "Возможна ли поставка в Россию?" },
+      "a": { "zh": "可以。可提供营业执照、检测报告、原产地证及出口报关单证，并按目的国农残限量与检疫标准执行。", "en": "Yes. We supply business licence, test reports, certificate of origin and customs papers, and follow destination residue limits and phytosanitary rules.", "ru": "Да. Предоставляем документы и соблюдаем нормы страны назначения." } },
+    { "q": { "zh": "合作流程是怎样的？", "en": "How does the process work?", "ru": "Как проходит сотрудничество?" },
+      "a": { "zh": "需求确认 → 选品采购 → 验货质检 → 仓储集货 → 出口报关 → 国际运输 → 清关派送。全程一个对接人。", "en": "Requirements → sourcing → inspection → consolidation → export clearance → transport → clearance and delivery. One contact throughout.", "ru": "Требования → подбор → инспекция → консолидация → таможня → перевозка → доставка." } }
+  ],
+
+  "contact_phone_cn": "+86 188 7925 9179",
+  "contact_phone_ru": "+7 911 706 7084",
+  "contact_email_1": "fanwh188@gmail.com",
+  "contact_email_2": "m18879259179@163.com",
+  "contact_wechat": "AriFan02",
+  "contact_addr": {
+    "zh": "江西省九江市修水县",
+    "en": "Xiushui County, Jiujiang, Jiangxi, China",
+    "ru": "уезд Сюшуй, Цзюцзян, провинция Цзянси, Китай"
+  },
+  "footer_note": {
+    "zh": "九江昭盛元科技有限公司 · 统一社会信用代码 91360424MAKJBPTM33",
+    "en": "Jiujiang Zhaoshengyuan Technology Co., Ltd. · USCC 91360424MAKJBPTM33",
+    "ru": "ООО «Цзюцзян Чжаошэнъюань Технологии» · ЕСКК 91360424MAKJBPTM33"
+  }
+}
+;window.__ZSY_PROD__={
+  "categories": [
+    { "key": "tea",       "label": { "zh": "茶叶与茶制品", "en": "Tea & Tea Products", "ru": "Чай и чайная продукция" } },
+    { "key": "porcelain", "label": { "zh": "瓷器与工艺品", "en": "Porcelain & Crafts",  "ru": "Фарфор и изделия" } },
+    { "key": "machinery", "label": { "zh": "机电泵阀",     "en": "Pumps & Valves",     "ru": "Насосы и арматура" } }
+  ],
+
+  "emptyText": {
+    "zh": "该品类正在整理资料，即将上架。如需了解现有供应范围，请直接联系我们。",
+    "en": "This category is being prepared. For our current supply scope, please contact us directly.",
+    "ru": "Категория готовится к публикации. По текущему ассортименту — свяжитесь с нами."
+  },
+
+  "products": [
+    {
+      "id": "tea-ninghong",
+      "category": "tea",
+      "published": true,
+      "order": 1,
+      "image": "assets/img/product-ninghong.jpg",
+      "name": { "zh": "宁红茶", "en": "Ninghong Black Tea", "ru": "Красный чай Нинхун" },
+      "subtitle": { "zh": "修水原产地 · 工夫红茶", "en": "Origin Xiushui · Gongfu Black Tea", "ru": "Родина Сюшуй · Гунфу" },
+      "desc": {
+        "zh": "修水是中国工夫红茶发源地之一。宁红茶香气甜香馥郁，滋味鲜嫩浓醇，汤色红艳明亮，适合礼盒、商超与电商渠道。",
+        "en": "Xiushui is one of the birthplaces of Chinese Gongfu black tea. Ninghong offers a sweet, rich aroma with a fresh, mellow taste and brilliant red liquor — suited to gift boxes, retail and e-commerce.",
+        "ru": "Сюшуй — одна из родин китайского красного чая гунфу. Нинхун: сладкий насыщенный аромат, свежий мягкий вкус, ярко-красный настой. Подходит для подарков, ритейла и маркетплейсов."
+      },
+      "specs": [
+        { "k": { "zh": "常见规格", "en": "Sizes",            "ru": "Фасовка" },
+          "v": { "zh": "102g / 125g / 300g", "en": "102g / 125g / 300g", "ru": "102 г / 125 г / 300 г" } },
+        { "k": { "zh": "形态",     "en": "Format",           "ru": "Форма" },
+          "v": { "zh": "散茶 · 礼盒 · 袋泡", "en": "Loose · gift box · bags", "ru": "Рассыпной · набор · пакетики" } },
+        { "k": { "zh": "适用场景", "en": "Best for",         "ru": "Канал сбыта" },
+          "v": { "zh": "商务礼赠 · 商超 · 电商", "en": "Corporate gifting · retail · e-commerce", "ru": "Подарки · ритейл · маркетплейсы" } },
+        { "k": { "zh": "冲泡建议", "en": "Brewing",          "ru": "Заваривание" },
+          "v": { "zh": "95℃ · 3–5g/150ml · 3–5 次", "en": "95°C · 3–5g per 150ml · 3–5 infusions", "ru": "95 °C · 3–5 г на 150 мл · 3–5 раз" } }
+      ]
+    },
+    {
+      "id": "tea-shuangjing",
+      "category": "tea",
+      "published": true,
+      "order": 2,
+      "image": "assets/img/product-shuangjing.jpg",
+      "name": { "zh": "双井绿茶", "en": "Shuangjing Green Tea", "ru": "Зелёный чай Шуанцзин" },
+      "subtitle": { "zh": "高山云雾 · 清香回甘", "en": "High-mountain · Clean & Sweet", "ru": "Высокогорный · чистый вкус" },
+      "desc": {
+        "zh": "出自修水双井一带的高山茶园。清香持久，鲜爽回甘，汤色嫩绿明亮，适合日常饮用与商超渠道。",
+        "en": "From the high-mountain gardens around Shuangjing in Xiushui. A clean, lasting aroma with a fresh sweet finish and tender green liquor — for everyday drinking and retail.",
+        "ru": "Из высокогорных садов Шуанцзин в Сюшуй. Чистый стойкий аромат, свежее сладкое послевкусие, нежно-зелёный настой. Для ежедневного чаепития и ритейла."
+      },
+      "specs": [
+        { "k": { "zh": "常见规格", "en": "Sizes",    "ru": "Фасовка" },
+          "v": { "zh": "100g / 125g / 250g", "en": "100g / 125g / 250g", "ru": "100 г / 125 г / 250 г" } },
+        { "k": { "zh": "形态",     "en": "Format",   "ru": "Форма" },
+          "v": { "zh": "散茶 · 罐装 · 袋泡", "en": "Loose · caddy · bags", "ru": "Рассыпной · банка · пакетики" } },
+        { "k": { "zh": "适用场景", "en": "Best for", "ru": "Канал сбыта" },
+          "v": { "zh": "日常自饮 · 商超 · 电商", "en": "Everyday · retail · e-commerce", "ru": "Ежедневно · ритейл · маркетплейсы" } },
+        { "k": { "zh": "冲泡建议", "en": "Brewing",  "ru": "Заваривание" },
+          "v": { "zh": "85℃ · 3g/150ml · 3–4 次", "en": "85°C · 3g per 150ml · 3–4 infusions", "ru": "85 °C · 3 г на 150 мл · 3–4 раза" } }
+      ]
+    },
+    {
+      "id": "tea-lushan",
+      "category": "tea",
+      "published": true,
+      "order": 3,
+      "image": "assets/img/product-lushan.jpg",
+      "name": { "zh": "庐山云雾茶", "en": "Lushan Yunwu Tea", "ru": "Чай Лушань Юньу" },
+      "subtitle": { "zh": "中国十大名茶 · 高山云雾", "en": "Top-10 Chinese Tea · Cloud-grown", "ru": "Топ-10 чаёв Китая" },
+      "desc": {
+        "zh": "自 1959 年起位列中国十大名茶。香凛持久，醇厚味甘，是高端礼赠渠道的常选品类。",
+        "en": "Listed among China's Top Ten Teas since 1959. A high, long-lasting aroma and a mellow sweet taste — a standard choice for premium gifting.",
+        "ru": "С 1959 года входит в десятку лучших чаёв Китая. Высокий долгий аромат, мягкий сладкий вкус — стандартный выбор для премиальных подарков."
+      },
+      "specs": [
+        { "k": { "zh": "常见规格", "en": "Sizes",    "ru": "Фасовка" },
+          "v": { "zh": "100g / 125g / 250g", "en": "100g / 125g / 250g", "ru": "100 г / 125 г / 250 г" } },
+        { "k": { "zh": "形态",     "en": "Format",   "ru": "Форма" },
+          "v": { "zh": "散茶 · 礼盒", "en": "Loose · gift box", "ru": "Рассыпной · набор" } },
+        { "k": { "zh": "适用场景", "en": "Best for", "ru": "Канал сбыта" },
+          "v": { "zh": "高端礼赠 · 专柜 · 礼品渠道", "en": "Premium gifting · specialty counters", "ru": "Премиум-подарки · точки продаж" } },
+        { "k": { "zh": "冲泡建议", "en": "Brewing",  "ru": "Заваривание" },
+          "v": { "zh": "85℃ · 3g/150ml · 3–4 次", "en": "85°C · 3g per 150ml · 3–4 infusions", "ru": "85 °C · 3 г на 150 мл · 3–4 раза" } }
+      ]
+    },
+    {
+      "id": "tea-oem",
+      "category": "tea",
+      "published": true,
+      "order": 4,
+      "image": "assets/img/supply-1.jpg",
+      "name": { "zh": "袋泡茶 · 果茶 · 花草茶", "en": "Tea Bags · Fruit · Herbal", "ru": "Пакетики · фруктовые · травяные" },
+      "subtitle": { "zh": "OEM / ODM 贴牌代工", "en": "OEM / ODM Contract Manufacturing", "ru": "OEM / ODM контрактное производство" },
+      "desc": {
+        "zh": "合作生产企业持有食品生产许可证，许可范围明确涵盖袋泡茶、调味茶（混合调味茶）、代用茶（叶类／花类／混合类）。可做滤纸包、三角尼龙包与定制外盒。",
+        "en": "Our partner manufacturer holds a food production licence explicitly covering tea bags, blended (flavoured) tea and herbal tea (leaf / flower / blended). Filter paper sachets, nylon pyramid bags and custom outer boxes available.",
+        "ru": "Производственный партнёр имеет лицензию, явно покрывающую пакетированный, купажированный и травяной чай (листовой / цветочный / смешанный). Пакетики, нейлоновые пирамидки, брендированные коробки."
+      },
+      "specs": [
+        { "k": { "zh": "单包规格", "en": "Per sachet",  "ru": "На пакетик" },
+          "v": { "zh": "2g – 5g / 包", "en": "2g – 5g each", "ru": "2–5 г" } },
+        { "k": { "zh": "包装形式", "en": "Packaging",   "ru": "Упаковка" },
+          "v": { "zh": "滤纸包 · 三角尼龙包 · 定制外盒", "en": "Filter paper · nylon pyramid · custom box", "ru": "Фильтр · нейлон · коробка" } },
+        { "k": { "zh": "适用场景", "en": "Best for",    "ru": "Канал сбыта" },
+          "v": { "zh": "餐饮 · 酒店 · 新式茶饮 · 贴牌", "en": "Food service · hotels · private label", "ru": "HoReCa · отели · СТМ" } },
+        { "k": { "zh": "起订量",   "en": "MOQ",         "ru": "Мин. заказ" },
+          "v": { "zh": "按规格与定制程度而定，请询盘确认", "en": "Depends on spec and customisation", "ru": "Зависит от ТЗ" } }
+      ]
+    }
+  ]
+}
+;</script>
+<script>
+/* ============================================================
+   数据
+   ============================================================ */
+var SITE = null, PROD = null, PV_LANG = 'zh', CUR = 'home';
+var imgTarget = null;
+
+/* 首页说明用的预览源由生成器注入：window.__PREVIEW_HTML__ */
+var PREVIEW_HTML = "<!DOCTYPE html>\n<html lang=\"zh-CN\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n<title id=\"pageTitle\">\u4e5d\u6c5f\u662d\u76db\u5143\u79d1\u6280\u6709\u9650\u516c\u53f8 | \u8de8\u5883\u4f9b\u5e94\u94fe \u00b7 \u8336\u53f6\u51fa\u53e3</title>\n<meta name=\"description\" content=\"\u4e5d\u6c5f\u662d\u76db\u5143\u79d1\u6280\u6709\u9650\u516c\u53f8\uff1a\u4f9b\u5e94\u94fe\u7ba1\u7406\u670d\u52a1\u3001\u8d27\u7269\u4e0e\u6280\u672f\u8fdb\u51fa\u53e3\u3001\u8fdb\u51fa\u53e3\u4ee3\u7406\u3002\u8336\u53f6\u4ea7\u5730\u76f4\u91c7\uff0c\u53ef\u9009\u888b\u6ce1\u8336\u3001\u679c\u8336\u3001\u82b1\u8349\u8336\u4e0e OEM/ODM \u8d34\u724c\u4ee3\u5de5\u3002\">\n<link rel=\"icon\" href=\"assets/img/logo-zsy.png\">\n<style>\n/* ============================================================\n   \u4e5d\u6c5f\u662d\u76db\u5143\u79d1\u6280\u6709\u9650\u516c\u53f8 \u00b7 \u6837\u5f0f\n   \u4e3b\u8272 \u6df1\u84dd #1a3a5c \u00b7 \u8f85\u8272 \u91d1 #c8a55b\n   ============================================================ */\n:root{\n  --brand:#1a3a5c; --brand2:#245a7a; --gold:#c8a55b; --gold2:#d8b76b;\n  --ink:#152233; --muted:#6b7a8a; --line:#e2e8ef; --bg:#fff; --bg2:#f5f7fa;\n  --ok:#2f8f5b; --bad:#c0392b;\n  --r:12px; --sh:0 2px 8px rgba(20,40,60,.06), 0 12px 32px rgba(20,40,60,.06);\n}\n*{box-sizing:border-box}\nhtml{scroll-behavior:smooth; scroll-padding-top:72px}\nbody{margin:0;background:var(--bg);color:var(--ink);\n  font:15px/1.78 -apple-system,BlinkMacSystemFont,\"Segoe UI\",\"PingFang SC\",\"Hiragino Sans GB\",\"Microsoft YaHei\",\"WenQuanYi Micro Hei\",sans-serif;\n  -webkit-font-smoothing:antialiased}\nimg{max-width:100%;display:block}\na{color:inherit;text-decoration:none}\nh1,h2,h3,h4,h5{margin:0;line-height:1.3;font-weight:700}\np{margin:0}\nul,ol{margin:0;padding:0;list-style:none}\n:focus-visible{outline:2px solid var(--gold);outline-offset:2px}\n\n.container{width:100%;max-width:1200px;margin:0 auto;padding:0 20px}\nsection{padding:78px 0}\nsection.alt{background:var(--bg2)}\n.wrap-center{text-align:center;max-width:820px}\n.divider{width:56px;height:3px;background:var(--gold);margin:18px auto 0;border-radius:2px}\n.eyebrow{font-size:12px;letter-spacing:2.4px;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:10px}\n.title{font-size:clamp(1.5rem,3.4vw,2.1rem);color:var(--brand)}\n.lead{color:var(--muted);margin-top:14px;font-size:1rem}\n.note{font-size:.84rem;color:var(--muted);text-align:center;margin-top:20px;line-height:1.75}\n.sub-h{margin:24px 0 10px;font-size:1rem;color:var(--brand)}\n\n.btn{display:inline-block;padding:11px 26px;border-radius:999px;font-weight:700;font-size:.93rem;\n  transition:.22s;border:2px solid transparent;text-align:center}\n.btn.primary{background:var(--gold);color:#1a2a1a}\n.btn.primary:hover{background:var(--gold2);transform:translateY(-2px);box-shadow:0 8px 18px rgba(200,165,91,.34)}\n.btn.ghost{border-color:rgba(255,255,255,.65);color:#fff}\n.btn.ghost:hover{background:rgba(255,255,255,.14);transform:translateY(-2px)}\n.btn.outline{border-color:var(--brand);color:var(--brand);background:#fff}\n.btn.outline:hover{background:var(--brand);color:#fff}\n.btn.sm{padding:9px 20px;font-size:.86rem}\n\n/* ---------- \u5bfc\u822a ---------- */\n.topbar{position:fixed;top:0;left:0;right:0;z-index:100;height:68px;\n  background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border-bottom:1px solid transparent;transition:.25s}\n.topbar.scrolled{border-bottom-color:var(--line);box-shadow:0 2px 14px rgba(20,40,60,.07)}\n.topbar .container{display:flex;align-items:center;gap:16px;height:100%}\n.brand{display:flex;align-items:center;gap:9px;flex-shrink:0}\n.brand img{height:30px;width:auto}\n.brand .txt{font-size:1.16rem;font-weight:800;color:var(--brand);line-height:1.1}\n.brand .txt small{display:block;font-size:.58rem;letter-spacing:2.2px;color:var(--muted);font-weight:600}\n.navlinks{display:flex;gap:22px;margin-left:auto}\n.navlinks a{font-size:.92rem;font-weight:600;color:var(--ink);padding:6px 0;position:relative;transition:.2s}\n.navlinks a:hover{color:var(--gold)}\n.right{display:flex;align-items:center;gap:10px;flex-shrink:0}\n.langswitch{display:flex;gap:2px;background:var(--bg2);border:1px solid var(--line);border-radius:999px;padding:3px}\n.langswitch button{background:none;border:0;color:var(--muted);padding:5px 12px;border-radius:999px;\n  font-size:.8rem;font-weight:700;cursor:pointer;transition:.2s}\n.langswitch button.on{background:var(--brand);color:#fff}\n.navtoggle{display:none;background:none;border:1px solid var(--line);border-radius:8px;\n  width:40px;height:36px;font-size:1.1rem;color:var(--brand);cursor:pointer}\n\n/* ---------- \u9996\u5c4f ---------- */\n.hero{position:relative;min-height:88vh;display:flex;align-items:center;\n  padding:120px 0 72px;background:linear-gradient(140deg,#0f2438,#1a3a5c 55%,#245a7a);overflow:hidden}\n.hero-bg{position:absolute;inset:0;background-size:cover;background-position:center;opacity:.34}\n.hero::after{content:'';position:absolute;inset:0;\n  background:linear-gradient(180deg,rgba(15,36,56,.62),rgba(26,58,92,.72))}\n.hero-inner{position:relative;z-index:2;text-align:center;color:#fff}\n.hero-inner h1{font-size:clamp(1.85rem,5vw,3.1rem);color:#fff;margin-bottom:16px;line-height:1.25}\n.hero-inner .lead{color:rgba(255,255,255,.88);font-size:clamp(.98rem,2vw,1.15rem);max-width:760px;margin:0 auto}\n.hero-cta{display:flex;gap:12px;justify-content:center;margin-top:30px;flex-wrap:wrap}\n.hero-facts{display:flex;gap:14px;justify-content:center;margin-top:46px;flex-wrap:wrap}\n.hero-facts li{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);\n  border-radius:10px;padding:12px 20px;min-width:120px;text-align:center}\n.hero-facts b{display:block;font-size:1.28rem;color:var(--gold)}\n.hero-facts span{font-size:.76rem;color:rgba(255,255,255,.82)}\n\n/* ---------- \u5173\u4e8e ---------- */\n.aboutgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:44px;align-items:start;margin-top:34px}\n.about-img img{border-radius:var(--r);box-shadow:var(--sh);width:100%}\n.about-desc{color:var(--muted);font-size:1rem;line-height:1.92}\n.qual-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:8px}\n.qual-list li{background:var(--bg2);border-left:3px solid var(--gold);border-radius:0 8px 8px 0;\n  padding:9px 14px;font-size:.88rem;color:var(--ink)}\n.qual-list + .note, #qualNote{text-align:left;margin-top:14px}\n\n/* ---------- \u4ea7\u54c1 ---------- */\n.catfilter{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin:28px 0 32px}\n.catbtn{background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 20px;\n  font-size:.88rem;font-weight:600;color:var(--muted);cursor:pointer;transition:.2s}\n.catbtn:hover{border-color:var(--brand);color:var(--brand)}\n.catbtn.on{background:var(--brand);color:#fff;border-color:var(--brand)}\n.catbtn .cnt{opacity:.7;font-size:.8rem}\n\n.prodgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(330px,100%),1fr));gap:26px}\n.pcard{background:#fff;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);\n  display:flex;flex-direction:column;transition:.28s}\n.pcard:hover{transform:translateY(-6px);box-shadow:0 6px 14px rgba(20,40,60,.08),0 22px 48px rgba(20,40,60,.12)}\n.pcard-img{height:230px;background:var(--bg2);overflow:hidden}\n.pcard-img img{width:100%;height:100%;object-fit:cover;transition:.5s}\n.pcard:hover .pcard-img img{transform:scale(1.05)}\n.pcard-body{padding:22px 24px 24px;display:flex;flex-direction:column;flex:1}\n.pcard-cat{font-size:.72rem;letter-spacing:1px;text-transform:uppercase;color:var(--gold);font-weight:700}\n.pcard-body h3{font-size:1.2rem;color:var(--brand);margin:6px 0 3px}\n.pcard-sub{font-size:.84rem;color:var(--muted);font-weight:600;margin-bottom:12px}\n.pcard-body p{font-size:.9rem;color:var(--muted);line-height:1.8;margin-bottom:14px}\n.spec-list{border-top:1px dashed var(--line);padding-top:12px;margin-bottom:16px}\n.spec-list li{display:flex;gap:10px;font-size:.83rem;padding:3px 0;color:var(--muted)}\n.spec-list li b{color:var(--ink);font-weight:700;flex-shrink:0;min-width:66px}\n.pcard-body .btn{margin-top:auto;align-self:flex-start}\n.empty-note{background:#fff;border:1px dashed var(--line);border-radius:var(--r);\n  padding:34px 24px;text-align:center;color:var(--muted);font-size:.92rem}\n\n/* ---------- \u80fd\u529b\u6b65\u9aa4 ---------- */\n.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr));gap:14px;margin-top:34px}\n.steps li{background:#fff;border-radius:10px;padding:16px 18px;box-shadow:var(--sh);\n  display:flex;gap:12px;align-items:flex-start}\n.steps li b{flex-shrink:0;width:26px;height:26px;border-radius:50%;background:var(--brand);color:#fff;\n  display:flex;align-items:center;justify-content:center;font-size:.82rem}\n.steps li span{font-size:.88rem;color:var(--muted);line-height:1.7}\n\n/* ---------- \u901a\u7528\u5361\u7247 ---------- */\n.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:18px;margin-top:34px}\n.mini-card{background:#fff;border-radius:10px;padding:20px 22px;box-shadow:var(--sh);border-left:3px solid var(--gold)}\n.mini-card h4{color:var(--brand);font-size:1rem;margin-bottom:7px}\n.mini-card p{font-size:.88rem;color:var(--muted);line-height:1.78}\n\n/* ---------- FAQ ---------- */\n.faqwrap{max-width:860px;margin:0 auto}\n.fq{background:#fff;border-radius:10px;margin-bottom:11px;box-shadow:var(--sh);overflow:hidden}\n.fq summary{padding:16px 22px;cursor:pointer;font-weight:700;color:var(--brand);font-size:.96rem;list-style:none}\n.fq summary::-webkit-details-marker{display:none}\n.fq summary::after{content:'+';float:right;color:var(--gold);font-size:1.2rem;font-weight:800}\n.fq[open] summary::after{content:'\u2212'}\n.fq .fa{padding:0 22px 18px;font-size:.9rem;color:var(--muted);line-height:1.85}\n\n/* ---------- \u8054\u7cfb ---------- */\n.contactgrid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:44px;align-items:start;margin-top:34px}\n.info-list li{margin-bottom:16px;font-size:.95rem}\n.info-list li b{display:inline-block;min-width:64px;color:var(--brand)}\n.info-list li span{color:var(--muted)}\n.clickable a{color:var(--brand);border-bottom:1px solid rgba(26,58,92,.28);word-break:break-all;transition:.2s}\n.clickable a:hover{color:var(--gold);border-bottom-color:var(--gold)}\n.tagline{font-size:.8rem;color:var(--muted)}\n.wxcopy{cursor:pointer;color:var(--brand);border-bottom:1px dashed var(--gold);user-select:all;transition:.2s}\n.wxcopy:hover{color:var(--gold)}\n.wxcopy.copied{color:var(--ok);font-weight:700}\n.quickrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px;padding-top:18px;border-top:1px dashed var(--line)}\n.qbtn{padding:9px 18px;border-radius:999px;font-size:.86rem;font-weight:700;transition:.22s}\n.qbtn.tg{background:#229ED9;color:#fff}\n.qbtn.tg:hover{background:#1c8bc0;transform:translateY(-2px)}\n.qbtn.wa{background:#25D366;color:#fff}\n.qbtn.wa:hover{background:#1ebc59;transform:translateY(-2px)}\n.qbtn.em{background:var(--brand);color:#fff}\n.qbtn.em:hover{background:var(--brand2);transform:translateY(-2px)}\n\n.cform{background:#fff;border-radius:var(--r);padding:28px;box-shadow:var(--sh)}\n.cform h4{margin-bottom:16px;color:var(--brand);font-size:1.02rem}\n.cform input,.cform select,.cform textarea{width:100%;border:1px solid var(--line);border-radius:8px;\n  padding:11px 13px;margin-bottom:12px;font:inherit;font-size:.92rem;background:#fbfcfe;transition:.16s}\n.cform input:focus,.cform select:focus,.cform textarea:focus{outline:none;border-color:var(--brand);\n  background:#fff;box-shadow:0 0 0 3px rgba(26,58,92,.08)}\n.cform textarea{resize:vertical;line-height:1.7}\n.cform button{width:100%;border:0}\n.formmsg{min-height:20px;margin-top:10px;font-size:.88rem;font-weight:600;text-align:center}\n.formmsg.ok{color:var(--ok)}\n.formmsg.bad{color:var(--bad)}\n\n/* ---------- \u9875\u811a ---------- */\nfooter{background:var(--brand);color:rgba(255,255,255,.82);padding:46px 0 26px;font-size:.88rem}\n.fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr));gap:30px}\n.fbrand{font-size:1.1rem;font-weight:800;color:#fff;margin-bottom:8px}\n.fbrand small{font-size:.6rem;letter-spacing:2px;opacity:.7;font-weight:600}\nfooter h5{color:#fff;font-size:.9rem;margin-bottom:12px}\nfooter ul li{margin-bottom:7px}\nfooter ul li a:hover{color:var(--gold)}\n.foot-contact a{color:rgba(255,255,255,.86)}\n.fbottom{margin-top:30px;padding-top:18px;border-top:1px solid rgba(255,255,255,.14);\n  display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:.8rem;opacity:.8}\n\n/* ---------- \u60ac\u6d6e\u6761 ---------- */\n.floatbar{position:fixed;right:16px;bottom:20px;z-index:95;display:flex;flex-direction:column;gap:10px}\n.floatbar a{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;\n  color:#fff;font-size:1rem;box-shadow:0 4px 14px rgba(20,40,60,.24);transition:.22s}\n.floatbar a:hover{transform:translateY(-3px) scale(1.05)}\n.floatbar .fb-tg{background:#229ED9}\n.floatbar .fb-wa{background:#25D366}\n.floatbar .fb-mail{background:var(--brand)}\n.floatbar .fb-top{background:rgba(26,58,92,.55);backdrop-filter:blur(4px)}\n.floatbar .fb-top:hover{background:var(--brand)}\n\n/* ---------- \u6eda\u52a8\u6de1\u5165 ---------- */\n.reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}\n.reveal.in{opacity:1;transform:none}\n\n/* ---------- \u54cd\u5e94\u5f0f ---------- */\n@media (max-width:980px){\n  .aboutgrid,.contactgrid{grid-template-columns:1fr;gap:30px}\n  .about-img{max-width:520px}\n}\n@media (max-width:860px){\n  section{padding:56px 0}\n  .navtoggle{display:block}\n  .navlinks{position:fixed;top:68px;left:0;right:0;background:#fff;flex-direction:column;gap:0;\n    padding:8px 0;border-bottom:1px solid var(--line);box-shadow:0 10px 24px rgba(20,40,60,.1);display:none}\n  .navlinks.open{display:flex}\n  .navlinks a{padding:14px 22px;border-top:1px solid #f2f5f8}\n  .hero{min-height:auto;padding:110px 0 56px}\n  .hero-facts li{min-width:104px;padding:10px 14px}\n}\n@media (max-width:560px){\n  .container{padding:0 16px}\n  .brand .txt small{display:none}\n  .hero-cta .btn{flex:1;min-width:150px}\n  .floatbar{right:10px;bottom:14px;gap:8px}\n  .floatbar a{width:40px;height:40px}\n  .floatbar a svg{width:17px!important;height:17px!important}\n  .qbtn{flex:1;min-width:100px;text-align:center}\n  .cform{padding:20px}\n  .steps li,.mini-card{padding:14px 16px}\n  .fbottom{flex-direction:column}\n}\n/* \u51cf\u5c11\u52a8\u6548\u504f\u597d */\n@media (prefers-reduced-motion:reduce){\n  .reveal{opacity:1;transform:none;transition:none}\n  html{scroll-behavior:auto}\n}\n/* \u6253\u5370 */\n@media print{\n  .topbar,.floatbar,.hero-cta{display:none!important}\n  .reveal{opacity:1!important;transform:none!important}\n  body{background:#fff}\n}\n\n</style>\n\n<meta property=\"og:type\" content=\"website\">\n<meta property=\"og:site_name\" content=\"\u4e5d\u6c5f\u662d\u76db\u5143\u79d1\u6280\u6709\u9650\u516c\u53f8\">\n<meta property=\"og:title\" content=\"\u4e5d\u6c5f\u662d\u76db\u5143\u79d1\u6280\u6709\u9650\u516c\u53f8 | \u8de8\u5883\u4f9b\u5e94\u94fe \u00b7 \u8336\u53f6\u51fa\u53e3\">\n<meta property=\"og:description\" content=\"\u8fdb\u51fa\u53e3\u8d44\u8d28\u9f50\u5907\uff0c\u4ea7\u5730\u76f4\u91c7\u3002\u8336\u53f6\u3001\u74f7\u5668\u3001\u673a\u7535\u6cf5\u9600\uff0c\u4e00\u4e2a\u7a97\u53e3\u5bf9\u63a5\u3002\">\n<meta property=\"og:image\" content=\"assets/img/hero-bg.jpg\">\n<meta name=\"twitter:card\" content=\"summary_large_image\">\n<meta name=\"theme-color\" content=\"#1a3a5c\">\n\n<noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>\n\n<script type=\"application/ld+json\">\n{\n  \"@context\":\"https://schema.org\",\"@type\":\"Organization\",\n  \"name\":\"\u4e5d\u6c5f\u662d\u76db\u5143\u79d1\u6280\u6709\u9650\u516c\u53f8\",\n  \"alternateName\":\"Jiujiang Zhaoshengyuan Technology Co., Ltd.\",\n  \"description\":\"\u4f9b\u5e94\u94fe\u7ba1\u7406\u670d\u52a1\uff1b\u8d27\u7269\u8fdb\u51fa\u53e3\u3001\u6280\u672f\u8fdb\u51fa\u53e3\u3001\u8fdb\u51fa\u53e3\u4ee3\u7406\u3002\u8336\u53f6\u4ea7\u5730\u76f4\u91c7\u4e0e\u51fa\u53e3\u4ea4\u4ed8\u3002\",\n  \"address\":{\"@type\":\"PostalAddress\",\"addressLocality\":\"\u4fee\u6c34\u53bf\",\"addressRegion\":\"\u6c5f\u897f\u7701\",\"addressCountry\":\"CN\"},\n  \"contactPoint\":[\n    {\"@type\":\"ContactPoint\",\"telephone\":\"+86-188-7925-9179\",\"contactType\":\"sales\",\"availableLanguage\":[\"zh\",\"en\",\"ru\"]},\n    {\"@type\":\"ContactPoint\",\"telephone\":\"+7-911-706-7084\",\"contactType\":\"sales\",\"areaServed\":\"RU\",\"availableLanguage\":[\"ru\",\"en\"]}\n  ],\n  \"email\":\"fanwh188@gmail.com\"\n}\n<\/script>\n</head>\n<body>\n\n<!-- ================= \u5bfc\u822a ================= -->\n<header class=\"topbar\" id=\"topbar\">\n  <div class=\"container\">\n    <a class=\"brand\" href=\"#home\">\n      <img src=\"assets/img/logo-zsy.png\" alt=\"ZSY\" onerror=\"this.style.display='none'\">\n      <span class=\"txt\">\u662d\u76db\u5143<small>ZHAOSHENGYUAN</small></span>\n    </a>\n    <nav class=\"navlinks\" id=\"navlinks\">\n      <a href=\"#about\"      data-i18n=\"nav.about\"></a>\n      <a href=\"#products\"   data-i18n=\"nav.products\"></a>\n      <a href=\"#capability\" data-i18n=\"nav.capability\"></a>\n      <a href=\"#why\"        data-i18n=\"nav.why\"></a>\n      <a href=\"#terms\"      data-i18n=\"nav.terms\"></a>\n      <a href=\"#faq\"        data-i18n=\"nav.faq\"></a>\n      <a href=\"#contact\"    data-i18n=\"nav.contact\"></a>\n    </nav>\n    <div class=\"right\">\n      <div class=\"langswitch\" id=\"langswitch\">\n        <button type=\"button\" data-lang=\"zh\">\u4e2d\u6587</button>\n        <button type=\"button\" data-lang=\"en\">EN</button>\n        <button type=\"button\" data-lang=\"ru\">RU</button>\n      </div>\n      <button class=\"navtoggle\" id=\"navtoggle\" aria-label=\"Menu\">\u2630</button>\n    </div>\n  </div>\n</header>\n\n<!-- ================= \u9996\u5c4f ================= -->\n<section id=\"home\" class=\"hero\">\n  <div class=\"hero-bg\" id=\"heroBg\"></div>\n  <div class=\"container hero-inner\">\n    <p class=\"eyebrow\" data-i18n=\"hero.eyebrow\"></p>\n    <h1 id=\"heroTitle\"></h1>\n    <p class=\"lead\" id=\"heroSub\"></p>\n    <div class=\"hero-cta\">\n      <a class=\"btn primary\" href=\"#products\" data-i18n=\"hero.cta1\"></a>\n      <a class=\"btn ghost\" href=\"#contact\" data-i18n=\"hero.cta2\"></a>\n    </div>\n    <ul class=\"hero-facts\">\n      <li><b>2016+</b><span data-i18n=\"hero.f1\"></span></li>\n      <li><b>3</b><span data-i18n=\"hero.f2\"></span></li>\n      <li><b>4</b><span data-i18n=\"hero.f3\"></span></li>\n      <li><b>RU / CN</b><span data-i18n=\"hero.f4\"></span></li>\n    </ul>\n  </div>\n</section>\n\n<!-- ================= \u5173\u4e8e ================= -->\n<section id=\"about\">\n  <div class=\"container wrap-center\">\n    <p class=\"eyebrow\" data-i18n=\"about.label\"></p>\n    <h2 class=\"title\" id=\"aboutTitle\"></h2>\n    <div class=\"divider\"></div>\n  </div>\n  <div class=\"container aboutgrid\">\n    <div class=\"about-img\"><img id=\"aboutImg\" src=\"\" alt=\"About\" style=\"display:none\"></div>\n    <div>\n      <p class=\"about-desc\" id=\"aboutDesc\"></p>\n      <h4 class=\"sub-h\" data-i18n=\"about.qualTitle\"></h4>\n      <ul class=\"qual-list\" id=\"qualList\"></ul>\n      <p class=\"note\" id=\"qualNote\"></p>\n    </div>\n  </div>\n</section>\n\n<!-- ================= \u4ea7\u54c1\u4e2d\u5fc3\uff08\u540e\u53f0\u589e\u5220\u6539\u67e5\uff09 ================= -->\n<section id=\"products\" class=\"alt\">\n  <div class=\"container wrap-center\">\n    <p class=\"eyebrow\" data-i18n=\"prod.label\"></p>\n    <h2 class=\"title\" data-i18n=\"prod.title\"></h2>\n    <div class=\"divider\"></div>\n    <p class=\"lead\" data-i18n=\"prod.lead\"></p>\n  </div>\n  <div class=\"container\">\n    <div class=\"catfilter\" id=\"catFilter\"></div>\n    <div class=\"prodgrid\" id=\"prodGrid\"></div>\n    <div class=\"empty-note\" id=\"prodEmpty\" style=\"display:none\"></div>\n    <p class=\"note\" data-i18n=\"prod.note\"></p>\n  </div>\n</section>\n\n<!-- ================= \u80fd\u529b ================= -->\n<section id=\"capability\">\n  <div class=\"container wrap-center\">\n    <p class=\"eyebrow\" data-i18n=\"cap.label\"></p>\n    <h2 class=\"title\" id=\"capTitle\"></h2>\n    <div class=\"divider\"></div>\n    <p class=\"lead\" id=\"capLead\"></p>\n  </div>\n  <div class=\"container\">\n    <ol class=\"steps\" id=\"capList\"></ol>\n    <p class=\"note\" id=\"capNote\"></p>\n  </div>\n</section>\n\n<!-- ================= \u4e3a\u4ec0\u4e48\u9009\u62e9\u6211\u4eec ================= -->\n<section id=\"why\" class=\"alt\">\n  <div class=\"container wrap-center\">\n    <h2 class=\"title\" id=\"whyTitle\"></h2>\n    <div class=\"divider\"></div>\n  </div>\n  <div class=\"container grid-2\" id=\"whyGrid\"></div>\n</section>\n\n<!-- ================= \u5408\u4f5c\u6761\u6b3e ================= -->\n<section id=\"terms\">\n  <div class=\"container wrap-center\">\n    <h2 class=\"title\" id=\"termTitle\"></h2>\n    <div class=\"divider\"></div>\n  </div>\n  <div class=\"container grid-2\" id=\"termGrid\"></div>\n  <div class=\"container\"><p class=\"note\" id=\"termNote\"></p></div>\n</section>\n\n<!-- ================= FAQ ================= -->\n<section id=\"faq\" class=\"alt\">\n  <div class=\"container wrap-center\">\n    <p class=\"eyebrow\" data-i18n=\"faq.label\"></p>\n    <h2 class=\"title\" data-i18n=\"faq.title\"></h2>\n    <div class=\"divider\"></div>\n  </div>\n  <div class=\"container faqwrap\" id=\"faqList\"></div>\n</section>\n\n<!-- ================= \u8054\u7cfb ================= -->\n<section id=\"contact\">\n  <div class=\"container wrap-center\">\n    <p class=\"eyebrow\" data-i18n=\"contact.label\"></p>\n    <h2 class=\"title\" data-i18n=\"contact.title\"></h2>\n    <div class=\"divider\"></div>\n    <p class=\"lead\" data-i18n=\"contact.lead\"></p>\n  </div>\n  <div class=\"container contactgrid\">\n    <ul class=\"info-list\">\n      <li><b data-i18n=\"contact.addr\"></b><span id=\"cAddr\"></span></li>\n      <li><b data-i18n=\"contact.phone\"></b>\n        <span class=\"clickable\">\n          <a id=\"cTelCn\" href=\"tel:+8618879259179\"></a> \u00b7 <span class=\"tagline\" data-i18n=\"contact.cn\"></span><br>\n          <a id=\"cTelRu\" href=\"tel:+79117067084\"></a> \u00b7 <span class=\"tagline\" data-i18n=\"contact.ru\"></span>\n        </span>\n      </li>\n      <li><b data-i18n=\"contact.wx\"></b><span><span class=\"wxcopy\" id=\"wxCopy\" title=\"\u70b9\u51fb\u590d\u5236\"></span></span></li>\n      <li><b data-i18n=\"contact.mail\"></b>\n        <span class=\"clickable\">\n          <a id=\"cMail1\" href=\"mailto:fanwh188@gmail.com\"></a><br>\n          <a id=\"cMail2\" href=\"mailto:m18879259179@163.com\"></a>\n        </span>\n      </li>\n      <li class=\"quickrow\">\n        <a class=\"qbtn tg\" href=\"https://t.me/Fan2399\" target=\"_blank\" rel=\"noopener\">Telegram @Fan2399</a>\n        <a class=\"qbtn wa\" href=\"https://wa.me/79117067084\" target=\"_blank\" rel=\"noopener\">WhatsApp</a>\n        <a class=\"qbtn em\" href=\"mailto:fanwh188@gmail.com\">Email</a>\n      </li>\n    </ul>\n\n    <form id=\"contactForm\" class=\"cform\">\n      <h4 data-i18n=\"contact.formTitle\"></h4>\n      <input name=\"name\"    data-i18n-ph=\"contact.fName\"    required>\n      <input name=\"company\" data-i18n-ph=\"contact.fCompany\">\n      <input name=\"contact\" data-i18n-ph=\"contact.fContact\"  required>\n      <input name=\"country\" data-i18n-ph=\"contact.fCountry\">\n      <select name=\"qty\">\n        <option data-i18n=\"contact.q1\"></option>\n        <option data-i18n=\"contact.q2\"></option>\n        <option data-i18n=\"contact.q3\"></option>\n        <option data-i18n=\"contact.q4\"></option>\n        <option data-i18n=\"contact.q5\"></option>\n      </select>\n      <select name=\"type\">\n        <option data-i18n=\"contact.t1\"></option>\n        <option data-i18n=\"contact.t2\"></option>\n        <option data-i18n=\"contact.t3\"></option>\n        <option data-i18n=\"contact.t4\"></option>\n        <option data-i18n=\"contact.t5\"></option>\n      </select>\n      <textarea name=\"msg\" rows=\"4\" data-i18n-ph=\"contact.fMsg\"></textarea>\n      <button type=\"submit\" class=\"btn primary\" data-i18n=\"contact.btn\"></button>\n      <p class=\"formmsg\" id=\"formmsg\"></p>\n    </form>\n  </div>\n</section>\n\n<footer>\n  <div class=\"container\">\n    <div class=\"fgrid\">\n      <div>\n        <div class=\"fbrand\">\u662d\u76db\u5143 <small>ZHAOSHENGYUAN</small></div>\n        <p id=\"footerNote\"></p>\n      </div>\n      <div>\n        <h5 data-i18n=\"footer.links\"></h5>\n        <ul id=\"footerLinks\"></ul>\n      </div>\n      <div>\n        <h5 data-i18n=\"footer.contact\"></h5>\n        <ul class=\"foot-contact\" id=\"footContact\"></ul>\n      </div>\n    </div>\n    <div class=\"fbottom\">\n      <span id=\"footerCopy\"></span>\n    </div>\n  </div>\n</footer>\n\n<div class=\"floatbar\">\n  <a class=\"fb-tg\" href=\"https://t.me/Fan2399\" target=\"_blank\" rel=\"noopener\" title=\"Telegram @Fan2399\" aria-label=\"Telegram\">\n    <svg viewBox=\"0 0 24 24\" width=\"20\" height=\"20\" fill=\"currentColor\"><path d=\"M12 0C5.37 0 0 5.37 0 12s5.37 12 12 12 12-5.37 12-12S18.63 0 12 0zm5.56 8.34l-1.98 9.36c-.15.66-.54.82-1.09.51l-3.01-2.22-1.45 1.4c-.16.16-.3.3-.61.3l.21-3.04 5.55-5.02c.24-.21-.05-.33-.37-.12l-6.86 4.32-2.96-.92c-.64-.2-.66-.64.14-.95l11.55-4.45c.54-.2 1.01.13.83.83z\"/></svg>\n  </a>\n  <a class=\"fb-wa\" href=\"https://wa.me/79117067084\" target=\"_blank\" rel=\"noopener\" title=\"WhatsApp\" aria-label=\"WhatsApp\">\n    <svg viewBox=\"0 0 24 24\" width=\"20\" height=\"20\" fill=\"currentColor\"><path d=\"M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2zm0 18.15c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.264 8.264 0 01-1.26-4.38c0-4.54 3.7-8.23 8.25-8.23 2.2 0 4.27.86 5.82 2.42a8.183 8.183 0 012.41 5.83c0 4.54-3.7 8.22-8.23 8.22zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.24-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.47-1.38-1.72-.15-.25-.02-.38.11-.5.11-.11.25-.29.37-.43.13-.15.17-.25.25-.41.08-.17.04-.31-.02-.44-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.42h-.48c-.16 0-.43.06-.65.31-.23.25-.86.84-.86 2.05s.88 2.38 1 2.54c.12.17 1.74 2.66 4.22 3.73.59.25 1.05.4 1.41.52.59.19 1.13.16 1.56.1.47-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.06-.1-.23-.16-.48-.29z\"/></svg>\n  </a>\n  <a class=\"fb-mail\" href=\"mailto:fanwh188@gmail.com\" title=\"Email\" aria-label=\"Email\">\u2709</a>\n  <a class=\"fb-top\" href=\"#home\" title=\"Top\" aria-label=\"Top\">\u2191</a>\n</div>\n\n<script>\n/* ============================================================\n   \u4e5d\u6c5f\u662d\u76db\u5143\u79d1\u6280\u6709\u9650\u516c\u53f8 \u00b7 \u754c\u9762\u6587\u5b57\u5b57\u5178\uff08\u4e2d / \u82f1 / \u4fc4\uff09\n   \u4ea7\u54c1\u6570\u636e\u4e0e\u7ad9\u70b9\u6b63\u6587\u6765\u81ea data/*.json\uff0c\u7531\u540e\u53f0\u7ba1\u7406\n   ============================================================ */\nconst LANGS = ['zh', 'en', 'ru'];\nconst LANG_META = {\n  zh: { label: '\u4e2d\u6587',     short: '\u4e2d\u6587', htmlLang: 'zh-CN', dir: 'ltr' },\n  en: { label: 'English',  short: 'EN',   htmlLang: 'en',    dir: 'ltr' },\n  ru: { label: '\u0420\u0443\u0441\u0441\u043a\u0438\u0439',  short: 'RU',   htmlLang: 'ru',    dir: 'ltr' }\n};\n\nconst I18N = {\n  zh: {\n    meta: {\n      title: '\u4e5d\u6c5f\u662d\u76db\u5143\u79d1\u6280\u6709\u9650\u516c\u53f8 | \u8de8\u5883\u4f9b\u5e94\u94fe \u00b7 \u8336\u53f6\u51fa\u53e3',\n      desc: '\u4f9b\u5e94\u94fe\u7ba1\u7406\u670d\u52a1\uff1b\u8d27\u7269\u4e0e\u6280\u672f\u8fdb\u51fa\u53e3\u3001\u8fdb\u51fa\u53e3\u4ee3\u7406\u3002\u8336\u53f6\u4ea7\u5730\u76f4\u91c7\uff0c\u53ef\u9009\u888b\u6ce1\u8336\u3001\u679c\u8336\u3001\u82b1\u8349\u8336\u4e0e OEM/ODM \u8d34\u724c\u4ee3\u5de5\u3002'\n    },\n    nav: { about:'\u5173\u4e8e\u6211\u4eec', products:'\u4ea7\u54c1\u4e2d\u5fc3', capability:'\u670d\u52a1\u80fd\u529b', why:'\u4e3a\u4ec0\u4e48\u9009\u62e9\u6211\u4eec', terms:'\u5408\u4f5c\u6761\u6b3e', faq:'\u5e38\u89c1\u95ee\u9898', contact:'\u8054\u7cfb\u5408\u4f5c' },\n\n    hero: { eyebrow:'\u6c5f\u897f \u00b7 \u4e5d\u6c5f \u00b7 \u4fee\u6c34',\n      cta1:'\u67e5\u770b\u4ea7\u54c1', cta2:'\u53d1\u9001\u8be2\u76d8',\n      f1:'\u4f9b\u5e94\u94fe\u7ba1\u7406\u7ecf\u9a8c', f2:'\u5728\u8425\u54c1\u7c7b', f3:'\u8fd0\u8f93\u65b9\u5f0f', f4:'\u4e2d\u4fc4\u76f4\u8fde' },\n\n    about: { label:'\u5173\u4e8e\u6211\u4eec', qualTitle:'\u7ecf\u8425\u8303\u56f4\uff08\u53ef\u5728\u56fd\u5bb6\u4f01\u4e1a\u4fe1\u7528\u4fe1\u606f\u516c\u793a\u7cfb\u7edf\u6838\u9a8c\uff09' },\n\n    prod: { label:'\u4ea7\u54c1\u4e2d\u5fc3', title:'\u4ea7\u54c1\u4e2d\u5fc3',\n      lead:'\u8336\u53f6\u54c1\u7c7b\u5df2\u53ef\u4f9b\u8d27\uff1b\u74f7\u5668\u4e0e\u673a\u7535\u6cf5\u9600\u9646\u7eed\u4e0a\u67b6\uff0c\u656c\u8bf7\u8be2\u76d8\u3002',\n      note:'\u56fe\u793a\u4e3a\u5b9e\u7269\u62cd\u6444\u3002\u5404\u54c1\u7c7b\u89c4\u683c\u3001\u8d77\u8ba2\u91cf\u4e0e\u6253\u6837\u5468\u671f\uff0c\u8bf7\u5728\u8be2\u76d8\u4e2d\u8bf4\u660e\u91c7\u8d2d\u89c4\u6a21\u4e0e\u9500\u552e\u6e20\u9053\u3002' },\n\n    cap: { label:'\u670d\u52a1\u80fd\u529b' },\n\n    faq: { label:'\u5e38\u89c1\u95ee\u9898', title:'\u5e38\u89c1\u95ee\u9898' },\n\n    contact: { label:'\u8054\u7cfb\u5408\u4f5c', title:'\u8054\u7cfb\u5408\u4f5c',\n      lead:'\u544a\u8bc9\u6211\u4eec\u54c1\u7c7b\u3001\u89c4\u683c\u3001\u6570\u91cf\u4e0e\u76ee\u7684\u6e2f\uff0c\u6211\u4eec\u7ed9\u51fa\u5b9e\u65f6\u65b9\u6848\u3002',\n      addr:'\u5730\u5740', phone:'\u7535\u8bdd', wx:'\u5fae\u4fe1', mail:'\u90ae\u7bb1', cn:'\u4e2d\u56fd', ru:'\u4fc4\u7f57\u65af',\n      formTitle:'\u53d1\u9001\u8be2\u76d8',\n      fName:'\u60a8\u7684\u79f0\u547c *', fCompany:'\u516c\u53f8 / \u673a\u6784', fContact:'\u8054\u7cfb\u65b9\u5f0f\uff08\u7535\u8bdd / \u90ae\u7bb1 / Telegram\uff09*',\n      fCountry:'\u56fd\u5bb6 / \u5730\u533a', fMsg:'\u9700\u6c42\u8bf4\u660e\uff08\u54c1\u7c7b\u3001\u6570\u91cf\u3001\u5305\u88c5\u3001\u76ee\u7684\u6e2f\u7b49\uff09',\n      q1:'\u9884\u8ba1\u91c7\u8d2d\u91cf\uff1a\u672a\u786e\u5b9a / \u4ec5\u54a8\u8be2', q2:'\u6837\u54c1\uff08< 5 kg \u6216\u5c11\u91cf\uff09', q3:'\u5c0f\u6279\u91cf\uff085\u201350 kg\uff09',\n      q4:'\u5e38\u89c4\u8ba2\u5355\uff0850\u2013500 kg\uff09', q5:'\u5927\u6279\u91cf\uff08> 500 kg / \u957f\u671f\u4f9b\u8d27\uff09',\n      t1:'\u8d2d\u4e70\u4ea7\u54c1', t2:'\u7ecf\u9500\u4ee3\u7406 / \u6e20\u9053\u5408\u4f5c', t3:'\u4f01\u4e1a\u56e2\u8d2d / \u793c\u76d2\u5b9a\u5236', t4:'OEM / ODM \u8d34\u724c', t5:'\u5176\u4ed6',\n      btn:'\u63d0\u4ea4\u8be2\u76d8' },\n\n    footer: { links:'\u5feb\u901f\u5bfc\u822a', contact:'\u8054\u7cfb\u65b9\u5f0f' },\n\n    msg: { send:'\u63d0\u4ea4\u4e2d\u2026',\n      ok:'\u2713 \u5df2\u6536\u5230\uff0c\u6211\u4eec\u4f1a\u5c3d\u5feb\u4e0e\u60a8\u8054\u7cfb',\n      errNetwork:'\u63d0\u4ea4\u5931\u8d25\uff0c\u8bf7\u7a0d\u540e\u91cd\u8bd5\uff0c\u6216\u76f4\u63a5\u8054\u7cfb\u6211\u4eec\uff1a+7 911 706 7084 / fanwh188@gmail.com',\n      errFill:'\u8bf7\u586b\u5199\u59d3\u540d\u4e0e\u8054\u7cfb\u65b9\u5f0f',\n      copied:'\u2713 \u5df2\u590d\u5236' }\n  },\n\n  en: {\n    meta: {\n      title: 'Zhaoshengyuan | Cross-border Supply Chain \u00b7 Tea Export from China',\n      desc: 'Supply-chain management, import & export of goods and technology, import-export agency. Tea sourced at origin; tea bags, fruit and herbal blends, OEM/ODM.'\n    },\n    nav: { about:'About', products:'Products', capability:'Services', why:'Why Us', terms:'Terms', faq:'FAQ', contact:'Contact' },\n\n    hero: { eyebrow:'Jiangxi \u00b7 Jiujiang \u00b7 Xiushui',\n      cta1:'View Products', cta2:'Send Enquiry',\n      f1:'Supply-chain experience', f2:'Active categories', f3:'Transport modes', f4:'RU & CN direct' },\n\n    about: { label:'About Us', qualTitle:'Registered business scope (verifiable on the National Enterprise Credit Information Publicity System)' },\n\n    prod: { label:'Products', title:'Products',\n      lead:'Tea categories are available now; porcelain and pumps are being added \u2014 enquiries welcome.',\n      note:'All photos are real. For exact specifications, MOQ and sampling lead times, please state your volume and sales channel.' },\n\n    cap: { label:'Services' },\n\n    faq: { label:'FAQ', title:'FAQ' },\n\n    contact: { label:'Contact', title:'Get in Touch',\n      lead:'Tell us the category, spec, quantity and destination port \u2014 we will quote in real time.',\n      addr:'Address', phone:'Phone', wx:'WeChat', mail:'Email', cn:'China', ru:'Russia',\n      formTitle:'Send an Enquiry',\n      fName:'Your name *', fCompany:'Company / organisation', fContact:'Contact (phone / email / Telegram) *',\n      fCountry:'Country / region', fMsg:'Requirements (category, quantity, packaging, destination\u2026)',\n      q1:'Volume: not decided / enquiry only', q2:'Samples (< 5 kg or small qty)', q3:'Small batch (5\u201350 kg)',\n      q4:'Standard order (50\u2013500 kg)', q5:'Bulk (> 500 kg / long-term)',\n      t1:'Buying products', t2:'Distribution / channel', t3:'Corporate gifting', t4:'OEM / ODM', t5:'Other',\n      btn:'Submit Enquiry' },\n\n    footer: { links:'Quick Links', contact:'Contact' },\n\n    msg: { send:'Sending\u2026',\n      ok:'\u2713 Received \u2014 we will be in touch shortly',\n      errNetwork:'Submission failed. Please retry, or contact us directly: +7 911 706 7084 / fanwh188@gmail.com',\n      errFill:'Please provide your name and contact details',\n      copied:'\u2713 Copied' }\n  },\n\n  ru: {\n    meta: {\n      title: '\u0427\u0436\u0430\u043e\u0448\u044d\u043d\u044a\u044e\u0430\u043d\u044c | \u0422\u0440\u0430\u043d\u0441\u0433\u0440\u0430\u043d\u0438\u0447\u043d\u044b\u0435 \u043f\u043e\u0441\u0442\u0430\u0432\u043a\u0438 \u00b7 \u042d\u043a\u0441\u043f\u043e\u0440\u0442 \u0447\u0430\u044f \u0438\u0437 \u041a\u0438\u0442\u0430\u044f',\n      desc: '\u0423\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435 \u0446\u0435\u043f\u044f\u043c\u0438 \u043f\u043e\u0441\u0442\u0430\u0432\u043e\u043a, \u0438\u043c\u043f\u043e\u0440\u0442 \u0438 \u044d\u043a\u0441\u043f\u043e\u0440\u0442 \u0442\u043e\u0432\u0430\u0440\u043e\u0432 \u0438 \u0442\u0435\u0445\u043d\u043e\u043b\u043e\u0433\u0438\u0439, \u0430\u0433\u0435\u043d\u0442\u0441\u043a\u0430\u044f \u0412\u042d\u0414. \u0427\u0430\u0439 \u043e\u0442 \u0438\u0441\u0442\u043e\u0447\u043d\u0438\u043a\u0430; \u043f\u0430\u043a\u0435\u0442\u0438\u043a\u0438, \u0444\u0440\u0443\u043a\u0442\u043e\u0432\u044b\u0435 \u0438 \u0442\u0440\u0430\u0432\u044f\u043d\u044b\u0435 \u043a\u0443\u043f\u0430\u0436\u0438, OEM/ODM.'\n    },\n    nav: { about:'\u041e \u043a\u043e\u043c\u043f\u0430\u043d\u0438\u0438', products:'\u041f\u0440\u043e\u0434\u0443\u043a\u0446\u0438\u044f', capability:'\u0423\u0441\u043b\u0443\u0433\u0438', why:'\u041f\u043e\u0447\u0435\u043c\u0443 \u043c\u044b', terms:'\u0423\u0441\u043b\u043e\u0432\u0438\u044f', faq:'\u0412\u043e\u043f\u0440\u043e\u0441\u044b', contact:'\u041a\u043e\u043d\u0442\u0430\u043a\u0442\u044b' },\n\n    hero: { eyebrow:'\u0426\u0437\u044f\u043d\u0441\u0438 \u00b7 \u0426\u0437\u044e\u0446\u0437\u044f\u043d \u00b7 \u0421\u044e\u0448\u0443\u0439',\n      cta1:'\u041f\u0440\u043e\u0434\u0443\u043a\u0446\u0438\u044f', cta2:'\u041e\u0442\u043f\u0440\u0430\u0432\u0438\u0442\u044c \u0437\u0430\u043f\u0440\u043e\u0441',\n      f1:'\u041e\u043f\u044b\u0442 \u0432 \u043f\u043e\u0441\u0442\u0430\u0432\u043a\u0430\u0445', f2:'\u0410\u043a\u0442\u0438\u0432\u043d\u044b\u0445 \u043a\u0430\u0442\u0435\u0433\u043e\u0440\u0438\u0439', f3:'\u0421\u043f\u043e\u0441\u043e\u0431\u043e\u0432 \u043f\u0435\u0440\u0435\u0432\u043e\u0437\u043a\u0438', f4:'RU \u0438 CN \u043d\u0430\u043f\u0440\u044f\u043c\u0443\u044e' },\n\n    about: { label:'\u041e \u043a\u043e\u043c\u043f\u0430\u043d\u0438\u0438', qualTitle:'\u0417\u0430\u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u043e\u0432\u0430\u043d\u043d\u044b\u0439 \u0432\u0438\u0434 \u0434\u0435\u044f\u0442\u0435\u043b\u044c\u043d\u043e\u0441\u0442\u0438 (\u043f\u0440\u043e\u0432\u0435\u0440\u044f\u0435\u0442\u0441\u044f \u0432 \u041d\u0430\u0446\u0438\u043e\u043d\u0430\u043b\u044c\u043d\u043e\u0439 \u0441\u0438\u0441\u0442\u0435\u043c\u0435 \u0440\u0430\u0441\u043a\u0440\u044b\u0442\u0438\u044f \u0438\u043d\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u0438)' },\n\n    prod: { label:'\u041f\u0440\u043e\u0434\u0443\u043a\u0446\u0438\u044f', title:'\u041f\u0440\u043e\u0434\u0443\u043a\u0446\u0438\u044f',\n      lead:'\u0427\u0430\u0439\u043d\u044b\u0435 \u043a\u0430\u0442\u0435\u0433\u043e\u0440\u0438\u0438 \u0434\u043e\u0441\u0442\u0443\u043f\u043d\u044b; \u0444\u0430\u0440\u0444\u043e\u0440 \u0438 \u043d\u0430\u0441\u043e\u0441\u044b \u0434\u043e\u0431\u0430\u0432\u043b\u044f\u044e\u0442\u0441\u044f \u2014 \u0437\u0430\u043f\u0440\u043e\u0441\u044b \u043f\u0440\u0438\u043d\u0438\u043c\u0430\u044e\u0442\u0441\u044f.',\n      note:'\u0412\u0441\u0435 \u0444\u043e\u0442\u043e \u0440\u0435\u0430\u043b\u044c\u043d\u044b\u0435. \u0422\u043e\u0447\u043d\u044b\u0435 \u0445\u0430\u0440\u0430\u043a\u0442\u0435\u0440\u0438\u0441\u0442\u0438\u043a\u0438, \u043c\u0438\u043d\u0438\u043c\u0430\u043b\u044c\u043d\u044b\u0439 \u043e\u0431\u044a\u0451\u043c \u0438 \u0441\u0440\u043e\u043a\u0438 \u043e\u0431\u0440\u0430\u0437\u0446\u043e\u0432 \u0443\u0442\u043e\u0447\u043d\u044f\u0439\u0442\u0435 \u0432 \u0437\u0430\u043f\u0440\u043e\u0441\u0435.' },\n\n    cap: { label:'\u0423\u0441\u043b\u0443\u0433\u0438' },\n\n    faq: { label:'\u0412\u043e\u043f\u0440\u043e\u0441\u044b', title:'\u0427\u0430\u0441\u0442\u044b\u0435 \u0432\u043e\u043f\u0440\u043e\u0441\u044b' },\n\n    contact: { label:'\u041a\u043e\u043d\u0442\u0430\u043a\u0442\u044b', title:'\u0421\u0432\u044f\u0436\u0438\u0442\u0435\u0441\u044c \u0441 \u043d\u0430\u043c\u0438',\n      lead:'\u0423\u043a\u0430\u0436\u0438\u0442\u0435 \u043a\u0430\u0442\u0435\u0433\u043e\u0440\u0438\u044e, \u0445\u0430\u0440\u0430\u043a\u0442\u0435\u0440\u0438\u0441\u0442\u0438\u043a\u0438, \u043e\u0431\u044a\u0451\u043c \u0438 \u043f\u043e\u0440\u0442 \u043d\u0430\u0437\u043d\u0430\u0447\u0435\u043d\u0438\u044f \u2014 \u0440\u0430\u0441\u0441\u0447\u0438\u0442\u0430\u0435\u043c \u0430\u043a\u0442\u0443\u0430\u043b\u044c\u043d\u043e\u0435 \u043f\u0440\u0435\u0434\u043b\u043e\u0436\u0435\u043d\u0438\u0435.',\n      addr:'\u0410\u0434\u0440\u0435\u0441', phone:'\u0422\u0435\u043b\u0435\u0444\u043e\u043d', wx:'WeChat', mail:'E-mail', cn:'\u041a\u0438\u0442\u0430\u0439', ru:'\u0420\u043e\u0441\u0441\u0438\u044f',\n      formTitle:'\u041e\u0442\u043f\u0440\u0430\u0432\u0438\u0442\u044c \u0437\u0430\u043f\u0440\u043e\u0441',\n      fName:'\u0412\u0430\u0448\u0435 \u0438\u043c\u044f *', fCompany:'\u041a\u043e\u043c\u043f\u0430\u043d\u0438\u044f / \u043e\u0440\u0433\u0430\u043d\u0438\u0437\u0430\u0446\u0438\u044f', fContact:'\u041a\u043e\u043d\u0442\u0430\u043a\u0442 (\u0442\u0435\u043b\u0435\u0444\u043e\u043d / e-mail / Telegram) *',\n      fCountry:'\u0421\u0442\u0440\u0430\u043d\u0430 / \u0440\u0435\u0433\u0438\u043e\u043d', fMsg:'\u0422\u0440\u0435\u0431\u043e\u0432\u0430\u043d\u0438\u044f (\u043a\u0430\u0442\u0435\u0433\u043e\u0440\u0438\u044f, \u043e\u0431\u044a\u0451\u043c, \u0443\u043f\u0430\u043a\u043e\u0432\u043a\u0430, \u043d\u0430\u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435\u2026)',\n      q1:'\u041e\u0431\u044a\u0451\u043c: \u043d\u0435 \u043e\u043f\u0440\u0435\u0434\u0435\u043b\u0451\u043d / \u0442\u043e\u043b\u044c\u043a\u043e \u0437\u0430\u043f\u0440\u043e\u0441', q2:'\u041e\u0431\u0440\u0430\u0437\u0446\u044b (< 5 \u043a\u0433 \u0438\u043b\u0438 \u043d\u0435\u043c\u043d\u043e\u0433\u043e)', q3:'\u041c\u0435\u043b\u043a\u0430\u044f \u043f\u0430\u0440\u0442\u0438\u044f (5\u201350 \u043a\u0433)',\n      q4:'\u0421\u0442\u0430\u043d\u0434\u0430\u0440\u0442\u043d\u044b\u0439 \u0437\u0430\u043a\u0430\u0437 (50\u2013500 \u043a\u0433)', q5:'\u041a\u0440\u0443\u043f\u043d\u044b\u0439 \u043e\u0431\u044a\u0451\u043c (> 500 \u043a\u0433 / \u0434\u043e\u043b\u0433\u043e\u0441\u0440\u043e\u0447\u043d\u043e)',\n      t1:'\u041f\u043e\u043a\u0443\u043f\u043a\u0430 \u043f\u0440\u043e\u0434\u0443\u043a\u0446\u0438\u0438', t2:'\u0414\u0438\u0441\u0442\u0440\u0438\u0431\u0443\u0446\u0438\u044f', t3:'\u041a\u043e\u0440\u043f\u043e\u0440\u0430\u0442\u0438\u0432\u043d\u044b\u0435 \u043f\u043e\u0434\u0430\u0440\u043a\u0438', t4:'OEM / ODM', t5:'\u0414\u0440\u0443\u0433\u043e\u0435',\n      btn:'\u041e\u0442\u043f\u0440\u0430\u0432\u0438\u0442\u044c \u0437\u0430\u043f\u0440\u043e\u0441' },\n\n    footer: { links:'\u041d\u0430\u0432\u0438\u0433\u0430\u0446\u0438\u044f', contact:'\u041a\u043e\u043d\u0442\u0430\u043a\u0442\u044b' },\n\n    msg: { send:'\u041e\u0442\u043f\u0440\u0430\u0432\u043a\u0430\u2026',\n      ok:'\u2713 \u0417\u0430\u043f\u0440\u043e\u0441 \u043f\u043e\u043b\u0443\u0447\u0435\u043d \u2014 \u043c\u044b \u0441\u0432\u044f\u0436\u0435\u043c\u0441\u044f \u0441 \u0432\u0430\u043c\u0438',\n      errNetwork:'\u041d\u0435 \u0443\u0434\u0430\u043b\u043e\u0441\u044c \u043e\u0442\u043f\u0440\u0430\u0432\u0438\u0442\u044c. \u041f\u043e\u043f\u0440\u043e\u0431\u0443\u0439\u0442\u0435 \u043f\u043e\u0437\u0436\u0435 \u0438\u043b\u0438 \u0441\u0432\u044f\u0436\u0438\u0442\u0435\u0441\u044c \u043d\u0430\u043f\u0440\u044f\u043c\u0443\u044e: +7 911 706 7084 / fanwh188@gmail.com',\n      errFill:'\u0423\u043a\u0430\u0436\u0438\u0442\u0435 \u0438\u043c\u044f \u0438 \u043a\u043e\u043d\u0442\u0430\u043a\u0442\u043d\u044b\u0435 \u0434\u0430\u043d\u043d\u044b\u0435',\n      copied:'\u2713 \u0421\u043a\u043e\u043f\u0438\u0440\u043e\u0432\u0430\u043d\u043e' }\n  }\n};\n\n<\/script>\n<script>window.__ZSY_SITE__={\n  \"hero_titles\": {\n    \"zh\": \"\u4e5d\u6c5f\u662d\u76db\u5143\u79d1\u6280\u6709\u9650\u516c\u53f8\",\n    \"en\": \"Jiujiang Zhaoshengyuan Technology Co., Ltd.\",\n    \"ru\": \"\u041e\u041e\u041e \u00ab\u0426\u0437\u044e\u0446\u0437\u044f\u043d \u0427\u0436\u0430\u043e\u0448\u044d\u043d\u044a\u044e\u0430\u043d\u044c \u0422\u0435\u0445\u043d\u043e\u043b\u043e\u0433\u0438\u0438\u00bb\"\n  },\n  \"hero_subs\": {\n    \"zh\": \"\u8de8\u5883\u4f9b\u5e94\u94fe \u00b7 \u8fdb\u51fa\u53e3\u4ee3\u7406 \u00b7 \u4ea7\u5730\u76f4\u91c7\u7684\u4e2d\u56fd\u8d27\u6e90\u4f19\u4f34\",\n    \"en\": \"Cross-border Supply Chain \u00b7 Import & Export Agency \u00b7 Your Sourcing Partner in China\",\n    \"ru\": \"\u0422\u0440\u0430\u043d\u0441\u0433\u0440\u0430\u043d\u0438\u0447\u043d\u0430\u044f \u043b\u043e\u0433\u0438\u0441\u0442\u0438\u043a\u0430 \u00b7 \u0412\u042d\u0414-\u0430\u0433\u0435\u043d\u0442 \u00b7 \u041f\u0430\u0440\u0442\u043d\u0451\u0440 \u043f\u043e \u0437\u0430\u043a\u0443\u043f\u043a\u0430\u043c \u0432 \u041a\u0438\u0442\u0430\u0435\"\n  },\n  \"hero_img\": \"assets/img/hero-bg.jpg\",\n\n  \"about_titles\": {\n    \"zh\": \"\u5173\u4e8e\u6211\u4eec\", \"en\": \"About Us\", \"ru\": \"\u041e \u043a\u043e\u043c\u043f\u0430\u043d\u0438\u0438\"\n  },\n  \"about_descs\": {\n    \"zh\": \"\u4e5d\u6c5f\u662d\u76db\u5143\u79d1\u6280\u6709\u9650\u516c\u53f8\u6ce8\u518c\u4e8e\u6c5f\u897f\u7701\u4e5d\u6c5f\u5e02\u4fee\u6c34\u53bf\u3002\u516c\u53f8\u4ee5\u4f9b\u5e94\u94fe\u7ba1\u7406\u670d\u52a1\u4e3a\u6838\u5fc3\uff0c\u5177\u5907\u8d27\u7269\u8fdb\u51fa\u53e3\u3001\u6280\u672f\u8fdb\u51fa\u53e3\u4e0e\u8fdb\u51fa\u53e3\u4ee3\u7406\u7ecf\u8425\u8d44\u8d28\uff0c\u53ef\u81ea\u8425\u5e76\u4ee3\u7406\u5404\u7c7b\u5546\u54c1\u4e0e\u6280\u672f\u7684\u8fdb\u51fa\u53e3\u4e1a\u52a1\u3002\u6211\u4eec\u7acb\u8db3\u4ea7\u5730\uff0c\u505a\u91c7\u8d2d\u65b9\u4e0e\u4e2d\u56fd\u5236\u9020\u4e4b\u95f4\u7684\u90a3\u4e00\u6bb5\uff1a\u9009\u54c1\u3001\u9a8c\u8d27\u3001\u96c6\u8d27\u3001\u62a5\u5173\u3001\u8fd0\u8f93\u3001\u6e05\u5173\u6d3e\u9001\u3002\",\n    \"en\": \"Jiujiang Zhaoshengyuan Technology Co., Ltd. is registered in Xiushui County, Jiujiang, Jiangxi. Supply-chain management is our core business, and we are licensed for the import and export of goods and technology as well as import-export agency. Based at the source, we handle the stretch between a buyer and Chinese manufacturing: sourcing, inspection, consolidation, customs clearance, shipping, and last-mile delivery.\",\n    \"ru\": \"\u041e\u041e\u041e \u00ab\u0426\u0437\u044e\u0446\u0437\u044f\u043d \u0427\u0436\u0430\u043e\u0448\u044d\u043d\u044a\u044e\u0430\u043d\u044c \u0422\u0435\u0445\u043d\u043e\u043b\u043e\u0433\u0438\u0438\u00bb \u0437\u0430\u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u043e\u0432\u0430\u043d\u043e \u0432 \u0443\u0435\u0437\u0434\u0435 \u0421\u044e\u0448\u0443\u0439, \u0426\u0437\u044e\u0446\u0437\u044f\u043d, \u043f\u0440\u043e\u0432\u0438\u043d\u0446\u0438\u044f \u0426\u0437\u044f\u043d\u0441\u0438. \u041e\u0441\u043d\u043e\u0432\u043d\u043e\u0435 \u043d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435 \u2014 \u0443\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435 \u0446\u0435\u043f\u044f\u043c\u0438 \u043f\u043e\u0441\u0442\u0430\u0432\u043e\u043a; \u0438\u043c\u0435\u044e\u0442\u0441\u044f \u043b\u0438\u0446\u0435\u043d\u0437\u0438\u0438 \u043d\u0430 \u0438\u043c\u043f\u043e\u0440\u0442 \u0438 \u044d\u043a\u0441\u043f\u043e\u0440\u0442 \u0442\u043e\u0432\u0430\u0440\u043e\u0432 \u0438 \u0442\u0435\u0445\u043d\u043e\u043b\u043e\u0433\u0438\u0439, \u0430 \u0442\u0430\u043a\u0436\u0435 \u043d\u0430 \u0430\u0433\u0435\u043d\u0442\u0441\u043a\u0443\u044e \u0412\u042d\u0414-\u0434\u0435\u044f\u0442\u0435\u043b\u044c\u043d\u043e\u0441\u0442\u044c. \u041c\u044b \u043d\u0430\u0445\u043e\u0434\u0438\u043c\u0441\u044f \u0443 \u0438\u0441\u0442\u043e\u0447\u043d\u0438\u043a\u0430 \u0438 \u0437\u0430\u043a\u0440\u044b\u0432\u0430\u0435\u043c \u0443\u0447\u0430\u0441\u0442\u043e\u043a \u043c\u0435\u0436\u0434\u0443 \u043f\u043e\u043a\u0443\u043f\u0430\u0442\u0435\u043b\u0435\u043c \u0438 \u043a\u0438\u0442\u0430\u0439\u0441\u043a\u0438\u043c \u043f\u0440\u043e\u0438\u0437\u0432\u043e\u0434\u0441\u0442\u0432\u043e\u043c: \u043f\u043e\u0434\u0431\u043e\u0440, \u0438\u043d\u0441\u043f\u0435\u043a\u0446\u0438\u044f, \u043a\u043e\u043d\u0441\u043e\u043b\u0438\u0434\u0430\u0446\u0438\u044f, \u0442\u0430\u043c\u043e\u0436\u043d\u044f, \u043f\u0435\u0440\u0435\u0432\u043e\u0437\u043a\u0430, \u0434\u043e\u0441\u0442\u0430\u0432\u043a\u0430.\"\n  },\n  \"about_img\": \"assets/img/about-2.jpg\",\n\n  \"qual_items\": [\n    { \"zh\": \"\u8d27\u7269\u8fdb\u51fa\u53e3\", \"en\": \"Import & export of goods\", \"ru\": \"\u0418\u043c\u043f\u043e\u0440\u0442 \u0438 \u044d\u043a\u0441\u043f\u043e\u0440\u0442 \u0442\u043e\u0432\u0430\u0440\u043e\u0432\" },\n    { \"zh\": \"\u6280\u672f\u8fdb\u51fa\u53e3\", \"en\": \"Import & export of technology\", \"ru\": \"\u0418\u043c\u043f\u043e\u0440\u0442 \u0438 \u044d\u043a\u0441\u043f\u043e\u0440\u0442 \u0442\u0435\u0445\u043d\u043e\u043b\u043e\u0433\u0438\u0439\" },\n    { \"zh\": \"\u8fdb\u51fa\u53e3\u4ee3\u7406\", \"en\": \"Import-export agency\", \"ru\": \"\u0410\u0433\u0435\u043d\u0442\u0441\u043a\u0430\u044f \u0412\u042d\u0414-\u0434\u0435\u044f\u0442\u0435\u043b\u044c\u043d\u043e\u0441\u0442\u044c\" },\n    { \"zh\": \"\u4f9b\u5e94\u94fe\u7ba1\u7406\u670d\u52a1\", \"en\": \"Supply-chain management\", \"ru\": \"\u0423\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435 \u0446\u0435\u043f\u044f\u043c\u0438 \u043f\u043e\u0441\u0442\u0430\u0432\u043e\u043a\" },\n    { \"zh\": \"\u533a\u5757\u94fe\u6280\u672f\u76f8\u5173\u8f6f\u4ef6\u548c\u670d\u52a1\uff08\u975e\u91d1\u878d\u7c7b\uff09\", \"en\": \"Blockchain software & services (non-financial)\", \"ru\": \"\u0411\u043b\u043e\u043a\u0447\u0435\u0439\u043d-\u041f\u041e \u0438 \u0443\u0441\u043b\u0443\u0433\u0438 (\u043d\u0435 \u0444\u0438\u043d\u0430\u043d\u0441\u043e\u0432\u044b\u0435)\" },\n    { \"zh\": \"\u5de5\u827a\u7f8e\u672f\u54c1\u53ca\u6536\u85cf\u54c1\u96f6\u552e\", \"en\": \"Retail of arts, crafts & collectibles\", \"ru\": \"\u0420\u043e\u0437\u043d\u0438\u0447\u043d\u0430\u044f \u0442\u043e\u0440\u0433\u043e\u0432\u043b\u044f \u0438\u0437\u0434\u0435\u043b\u0438\u044f\u043c\u0438 \u0438\u0441\u043a\u0443\u0441\u0441\u0442\u0432\u0430\" }\n  ],\n  \"qual_note\": {\n    \"zh\": \"\u4ee5\u4e0a\u5747\u53d6\u81ea\u516c\u53f8\u7ecf\u8425\u8303\u56f4\uff0c\u53ef\u5728\u56fd\u5bb6\u4f01\u4e1a\u4fe1\u7528\u4fe1\u606f\u516c\u793a\u7cfb\u7edf\u6838\u9a8c\u3002\u7edf\u4e00\u793e\u4f1a\u4fe1\u7528\u4ee3\u7801 91360424MAKJBPTM33\u3002\u533a\u5757\u94fe\u76f8\u5173\u670d\u52a1\u4ec5\u9650\u6eaf\u6e90\u9632\u4f2a\u4e0e\u5355\u636e\u5b58\u8bc1\uff0c\u4e0d\u6d89\u53ca\u4efb\u4f55\u865a\u62df\u8d27\u5e01\u3001\u4ee3\u5e01\u53d1\u884c\u6216\u652f\u4ed8\u7ed3\u7b97\u4e1a\u52a1\u3002\",\n    \"en\": \"All items above are taken from the company's registered business scope and can be verified on the National Enterprise Credit Information Publicity System. Unified Social Credit Code 91360424MAKJBPTM33. Blockchain-related services are limited to traceability, anti-counterfeiting and document attestation \u2014 no virtual currency, token issuance or payment settlement involved.\",\n    \"ru\": \"\u0412\u0441\u0435 \u043f\u0443\u043d\u043a\u0442\u044b \u0432\u0437\u044f\u0442\u044b \u0438\u0437 \u0437\u0430\u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u043e\u0432\u0430\u043d\u043d\u043e\u0433\u043e \u0432\u0438\u0434\u0430 \u0434\u0435\u044f\u0442\u0435\u043b\u044c\u043d\u043e\u0441\u0442\u0438 \u0438 \u043f\u0440\u043e\u0432\u0435\u0440\u044f\u044e\u0442\u0441\u044f \u0432 \u041d\u0430\u0446\u0438\u043e\u043d\u0430\u043b\u044c\u043d\u043e\u0439 \u0441\u0438\u0441\u0442\u0435\u043c\u0435 \u0440\u0430\u0441\u043a\u0440\u044b\u0442\u0438\u044f \u043a\u043e\u0440\u043f\u043e\u0440\u0430\u0442\u0438\u0432\u043d\u043e\u0439 \u0438\u043d\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u0438. \u0415\u0434\u0438\u043d\u044b\u0439 \u0441\u043e\u0446\u0438\u0430\u043b\u044c\u043d\u044b\u0439 \u043a\u043e\u0434 91360424MAKJBPTM33. \u0423\u0441\u043b\u0443\u0433\u0438 \u0431\u043b\u043e\u043a\u0447\u0435\u0439\u043d\u0430 \u043e\u0433\u0440\u0430\u043d\u0438\u0447\u0438\u0432\u0430\u044e\u0442\u0441\u044f \u043f\u0440\u043e\u0441\u043b\u0435\u0436\u0438\u0432\u0430\u0435\u043c\u043e\u0441\u0442\u044c\u044e, \u0437\u0430\u0449\u0438\u0442\u043e\u0439 \u043e\u0442 \u043f\u043e\u0434\u0434\u0435\u043b\u043a\u0438 \u0438 \u043f\u043e\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043d\u0438\u0435\u043c \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u043e\u0432 \u2014 \u0431\u0435\u0437 \u0432\u0438\u0440\u0442\u0443\u0430\u043b\u044c\u043d\u044b\u0445 \u0432\u0430\u043b\u044e\u0442, \u0432\u044b\u043f\u0443\u0441\u043a\u0430 \u0442\u043e\u043a\u0435\u043d\u043e\u0432 \u0438 \u043f\u043b\u0430\u0442\u0435\u0436\u0435\u0439.\"\n  },\n\n  \"cap_title\": { \"zh\": \"\u6211\u4eec\u80fd\u505a\u4ec0\u4e48\", \"en\": \"What We Do\", \"ru\": \"\u0427\u0442\u043e \u043c\u044b \u0434\u0435\u043b\u0430\u0435\u043c\" },\n  \"cap_lead\": {\n    \"zh\": \"\u4ece\u9009\u54c1\u5230\u6e05\u5173\u6d3e\u9001\uff0c\u4e03\u4e2a\u73af\u8282\uff0c\u4e00\u4e2a\u5bf9\u63a5\u4eba\u3002\",\n    \"en\": \"From sourcing to customs clearance and delivery \u2014 seven steps, one point of contact.\",\n    \"ru\": \"\u041e\u0442 \u043f\u043e\u0434\u0431\u043e\u0440\u0430 \u0434\u043e \u0442\u0430\u043c\u043e\u0436\u043d\u0438 \u0438 \u0434\u043e\u0441\u0442\u0430\u0432\u043a\u0438 \u2014 \u0441\u0435\u043c\u044c \u044d\u0442\u0430\u043f\u043e\u0432, \u043e\u0434\u0438\u043d \u043a\u043e\u043d\u0442\u0430\u043a\u0442.\"\n  },\n  \"cap_items\": [\n    { \"zh\": \"\u9700\u6c42\u786e\u8ba4\uff1a\u54c1\u7c7b\u3001\u89c4\u683c\u3001\u76ee\u6807\u5e02\u573a\u3001\u5408\u89c4\u8981\u6c42\", \"en\": \"Requirements: category, spec, target market, compliance\", \"ru\": \"\u0422\u0440\u0435\u0431\u043e\u0432\u0430\u043d\u0438\u044f: \u043a\u0430\u0442\u0435\u0433\u043e\u0440\u0438\u044f, \u0422\u0417, \u0440\u044b\u043d\u043e\u043a, \u043a\u043e\u043c\u043f\u043b\u0430\u0435\u043d\u0441\" },\n    { \"zh\": \"\u9009\u54c1\u91c7\u8d2d\uff1a\u4ea7\u5730\u76f4\u91c7\uff0c\u591a\u5bb6\u5de5\u5382\u6bd4\u4ef7\u4e0e\u6253\u6837\", \"en\": \"Sourcing: direct from origin, multi-factory comparison\", \"ru\": \"\u041f\u043e\u0434\u0431\u043e\u0440: \u043d\u0430\u043f\u0440\u044f\u043c\u0443\u044e \u043e\u0442 \u0438\u0441\u0442\u043e\u0447\u043d\u0438\u043a\u0430, \u0441\u0440\u0430\u0432\u043d\u0435\u043d\u0438\u0435 \u0444\u0430\u0431\u0440\u0438\u043a\" },\n    { \"zh\": \"\u9a8c\u8d27\u8d28\u68c0\uff1a\u51fa\u8d27\u524d\u68c0\u9a8c\uff0c\u652f\u6301\u7b2c\u4e09\u65b9\u9a8c\u8d27\", \"en\": \"Inspection: pre-shipment check, third-party accepted\", \"ru\": \"\u0418\u043d\u0441\u043f\u0435\u043a\u0446\u0438\u044f: \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0430 \u043f\u0435\u0440\u0435\u0434 \u043e\u0442\u0433\u0440\u0443\u0437\u043a\u043e\u0439\" },\n    { \"zh\": \"\u4ed3\u50a8\u96c6\u8d27\uff1a\u591a\u4f9b\u5e94\u5546\u8d27\u7269\u5408\u5e76\uff0c\u964d\u4f4e\u5934\u7a0b\u6210\u672c\", \"en\": \"Consolidation: merge suppliers to cut first-leg cost\", \"ru\": \"\u041a\u043e\u043d\u0441\u043e\u043b\u0438\u0434\u0430\u0446\u0438\u044f: \u043e\u0431\u044a\u0435\u0434\u0438\u043d\u0435\u043d\u0438\u0435 \u043f\u043e\u0441\u0442\u0430\u0432\u0449\u0438\u043a\u043e\u0432\" },\n    { \"zh\": \"\u51fa\u53e3\u62a5\u5173\uff1a\u5355\u8bc1\u51c6\u5907\u4e0e\u7533\u62a5\", \"en\": \"Export clearance: documentation and declaration\", \"ru\": \"\u042d\u043a\u0441\u043f\u043e\u0440\u0442\u043d\u0430\u044f \u0442\u0430\u043c\u043e\u0436\u043d\u044f: \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u044b \u0438 \u0434\u0435\u043a\u043b\u0430\u0440\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435\" },\n    { \"zh\": \"\u56fd\u9645\u8fd0\u8f93\uff1a\u6d77\u8fd0 / \u94c1\u8def / \u7a7a\u8fd0 / \u516c\u8def\", \"en\": \"Transport: sea / rail / air / road\", \"ru\": \"\u041f\u0435\u0440\u0435\u0432\u043e\u0437\u043a\u0430: \u043c\u043e\u0440\u0435 / \u0436/\u0434 / \u0430\u0432\u0438\u0430 / \u0430\u0432\u0442\u043e\" },\n    { \"zh\": \"\u6e05\u5173\u6d3e\u9001\uff1a\u76ee\u7684\u6e2f\u6e05\u5173\u4e0e\u672b\u7aef\u914d\u9001\", \"en\": \"Destination: customs clearance and last mile\", \"ru\": \"\u041d\u0430\u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435: \u0442\u0430\u043c\u043e\u0436\u043d\u044f \u0438 \u043f\u043e\u0441\u043b\u0435\u0434\u043d\u044f\u044f \u043c\u0438\u043b\u044f\" }\n  ],\n  \"cap_note\": {\n    \"zh\": \"\u65f6\u6548\u4e0e\u8d39\u7528\u968f\u5b63\u8282\u3001\u653f\u7b56\u3001\u8231\u4f4d\u4e0e\u76ee\u7684\u56fd\u6ce2\u52a8\uff0c\u6211\u4eec\u4e0d\u6807\u793a\u56fa\u5b9a\u62a5\u4ef7\u2014\u2014\u8bf7\u5728\u8be2\u76d8\u4e2d\u8bf4\u660e\u54c1\u7c7b\u3001\u4f53\u79ef\u91cd\u91cf\u4e0e\u76ee\u7684\u6e2f\uff0c\u6211\u4eec\u7ed9\u51fa\u5b9e\u65f6\u65b9\u6848\u3002\",\n    \"en\": \"Transit times and costs move with season, policy, capacity and destination. We do not publish fixed rates \u2014 tell us the category, volume, weight and destination port and we will quote in real time.\",\n    \"ru\": \"\u0421\u0440\u043e\u043a\u0438 \u0438 \u0441\u0442\u043e\u0438\u043c\u043e\u0441\u0442\u044c \u0437\u0430\u0432\u0438\u0441\u044f\u0442 \u043e\u0442 \u0441\u0435\u0437\u043e\u043d\u0430, \u043f\u0440\u0430\u0432\u0438\u043b, \u043d\u0430\u043b\u0438\u0447\u0438\u044f \u043c\u0435\u0441\u0442 \u0438 \u0441\u0442\u0440\u0430\u043d\u044b \u043d\u0430\u0437\u043d\u0430\u0447\u0435\u043d\u0438\u044f. \u0424\u0438\u043a\u0441\u0438\u0440\u043e\u0432\u0430\u043d\u043d\u044b\u0445 \u0442\u0430\u0440\u0438\u0444\u043e\u0432 \u043d\u0435 \u043f\u0443\u0431\u043b\u0438\u043a\u0443\u0435\u043c \u2014 \u0443\u043a\u0430\u0436\u0438\u0442\u0435 \u043a\u0430\u0442\u0435\u0433\u043e\u0440\u0438\u044e, \u043e\u0431\u044a\u0451\u043c, \u0432\u0435\u0441 \u0438 \u043f\u043e\u0440\u0442 \u043d\u0430\u0437\u043d\u0430\u0447\u0435\u043d\u0438\u044f.\"\n  },\n\n  \"why_title\": { \"zh\": \"\u4e3a\u4ec0\u4e48\u9009\u62e9\u6211\u4eec\", \"en\": \"Why Work With Us\", \"ru\": \"\u041f\u043e\u0447\u0435\u043c\u0443 \u043c\u044b\" },\n  \"why_items\": [\n    { \"title\": { \"zh\": \"\u8fdb\u51fa\u53e3\u8d44\u8d28\u9f50\u5907\", \"en\": \"Fully licensed for trade\", \"ru\": \"\u041f\u043e\u043b\u043d\u044b\u0439 \u043d\u0430\u0431\u043e\u0440 \u043b\u0438\u0446\u0435\u043d\u0437\u0438\u0439\" },\n      \"text\": { \"zh\": \"\u7ecf\u8425\u8303\u56f4\u542b\u8d27\u7269\u8fdb\u51fa\u53e3\u3001\u6280\u672f\u8fdb\u51fa\u53e3\u4e0e\u8fdb\u51fa\u53e3\u4ee3\u7406\uff0c\u53ef\u76f4\u63a5\u7ec4\u7ec7\u8de8\u5883\u4ea4\u4ed8\u3002\", \"en\": \"Our scope covers goods, technology and agency \u2014 we can organise cross-border delivery directly.\", \"ru\": \"\u0412\u0438\u0434 \u0434\u0435\u044f\u0442\u0435\u043b\u044c\u043d\u043e\u0441\u0442\u0438 \u0432\u043a\u043b\u044e\u0447\u0430\u0435\u0442 \u0442\u043e\u0432\u0430\u0440\u044b, \u0442\u0435\u0445\u043d\u043e\u043b\u043e\u0433\u0438\u0438 \u0438 \u0430\u0433\u0435\u043d\u0442\u0441\u043a\u0443\u044e \u0412\u042d\u0414.\" } },\n    { \"title\": { \"zh\": \"\u4ea7\u5730\u76f4\u91c7\", \"en\": \"Source-direct procurement\", \"ru\": \"\u0417\u0430\u043a\u0443\u043f\u043a\u0430 \u0443 \u0438\u0441\u0442\u043e\u0447\u043d\u0438\u043a\u0430\" },\n      \"text\": { \"zh\": \"\u6ce8\u518c\u5730\u4f4d\u4e8e\u4fee\u6c34\u53bf\u8336\u53f6\u4ea7\u533a\uff0c\u51cf\u5c11\u4e2d\u95f4\u73af\u8282\u3002\", \"en\": \"Registered in Xiushui, a tea-producing county \u2014 fewer middlemen.\", \"ru\": \"\u0420\u0435\u0433\u0438\u0441\u0442\u0440\u0430\u0446\u0438\u044f \u0432 \u0447\u0430\u0435\u043f\u0440\u043e\u0438\u0437\u0432\u043e\u0434\u044f\u0449\u0435\u043c \u0443\u0435\u0437\u0434\u0435 \u0421\u044e\u0448\u0443\u0439 \u2014 \u043c\u0435\u043d\u044c\u0448\u0435 \u043f\u043e\u0441\u0440\u0435\u0434\u043d\u0438\u043a\u043e\u0432.\" } },\n    { \"title\": { \"zh\": \"\u4f9b\u5e94\u94fe\u7ba1\u7406\u662f\u4e3b\u4e1a\", \"en\": \"Supply chain is our core\", \"ru\": \"\u0423\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435 \u043f\u043e\u0441\u0442\u0430\u0432\u043a\u0430\u043c\u0438 \u2014 \u043f\u0440\u043e\u0444\u0438\u043b\u044c\" },\n      \"text\": { \"zh\": \"\u4f9b\u5e94\u94fe\u7ba1\u7406\u670d\u52a1\u5728\u518c\uff0c\u4e0d\u662f\u517c\u8425\u3002\", \"en\": \"Supply-chain management is registered as our core business, not a side line.\", \"ru\": \"\u0423\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435 \u0446\u0435\u043f\u044f\u043c\u0438 \u043f\u043e\u0441\u0442\u0430\u0432\u043e\u043a \u2014 \u043e\u0441\u043d\u043e\u0432\u043d\u043e\u0439 \u0432\u0438\u0434 \u0434\u0435\u044f\u0442\u0435\u043b\u044c\u043d\u043e\u0441\u0442\u0438.\" } },\n    { \"title\": { \"zh\": \"\u6eaf\u6e90\u4e0e\u5355\u636e\u5b58\u8bc1\", \"en\": \"Traceability & attestation\", \"ru\": \"\u041f\u0440\u043e\u0441\u043b\u0435\u0436\u0438\u0432\u0430\u0435\u043c\u043e\u0441\u0442\u044c\" },\n      \"text\": { \"zh\": \"\u533a\u5757\u94fe\u76f8\u5173\u670d\u52a1\u7528\u4e8e\u6eaf\u6e90\u9632\u4f2a\u4e0e\u5355\u636e\u5b58\u8bc1\uff0c\u975e\u91d1\u878d\u7c7b\uff0c\u5408\u89c4\u53ef\u63a7\u3002\", \"en\": \"Blockchain services used only for traceability and document attestation \u2014 non-financial and compliant.\", \"ru\": \"\u0411\u043b\u043e\u043a\u0447\u0435\u0439\u043d \u0442\u043e\u043b\u044c\u043a\u043e \u0434\u043b\u044f \u043f\u0440\u043e\u0441\u043b\u0435\u0436\u0438\u0432\u0430\u0435\u043c\u043e\u0441\u0442\u0438 \u0438 \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u043e\u0432 \u2014 \u043d\u0435 \u0444\u0438\u043d\u0430\u043d\u0441\u043e\u0432\u044b\u0439.\" } },\n    { \"title\": { \"zh\": \"\u591a\u54c1\u7c7b\u53ef\u62d3\u5c55\", \"en\": \"Multi-category, extensible\", \"ru\": \"\u041c\u0443\u043b\u044c\u0442\u0438\u043a\u0430\u0442\u0435\u0433\u043e\u0440\u0438\u0439\u043d\u043e\u0441\u0442\u044c\" },\n      \"text\": { \"zh\": \"\u8336\u53f6\u5df2\u843d\u5730\uff0c\u74f7\u5668\u4e0e\u673a\u7535\u6cf5\u9600\u9646\u7eed\u4e0a\u67b6\uff0c\u4e00\u4e2a\u7a97\u53e3\u5bf9\u63a5\u591a\u4e2a\u54c1\u7c7b\u3002\", \"en\": \"Tea is live; porcelain and pumps are coming \u2014 one window for several categories.\", \"ru\": \"\u0427\u0430\u0439 \u0443\u0436\u0435 \u0434\u043e\u0441\u0442\u0443\u043f\u0435\u043d, \u0444\u0430\u0440\u0444\u043e\u0440 \u0438 \u043d\u0430\u0441\u043e\u0441\u044b \u2014 \u0432 \u0440\u0430\u0431\u043e\u0442\u0435.\" } },\n    { \"title\": { \"zh\": \"\u4e2d\u4fc4\u53cc\u8bed\u76f4\u63a5\u6c9f\u901a\", \"en\": \"Direct contact in RU / EN / ZH\", \"ru\": \"\u041f\u0440\u044f\u043c\u0430\u044f \u0441\u0432\u044f\u0437\u044c \u043d\u0430 RU / EN / ZH\" },\n      \"text\": { \"zh\": \"\u4fc4\u7f57\u65af\u53f7\u7801\u4e0e Telegram \u76f4\u8fbe\uff0c\u4e0d\u7528\u7b49\u90ae\u4ef6\u6765\u56de\u3002\", \"en\": \"A Russian phone number and Telegram \u2014 no waiting on email threads.\", \"ru\": \"\u0420\u043e\u0441\u0441\u0438\u0439\u0441\u043a\u0438\u0439 \u043d\u043e\u043c\u0435\u0440 \u0438 Telegram \u2014 \u0431\u0435\u0437 \u0434\u043e\u043b\u0433\u043e\u0439 \u043f\u0435\u0440\u0435\u043f\u0438\u0441\u043a\u0438.\" } }\n  ],\n\n  \"term_title\": { \"zh\": \"\u5408\u4f5c\u6761\u6b3e\", \"en\": \"Terms of Trade\", \"ru\": \"\u0423\u0441\u043b\u043e\u0432\u0438\u044f \u0441\u043e\u0442\u0440\u0443\u0434\u043d\u0438\u0447\u0435\u0441\u0442\u0432\u0430\" },\n  \"term_items\": [\n    { \"title\": { \"zh\": \"\u8d77\u8ba2\u91cf\", \"en\": \"Minimum order\", \"ru\": \"\u041c\u0438\u043d\u0438\u043c\u0430\u043b\u044c\u043d\u044b\u0439 \u0437\u0430\u043a\u0430\u0437\" },\n      \"text\": { \"zh\": \"\u6309\u54c1\u7c7b\u3001\u89c4\u683c\u4e0e\u5b9a\u5236\u7a0b\u5ea6\u800c\u5b9a\uff0c\u73b0\u8d27\u4f4e\u4e8e\u5b9a\u5236\u3002\u8bf7\u4ee5\u8be2\u76d8\u786e\u8ba4\u4e3a\u51c6\u3002\", \"en\": \"Depends on category, spec and customisation; stock is lower than custom. Confirm by enquiry.\", \"ru\": \"\u0417\u0430\u0432\u0438\u0441\u0438\u0442 \u043e\u0442 \u043a\u0430\u0442\u0435\u0433\u043e\u0440\u0438\u0438 \u0438 \u0422\u0417; \u0441\u0442\u043e\u043a \u043d\u0438\u0436\u0435 \u043a\u0430\u0441\u0442\u043e\u043c\u0430.\" } },\n    { \"title\": { \"zh\": \"\u6837\u54c1\", \"en\": \"Samples\", \"ru\": \"\u041e\u0431\u0440\u0430\u0437\u0446\u044b\" },\n      \"text\": { \"zh\": \"\u652f\u6301\u5bc4\u6837\u3002\u6837\u54c1\u8d39\u4e0e\u8fd0\u8d39\u6309\u5b9e\u9645\u7ed3\u7b97\uff0c\u5927\u5355\u786e\u8ba4\u540e\u53ef\u62b5\u6263\u8d27\u6b3e\u3002\", \"en\": \"Samples available; cost settled at actuals and credited against a confirmed bulk order.\", \"ru\": \"\u041e\u0431\u0440\u0430\u0437\u0446\u044b \u043f\u0440\u0435\u0434\u043e\u0441\u0442\u0430\u0432\u043b\u044f\u044e\u0442\u0441\u044f; \u0437\u0430\u0442\u0440\u0430\u0442\u044b \u0437\u0430\u0441\u0447\u0438\u0442\u044b\u0432\u0430\u044e\u0442\u0441\u044f \u043f\u0440\u0438 \u0437\u0430\u043a\u0430\u0437\u0435.\" } },\n    { \"title\": { \"zh\": \"\u6253\u6837\u4e0e\u4ea4\u671f\", \"en\": \"Sampling & lead time\", \"ru\": \"\u041e\u0431\u0440\u0430\u0437\u0446\u044b \u0438 \u0441\u0440\u043e\u043a\u0438\" },\n      \"text\": { \"zh\": \"\u5e38\u89c4\u89c4\u683c\u73b0\u8d27\u5373\u53d1\uff1b\u5b9a\u5236\u5305\u88c5\u786e\u8ba4\u8bbe\u8ba1\u7a3f\u540e\u6392\u4ea7\uff0c\u5468\u671f\u4e0b\u5355\u524d\u660e\u786e\u544a\u77e5\u3002\", \"en\": \"Standard specs ship from stock; custom packaging scheduled after artwork approval.\", \"ru\": \"\u0421\u0442\u0430\u043d\u0434\u0430\u0440\u0442 \u0441\u043e \u0441\u043a\u043b\u0430\u0434\u0430; \u043a\u0430\u0441\u0442\u043e\u043c \u043f\u043e\u0441\u043b\u0435 \u0443\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043d\u0438\u044f \u043c\u0430\u043a\u0435\u0442\u0430.\" } },\n    { \"title\": { \"zh\": \"\u652f\u4ed8\u65b9\u5f0f\", \"en\": \"Payment\", \"ru\": \"\u041e\u043f\u043b\u0430\u0442\u0430\" },\n      \"text\": { \"zh\": \"\u5bf9\u516c\u8f6c\u8d26\u3001\u4fe1\u7528\u8bc1\u3002\u65b0\u5ba2\u6237\u9996\u5355\u6b3e\u5230\u53d1\u8d27\uff0c\u957f\u671f\u5ba2\u6237\u53ef\u534f\u5546\u8d26\u671f\u3002\", \"en\": \"Bank transfer and L/C. First order prepaid; terms negotiable for long-term partners.\", \"ru\": \"\u041f\u0435\u0440\u0435\u0432\u043e\u0434 \u0438 \u0430\u043a\u043a\u0440\u0435\u0434\u0438\u0442\u0438\u0432. \u041f\u0435\u0440\u0432\u044b\u0439 \u0437\u0430\u043a\u0430\u0437 \u2014 \u043f\u0440\u0435\u0434\u043e\u043f\u043b\u0430\u0442\u0430.\" } },\n    { \"title\": { \"zh\": \"\u5305\u88c5\u4e0e\u8d34\u724c\", \"en\": \"Packaging & private label\", \"ru\": \"\u0423\u043f\u0430\u043a\u043e\u0432\u043a\u0430 \u0438 \u0421\u0422\u041c\" },\n      \"text\": { \"zh\": \"\u652f\u6301 LOGO \u52a0\u5370\u3001\u5305\u88c5\u8bbe\u8ba1\u4e0e\u8d34\u724c\u4ee3\u5de5\u3002\u4f7f\u7528\u5ba2\u6237\u5546\u6807\u9700\u63d0\u4f9b\u8bc1\u660e\u6587\u4ef6\u3002\", \"en\": \"Logo printing, packaging design, contract manufacturing. Own trademark requires proof.\", \"ru\": \"\u041d\u0430\u043d\u0435\u0441\u0435\u043d\u0438\u0435 \u043b\u043e\u0433\u043e\u0442\u0438\u043f\u0430, \u0440\u0430\u0437\u0440\u0430\u0431\u043e\u0442\u043a\u0430 \u0443\u043f\u0430\u043a\u043e\u0432\u043a\u0438, \u0421\u0422\u041c.\" } },\n    { \"title\": { \"zh\": \"\u51fa\u53e3\u4e0e\u5355\u8bc1\", \"en\": \"Export & documents\", \"ru\": \"\u042d\u043a\u0441\u043f\u043e\u0440\u0442 \u0438 \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u044b\" },\n      \"text\": { \"zh\": \"\u53ef\u63d0\u4f9b\u8425\u4e1a\u6267\u7167\u3001\u68c0\u6d4b\u62a5\u544a\u3001\u539f\u4ea7\u5730\u8bc1\u53ca\u51fa\u53e3\u62a5\u5173\u5355\u8bc1\u3002\", \"en\": \"Business licence, test reports, certificate of origin and customs papers.\", \"ru\": \"\u041b\u0438\u0446\u0435\u043d\u0437\u0438\u0438, \u043f\u0440\u043e\u0442\u043e\u043a\u043e\u043b\u044b, \u0441\u0435\u0440\u0442\u0438\u0444\u0438\u043a\u0430\u0442 \u043f\u0440\u043e\u0438\u0441\u0445\u043e\u0436\u0434\u0435\u043d\u0438\u044f, \u0442\u0430\u043c\u043e\u0436\u043d\u044f.\" } }\n  ],\n  \"term_note\": {\n    \"zh\": \"\u672c\u9875\u6761\u6b3e\u4e3a\u901a\u7528\u8bf4\u660e\uff0c\u4e0d\u6784\u6210\u62a5\u4ef7\u6216\u8981\u7ea6\u3002\u5177\u4f53\u4ee5\u6b63\u5f0f\u5408\u540c\u4e3a\u51c6\u3002\",\n    \"en\": \"This page is general information and does not constitute an offer. The confirmed contract prevails.\",\n    \"ru\": \"\u0421\u0442\u0440\u0430\u043d\u0438\u0446\u0430 \u043d\u043e\u0441\u0438\u0442 \u0438\u043d\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u043e\u043d\u043d\u044b\u0439 \u0445\u0430\u0440\u0430\u043a\u0442\u0435\u0440 \u0438 \u043d\u0435 \u044f\u0432\u043b\u044f\u0435\u0442\u0441\u044f \u043e\u0444\u0435\u0440\u0442\u043e\u0439.\"\n  },\n\n  \"faq_list\": [\n    { \"q\": { \"zh\": \"\u4f60\u4eec\u662f\u751f\u4ea7\u5382\u5bb6\u8fd8\u662f\u8d38\u6613\u516c\u53f8\uff1f\", \"en\": \"Are you a manufacturer or a trading company?\", \"ru\": \"\u0412\u044b \u043f\u0440\u043e\u0438\u0437\u0432\u043e\u0434\u0438\u0442\u0435\u043b\u044c \u0438\u043b\u0438 \u0442\u043e\u0440\u0433\u043e\u0432\u0430\u044f \u043a\u043e\u043c\u043f\u0430\u043d\u0438\u044f?\" },\n      \"a\": { \"zh\": \"\u6211\u4eec\u662f\u4f9b\u5e94\u94fe\u670d\u52a1\u5546\uff0c\u6301\u6709\u8d27\u7269\u8fdb\u51fa\u53e3\u3001\u6280\u672f\u8fdb\u51fa\u53e3\u4e0e\u8fdb\u51fa\u53e3\u4ee3\u7406\u8d44\u8d28\u3002\u8336\u53f6\u7531\u4fee\u6c34\u672c\u5730\u6301\u8bc1\u751f\u4ea7\u4f01\u4e1a\u4f9b\u8d27\uff0c\u6211\u4eec\u8d1f\u8d23\u9009\u54c1\u3001\u9a8c\u8d27\u3001\u96c6\u8d27\u4e0e\u51fa\u53e3\u4ea4\u4ed8\u3002\", \"en\": \"We are a supply-chain service provider licensed for import and export of goods and technology, and for import-export agency. Tea is supplied by licensed local manufacturers in Xiushui; we handle sourcing, inspection, consolidation and export delivery.\", \"ru\": \"\u041c\u044b \u2014 \u043f\u043e\u0441\u0442\u0430\u0432\u0449\u0438\u043a \u0443\u0441\u043b\u0443\u0433 \u0432 \u0441\u0444\u0435\u0440\u0435 \u0446\u0435\u043f\u0435\u0439 \u043f\u043e\u0441\u0442\u0430\u0432\u043e\u043a \u0441 \u043b\u0438\u0446\u0435\u043d\u0437\u0438\u044f\u043c\u0438 \u043d\u0430 \u0438\u043c\u043f\u043e\u0440\u0442/\u044d\u043a\u0441\u043f\u043e\u0440\u0442 \u0438 \u0430\u0433\u0435\u043d\u0442\u0441\u043a\u0443\u044e \u0412\u042d\u0414. \u0427\u0430\u0439 \u043f\u043e\u0441\u0442\u0430\u0432\u043b\u044f\u044e\u0442 \u043b\u0438\u0446\u0435\u043d\u0437\u0438\u0440\u043e\u0432\u0430\u043d\u043d\u044b\u0435 \u043c\u0435\u0441\u0442\u043d\u044b\u0435 \u043f\u0440\u043e\u0438\u0437\u0432\u043e\u0434\u0438\u0442\u0435\u043b\u0438 \u0421\u044e\u0448\u0443\u0439; \u043c\u044b \u043e\u0442\u0432\u0435\u0447\u0430\u0435\u043c \u0437\u0430 \u043f\u043e\u0434\u0431\u043e\u0440, \u0438\u043d\u0441\u043f\u0435\u043a\u0446\u0438\u044e, \u043a\u043e\u043d\u0441\u043e\u043b\u0438\u0434\u0430\u0446\u0438\u044e \u0438 \u044d\u043a\u0441\u043f\u043e\u0440\u0442.\" } },\n    { \"q\": { \"zh\": \"\u8336\u53f6\u80fd\u5426\u505a\u888b\u6ce1\u8336\u3001\u679c\u8336\u3001\u82b1\u8349\u8336\uff1f\", \"en\": \"Can you supply tea bags, fruit and herbal teas?\", \"ru\": \"\u041f\u043e\u0441\u0442\u0430\u0432\u043b\u044f\u0435\u0442\u0435 \u043b\u0438 \u043f\u0430\u043a\u0435\u0442\u0438\u043a\u0438, \u0444\u0440\u0443\u043a\u0442\u043e\u0432\u044b\u0435 \u0438 \u0442\u0440\u0430\u0432\u044f\u043d\u044b\u0435 \u0447\u0430\u0438?\" },\n      \"a\": { \"zh\": \"\u53ef\u4ee5\u3002\u4f9b\u8d27\u751f\u4ea7\u4f01\u4e1a\u7684\u98df\u54c1\u751f\u4ea7\u8bb8\u53ef\u8bc1\u8bb8\u53ef\u8303\u56f4\u660e\u786e\u6db5\u76d6\u888b\u6ce1\u8336\u3001\u8c03\u5473\u8336\uff08\u6df7\u5408\u8c03\u5473\u8336\uff09\u3001\u4ee3\u7528\u8336\uff08\u53f6\u7c7b\uff0f\u82b1\u7c7b\uff0f\u6df7\u5408\u7c7b\uff09\u3002\", \"en\": \"Yes. The supplying manufacturer's food production licence explicitly covers tea bags, blended (flavoured) tea and herbal tea (leaf / flower / blended).\", \"ru\": \"\u0414\u0430. \u041b\u0438\u0446\u0435\u043d\u0437\u0438\u044f \u043f\u0440\u043e\u0438\u0437\u0432\u043e\u0434\u0438\u0442\u0435\u043b\u044f \u044f\u0432\u043d\u043e \u043f\u043e\u043a\u0440\u044b\u0432\u0430\u0435\u0442 \u043f\u0430\u043a\u0435\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u043d\u044b\u0439, \u043a\u0443\u043f\u0430\u0436\u0438\u0440\u043e\u0432\u0430\u043d\u043d\u044b\u0439 \u0438 \u0442\u0440\u0430\u0432\u044f\u043d\u043e\u0439 \u0447\u0430\u0439.\" } },\n    { \"q\": { \"zh\": \"\u4f60\u4eec\u6d89\u53ca\u865a\u62df\u8d27\u5e01\u6216\u533a\u5757\u94fe\u91d1\u878d\u4e1a\u52a1\u5417\uff1f\", \"en\": \"Do you deal in crypto or blockchain finance?\", \"ru\": \"\u0420\u0430\u0431\u043e\u0442\u0430\u0435\u0442\u0435 \u043b\u0438 \u0432\u044b \u0441 \u043a\u0440\u0438\u043f\u0442\u043e\u0432\u0430\u043b\u044e\u0442\u043e\u0439?\" },\n      \"a\": { \"zh\": \"\u4e0d\u6d89\u53ca\u3002\u6211\u4eec\u7684\u533a\u5757\u94fe\u76f8\u5173\u670d\u52a1\u4ec5\u9650\u6eaf\u6e90\u9632\u4f2a\u4e0e\u5355\u636e\u5b58\u8bc1\uff0c\u5c5e\u4e8e\u975e\u91d1\u878d\u7c7b\uff0c\u4e0d\u6d89\u53ca\u4efb\u4f55\u865a\u62df\u8d27\u5e01\u3001\u4ee3\u5e01\u53d1\u884c\u6216\u652f\u4ed8\u7ed3\u7b97\u3002\", \"en\": \"No. Blockchain-related services are limited to traceability, anti-counterfeiting and document attestation \u2014 non-financial, with no virtual currency, token issuance or payment settlement.\", \"ru\": \"\u041d\u0435\u0442. \u0411\u043b\u043e\u043a\u0447\u0435\u0439\u043d-\u0443\u0441\u043b\u0443\u0433\u0438 \u043e\u0433\u0440\u0430\u043d\u0438\u0447\u0435\u043d\u044b \u043f\u0440\u043e\u0441\u043b\u0435\u0436\u0438\u0432\u0430\u0435\u043c\u043e\u0441\u0442\u044c\u044e \u0438 \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u0430\u043c\u0438 \u2014 \u0431\u0435\u0437 \u043a\u0440\u0438\u043f\u0442\u043e\u0432\u0430\u043b\u044e\u0442 \u0438 \u043f\u043b\u0430\u0442\u0435\u0436\u0435\u0439.\" } },\n    { \"q\": { \"zh\": \"\u9664\u4e86\u8336\u53f6\uff0c\u8fd8\u80fd\u4f9b\u5e94\u4ec0\u4e48\uff1f\", \"en\": \"What else besides tea?\", \"ru\": \"\u0427\u0442\u043e \u0435\u0449\u0451, \u043a\u0440\u043e\u043c\u0435 \u0447\u0430\u044f?\" },\n      \"a\": { \"zh\": \"\u74f7\u5668\u4e0e\u673a\u7535\u6cf5\u9600\u6b63\u5728\u4e0a\u67b6\u4e2d\u3002\u7ecf\u8425\u8303\u56f4\u542b\u5de5\u827a\u7f8e\u672f\u54c1\u53ca\u6536\u85cf\u54c1\u96f6\u552e\uff0c\u53ef\u627f\u63a5\u76f8\u5173\u54c1\u7c7b\u7684\u8be2\u76d8\u4e0e\u6253\u6837\u3002\", \"en\": \"Porcelain and pumps are being added. Our scope includes retail of arts, crafts and collectibles, so related enquiries and sampling are welcome.\", \"ru\": \"\u0424\u0430\u0440\u0444\u043e\u0440 \u0438 \u043d\u0430\u0441\u043e\u0441\u044b \u0434\u043e\u0431\u0430\u0432\u043b\u044f\u044e\u0442\u0441\u044f. \u0412\u0438\u0434 \u0434\u0435\u044f\u0442\u0435\u043b\u044c\u043d\u043e\u0441\u0442\u0438 \u0432\u043a\u043b\u044e\u0447\u0430\u0435\u0442 \u0440\u043e\u0437\u043d\u0438\u0446\u0443 \u0438\u0437\u0434\u0435\u043b\u0438\u0439 \u0438\u0441\u043a\u0443\u0441\u0441\u0442\u0432\u0430.\" } },\n    { \"q\": { \"zh\": \"\u6700\u5c0f\u8d77\u8ba2\u91cf\u662f\u591a\u5c11\uff1f\", \"en\": \"What is the MOQ?\", \"ru\": \"\u041a\u0430\u043a\u043e\u0432 \u043c\u0438\u043d\u0438\u043c\u0430\u043b\u044c\u043d\u044b\u0439 \u0437\u0430\u043a\u0430\u0437?\" },\n      \"a\": { \"zh\": \"\u6309\u54c1\u7c7b\u3001\u89c4\u683c\u4e0e\u5b9a\u5236\u7a0b\u5ea6\u800c\u5b9a\uff0c\u73b0\u8d27\u95e8\u69db\u4f4e\u4e8e\u5b9a\u5236\u5355\u3002\u8bf7\u5728\u8be2\u76d8\u4e2d\u8bf4\u660e\u91c7\u8d2d\u89c4\u6a21\u4e0e\u9500\u552e\u6e20\u9053\u3002\", \"en\": \"Depends on category, spec and customisation; stock items lower than custom runs. State your volume and channel in your enquiry.\", \"ru\": \"\u0417\u0430\u0432\u0438\u0441\u0438\u0442 \u043e\u0442 \u043a\u0430\u0442\u0435\u0433\u043e\u0440\u0438\u0438 \u0438 \u0422\u0417. \u0423\u043a\u0430\u0436\u0438\u0442\u0435 \u043e\u0431\u044a\u0451\u043c \u0438 \u043a\u0430\u043d\u0430\u043b \u0432 \u0437\u0430\u043f\u0440\u043e\u0441\u0435.\" } },\n    { \"q\": { \"zh\": \"\u8fd0\u8f93\u65b9\u5f0f\u4e0e\u65f6\u6548\uff1f\", \"en\": \"Shipping modes and transit times?\", \"ru\": \"\u0421\u043f\u043e\u0441\u043e\u0431\u044b \u043f\u0435\u0440\u0435\u0432\u043e\u0437\u043a\u0438 \u0438 \u0441\u0440\u043e\u043a\u0438?\" },\n      \"a\": { \"zh\": \"\u6d77\u8fd0\u3001\u94c1\u8def\u3001\u7a7a\u8fd0\u3001\u516c\u8def\u5747\u53ef\u5b89\u6392\u3002\u65f6\u6548\u4e0e\u8d39\u7528\u968f\u5b63\u8282\u3001\u653f\u7b56\u3001\u8231\u4f4d\u4e0e\u76ee\u7684\u56fd\u6ce2\u52a8\uff0c\u6211\u4eec\u4e0d\u6807\u793a\u56fa\u5b9a\u62a5\u4ef7\uff0c\u8bf7\u8054\u7cfb\u83b7\u53d6\u5b9e\u65f6\u65b9\u6848\u3002\", \"en\": \"Sea, rail, air and road are all available. Transit times and costs vary with season, policy, capacity and destination \u2014 we publish no fixed rates, please ask for a live quote.\", \"ru\": \"\u041c\u043e\u0440\u0435, \u0436/\u0434, \u0430\u0432\u0438\u0430, \u0430\u0432\u0442\u043e. \u0421\u0440\u043e\u043a\u0438 \u0438 \u0441\u0442\u043e\u0438\u043c\u043e\u0441\u0442\u044c \u0432\u0430\u0440\u044c\u0438\u0440\u0443\u044e\u0442\u0441\u044f \u2014 \u0437\u0430\u043f\u0440\u0430\u0448\u0438\u0432\u0430\u0439\u0442\u0435 \u0430\u043a\u0442\u0443\u0430\u043b\u044c\u043d\u044b\u0439 \u0440\u0430\u0441\u0447\u0451\u0442.\" } },\n    { \"q\": { \"zh\": \"\u80fd\u5426\u51fa\u53e3\u4fc4\u7f57\u65af\uff1f\u9700\u8981\u54ea\u4e9b\u5355\u8bc1\uff1f\", \"en\": \"Can you ship to Russia? What documents?\", \"ru\": \"\u0412\u043e\u0437\u043c\u043e\u0436\u043d\u0430 \u043b\u0438 \u043f\u043e\u0441\u0442\u0430\u0432\u043a\u0430 \u0432 \u0420\u043e\u0441\u0441\u0438\u044e?\" },\n      \"a\": { \"zh\": \"\u53ef\u4ee5\u3002\u53ef\u63d0\u4f9b\u8425\u4e1a\u6267\u7167\u3001\u68c0\u6d4b\u62a5\u544a\u3001\u539f\u4ea7\u5730\u8bc1\u53ca\u51fa\u53e3\u62a5\u5173\u5355\u8bc1\uff0c\u5e76\u6309\u76ee\u7684\u56fd\u519c\u6b8b\u9650\u91cf\u4e0e\u68c0\u75ab\u6807\u51c6\u6267\u884c\u3002\", \"en\": \"Yes. We supply business licence, test reports, certificate of origin and customs papers, and follow destination residue limits and phytosanitary rules.\", \"ru\": \"\u0414\u0430. \u041f\u0440\u0435\u0434\u043e\u0441\u0442\u0430\u0432\u043b\u044f\u0435\u043c \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u044b \u0438 \u0441\u043e\u0431\u043b\u044e\u0434\u0430\u0435\u043c \u043d\u043e\u0440\u043c\u044b \u0441\u0442\u0440\u0430\u043d\u044b \u043d\u0430\u0437\u043d\u0430\u0447\u0435\u043d\u0438\u044f.\" } },\n    { \"q\": { \"zh\": \"\u5408\u4f5c\u6d41\u7a0b\u662f\u600e\u6837\u7684\uff1f\", \"en\": \"How does the process work?\", \"ru\": \"\u041a\u0430\u043a \u043f\u0440\u043e\u0445\u043e\u0434\u0438\u0442 \u0441\u043e\u0442\u0440\u0443\u0434\u043d\u0438\u0447\u0435\u0441\u0442\u0432\u043e?\" },\n      \"a\": { \"zh\": \"\u9700\u6c42\u786e\u8ba4 \u2192 \u9009\u54c1\u91c7\u8d2d \u2192 \u9a8c\u8d27\u8d28\u68c0 \u2192 \u4ed3\u50a8\u96c6\u8d27 \u2192 \u51fa\u53e3\u62a5\u5173 \u2192 \u56fd\u9645\u8fd0\u8f93 \u2192 \u6e05\u5173\u6d3e\u9001\u3002\u5168\u7a0b\u4e00\u4e2a\u5bf9\u63a5\u4eba\u3002\", \"en\": \"Requirements \u2192 sourcing \u2192 inspection \u2192 consolidation \u2192 export clearance \u2192 transport \u2192 clearance and delivery. One contact throughout.\", \"ru\": \"\u0422\u0440\u0435\u0431\u043e\u0432\u0430\u043d\u0438\u044f \u2192 \u043f\u043e\u0434\u0431\u043e\u0440 \u2192 \u0438\u043d\u0441\u043f\u0435\u043a\u0446\u0438\u044f \u2192 \u043a\u043e\u043d\u0441\u043e\u043b\u0438\u0434\u0430\u0446\u0438\u044f \u2192 \u0442\u0430\u043c\u043e\u0436\u043d\u044f \u2192 \u043f\u0435\u0440\u0435\u0432\u043e\u0437\u043a\u0430 \u2192 \u0434\u043e\u0441\u0442\u0430\u0432\u043a\u0430.\" } }\n  ],\n\n  \"contact_phone_cn\": \"+86 188 7925 9179\",\n  \"contact_phone_ru\": \"+7 911 706 7084\",\n  \"contact_email_1\": \"fanwh188@gmail.com\",\n  \"contact_email_2\": \"m18879259179@163.com\",\n  \"contact_wechat\": \"AriFan02\",\n  \"contact_addr\": {\n    \"zh\": \"\u6c5f\u897f\u7701\u4e5d\u6c5f\u5e02\u4fee\u6c34\u53bf\",\n    \"en\": \"Xiushui County, Jiujiang, Jiangxi, China\",\n    \"ru\": \"\u0443\u0435\u0437\u0434 \u0421\u044e\u0448\u0443\u0439, \u0426\u0437\u044e\u0446\u0437\u044f\u043d, \u043f\u0440\u043e\u0432\u0438\u043d\u0446\u0438\u044f \u0426\u0437\u044f\u043d\u0441\u0438, \u041a\u0438\u0442\u0430\u0439\"\n  },\n  \"footer_note\": {\n    \"zh\": \"\u4e5d\u6c5f\u662d\u76db\u5143\u79d1\u6280\u6709\u9650\u516c\u53f8 \u00b7 \u7edf\u4e00\u793e\u4f1a\u4fe1\u7528\u4ee3\u7801 91360424MAKJBPTM33\",\n    \"en\": \"Jiujiang Zhaoshengyuan Technology Co., Ltd. \u00b7 USCC 91360424MAKJBPTM33\",\n    \"ru\": \"\u041e\u041e\u041e \u00ab\u0426\u0437\u044e\u0446\u0437\u044f\u043d \u0427\u0436\u0430\u043e\u0448\u044d\u043d\u044a\u044e\u0430\u043d\u044c \u0422\u0435\u0445\u043d\u043e\u043b\u043e\u0433\u0438\u0438\u00bb \u00b7 \u0415\u0421\u041a\u041a 91360424MAKJBPTM33\"\n  }\n}\n;window.__ZSY_PROD__={\n  \"categories\": [\n    { \"key\": \"tea\",       \"label\": { \"zh\": \"\u8336\u53f6\u4e0e\u8336\u5236\u54c1\", \"en\": \"Tea & Tea Products\", \"ru\": \"\u0427\u0430\u0439 \u0438 \u0447\u0430\u0439\u043d\u0430\u044f \u043f\u0440\u043e\u0434\u0443\u043a\u0446\u0438\u044f\" } },\n    { \"key\": \"porcelain\", \"label\": { \"zh\": \"\u74f7\u5668\u4e0e\u5de5\u827a\u54c1\", \"en\": \"Porcelain & Crafts\",  \"ru\": \"\u0424\u0430\u0440\u0444\u043e\u0440 \u0438 \u0438\u0437\u0434\u0435\u043b\u0438\u044f\" } },\n    { \"key\": \"machinery\", \"label\": { \"zh\": \"\u673a\u7535\u6cf5\u9600\",     \"en\": \"Pumps & Valves\",     \"ru\": \"\u041d\u0430\u0441\u043e\u0441\u044b \u0438 \u0430\u0440\u043c\u0430\u0442\u0443\u0440\u0430\" } }\n  ],\n\n  \"emptyText\": {\n    \"zh\": \"\u8be5\u54c1\u7c7b\u6b63\u5728\u6574\u7406\u8d44\u6599\uff0c\u5373\u5c06\u4e0a\u67b6\u3002\u5982\u9700\u4e86\u89e3\u73b0\u6709\u4f9b\u5e94\u8303\u56f4\uff0c\u8bf7\u76f4\u63a5\u8054\u7cfb\u6211\u4eec\u3002\",\n    \"en\": \"This category is being prepared. For our current supply scope, please contact us directly.\",\n    \"ru\": \"\u041a\u0430\u0442\u0435\u0433\u043e\u0440\u0438\u044f \u0433\u043e\u0442\u043e\u0432\u0438\u0442\u0441\u044f \u043a \u043f\u0443\u0431\u043b\u0438\u043a\u0430\u0446\u0438\u0438. \u041f\u043e \u0442\u0435\u043a\u0443\u0449\u0435\u043c\u0443 \u0430\u0441\u0441\u043e\u0440\u0442\u0438\u043c\u0435\u043d\u0442\u0443 \u2014 \u0441\u0432\u044f\u0436\u0438\u0442\u0435\u0441\u044c \u0441 \u043d\u0430\u043c\u0438.\"\n  },\n\n  \"products\": [\n    {\n      \"id\": \"tea-ninghong\",\n      \"category\": \"tea\",\n      \"published\": true,\n      \"order\": 1,\n      \"image\": \"assets/img/product-ninghong.jpg\",\n      \"name\": { \"zh\": \"\u5b81\u7ea2\u8336\", \"en\": \"Ninghong Black Tea\", \"ru\": \"\u041a\u0440\u0430\u0441\u043d\u044b\u0439 \u0447\u0430\u0439 \u041d\u0438\u043d\u0445\u0443\u043d\" },\n      \"subtitle\": { \"zh\": \"\u4fee\u6c34\u539f\u4ea7\u5730 \u00b7 \u5de5\u592b\u7ea2\u8336\", \"en\": \"Origin Xiushui \u00b7 Gongfu Black Tea\", \"ru\": \"\u0420\u043e\u0434\u0438\u043d\u0430 \u0421\u044e\u0448\u0443\u0439 \u00b7 \u0413\u0443\u043d\u0444\u0443\" },\n      \"desc\": {\n        \"zh\": \"\u4fee\u6c34\u662f\u4e2d\u56fd\u5de5\u592b\u7ea2\u8336\u53d1\u6e90\u5730\u4e4b\u4e00\u3002\u5b81\u7ea2\u8336\u9999\u6c14\u751c\u9999\u99a5\u90c1\uff0c\u6ecb\u5473\u9c9c\u5ae9\u6d53\u9187\uff0c\u6c64\u8272\u7ea2\u8273\u660e\u4eae\uff0c\u9002\u5408\u793c\u76d2\u3001\u5546\u8d85\u4e0e\u7535\u5546\u6e20\u9053\u3002\",\n        \"en\": \"Xiushui is one of the birthplaces of Chinese Gongfu black tea. Ninghong offers a sweet, rich aroma with a fresh, mellow taste and brilliant red liquor \u2014 suited to gift boxes, retail and e-commerce.\",\n        \"ru\": \"\u0421\u044e\u0448\u0443\u0439 \u2014 \u043e\u0434\u043d\u0430 \u0438\u0437 \u0440\u043e\u0434\u0438\u043d \u043a\u0438\u0442\u0430\u0439\u0441\u043a\u043e\u0433\u043e \u043a\u0440\u0430\u0441\u043d\u043e\u0433\u043e \u0447\u0430\u044f \u0433\u0443\u043d\u0444\u0443. \u041d\u0438\u043d\u0445\u0443\u043d: \u0441\u043b\u0430\u0434\u043a\u0438\u0439 \u043d\u0430\u0441\u044b\u0449\u0435\u043d\u043d\u044b\u0439 \u0430\u0440\u043e\u043c\u0430\u0442, \u0441\u0432\u0435\u0436\u0438\u0439 \u043c\u044f\u0433\u043a\u0438\u0439 \u0432\u043a\u0443\u0441, \u044f\u0440\u043a\u043e-\u043a\u0440\u0430\u0441\u043d\u044b\u0439 \u043d\u0430\u0441\u0442\u043e\u0439. \u041f\u043e\u0434\u0445\u043e\u0434\u0438\u0442 \u0434\u043b\u044f \u043f\u043e\u0434\u0430\u0440\u043a\u043e\u0432, \u0440\u0438\u0442\u0435\u0439\u043b\u0430 \u0438 \u043c\u0430\u0440\u043a\u0435\u0442\u043f\u043b\u0435\u0439\u0441\u043e\u0432.\"\n      },\n      \"specs\": [\n        { \"k\": { \"zh\": \"\u5e38\u89c1\u89c4\u683c\", \"en\": \"Sizes\",            \"ru\": \"\u0424\u0430\u0441\u043e\u0432\u043a\u0430\" },\n          \"v\": { \"zh\": \"102g / 125g / 300g\", \"en\": \"102g / 125g / 300g\", \"ru\": \"102 \u0433 / 125 \u0433 / 300 \u0433\" } },\n        { \"k\": { \"zh\": \"\u5f62\u6001\",     \"en\": \"Format\",           \"ru\": \"\u0424\u043e\u0440\u043c\u0430\" },\n          \"v\": { \"zh\": \"\u6563\u8336 \u00b7 \u793c\u76d2 \u00b7 \u888b\u6ce1\", \"en\": \"Loose \u00b7 gift box \u00b7 bags\", \"ru\": \"\u0420\u0430\u0441\u0441\u044b\u043f\u043d\u043e\u0439 \u00b7 \u043d\u0430\u0431\u043e\u0440 \u00b7 \u043f\u0430\u043a\u0435\u0442\u0438\u043a\u0438\" } },\n        { \"k\": { \"zh\": \"\u9002\u7528\u573a\u666f\", \"en\": \"Best for\",         \"ru\": \"\u041a\u0430\u043d\u0430\u043b \u0441\u0431\u044b\u0442\u0430\" },\n          \"v\": { \"zh\": \"\u5546\u52a1\u793c\u8d60 \u00b7 \u5546\u8d85 \u00b7 \u7535\u5546\", \"en\": \"Corporate gifting \u00b7 retail \u00b7 e-commerce\", \"ru\": \"\u041f\u043e\u0434\u0430\u0440\u043a\u0438 \u00b7 \u0440\u0438\u0442\u0435\u0439\u043b \u00b7 \u043c\u0430\u0440\u043a\u0435\u0442\u043f\u043b\u0435\u0439\u0441\u044b\" } },\n        { \"k\": { \"zh\": \"\u51b2\u6ce1\u5efa\u8bae\", \"en\": \"Brewing\",          \"ru\": \"\u0417\u0430\u0432\u0430\u0440\u0438\u0432\u0430\u043d\u0438\u0435\" },\n          \"v\": { \"zh\": \"95\u2103 \u00b7 3\u20135g/150ml \u00b7 3\u20135 \u6b21\", \"en\": \"95\u00b0C \u00b7 3\u20135g per 150ml \u00b7 3\u20135 infusions\", \"ru\": \"95 \u00b0C \u00b7 3\u20135 \u0433 \u043d\u0430 150 \u043c\u043b \u00b7 3\u20135 \u0440\u0430\u0437\" } }\n      ]\n    },\n    {\n      \"id\": \"tea-shuangjing\",\n      \"category\": \"tea\",\n      \"published\": true,\n      \"order\": 2,\n      \"image\": \"assets/img/product-shuangjing.jpg\",\n      \"name\": { \"zh\": \"\u53cc\u4e95\u7eff\u8336\", \"en\": \"Shuangjing Green Tea\", \"ru\": \"\u0417\u0435\u043b\u0451\u043d\u044b\u0439 \u0447\u0430\u0439 \u0428\u0443\u0430\u043d\u0446\u0437\u0438\u043d\" },\n      \"subtitle\": { \"zh\": \"\u9ad8\u5c71\u4e91\u96fe \u00b7 \u6e05\u9999\u56de\u7518\", \"en\": \"High-mountain \u00b7 Clean & Sweet\", \"ru\": \"\u0412\u044b\u0441\u043e\u043a\u043e\u0433\u043e\u0440\u043d\u044b\u0439 \u00b7 \u0447\u0438\u0441\u0442\u044b\u0439 \u0432\u043a\u0443\u0441\" },\n      \"desc\": {\n        \"zh\": \"\u51fa\u81ea\u4fee\u6c34\u53cc\u4e95\u4e00\u5e26\u7684\u9ad8\u5c71\u8336\u56ed\u3002\u6e05\u9999\u6301\u4e45\uff0c\u9c9c\u723d\u56de\u7518\uff0c\u6c64\u8272\u5ae9\u7eff\u660e\u4eae\uff0c\u9002\u5408\u65e5\u5e38\u996e\u7528\u4e0e\u5546\u8d85\u6e20\u9053\u3002\",\n        \"en\": \"From the high-mountain gardens around Shuangjing in Xiushui. A clean, lasting aroma with a fresh sweet finish and tender green liquor \u2014 for everyday drinking and retail.\",\n        \"ru\": \"\u0418\u0437 \u0432\u044b\u0441\u043e\u043a\u043e\u0433\u043e\u0440\u043d\u044b\u0445 \u0441\u0430\u0434\u043e\u0432 \u0428\u0443\u0430\u043d\u0446\u0437\u0438\u043d \u0432 \u0421\u044e\u0448\u0443\u0439. \u0427\u0438\u0441\u0442\u044b\u0439 \u0441\u0442\u043e\u0439\u043a\u0438\u0439 \u0430\u0440\u043e\u043c\u0430\u0442, \u0441\u0432\u0435\u0436\u0435\u0435 \u0441\u043b\u0430\u0434\u043a\u043e\u0435 \u043f\u043e\u0441\u043b\u0435\u0432\u043a\u0443\u0441\u0438\u0435, \u043d\u0435\u0436\u043d\u043e-\u0437\u0435\u043b\u0451\u043d\u044b\u0439 \u043d\u0430\u0441\u0442\u043e\u0439. \u0414\u043b\u044f \u0435\u0436\u0435\u0434\u043d\u0435\u0432\u043d\u043e\u0433\u043e \u0447\u0430\u0435\u043f\u0438\u0442\u0438\u044f \u0438 \u0440\u0438\u0442\u0435\u0439\u043b\u0430.\"\n      },\n      \"specs\": [\n        { \"k\": { \"zh\": \"\u5e38\u89c1\u89c4\u683c\", \"en\": \"Sizes\",    \"ru\": \"\u0424\u0430\u0441\u043e\u0432\u043a\u0430\" },\n          \"v\": { \"zh\": \"100g / 125g / 250g\", \"en\": \"100g / 125g / 250g\", \"ru\": \"100 \u0433 / 125 \u0433 / 250 \u0433\" } },\n        { \"k\": { \"zh\": \"\u5f62\u6001\",     \"en\": \"Format\",   \"ru\": \"\u0424\u043e\u0440\u043c\u0430\" },\n          \"v\": { \"zh\": \"\u6563\u8336 \u00b7 \u7f50\u88c5 \u00b7 \u888b\u6ce1\", \"en\": \"Loose \u00b7 caddy \u00b7 bags\", \"ru\": \"\u0420\u0430\u0441\u0441\u044b\u043f\u043d\u043e\u0439 \u00b7 \u0431\u0430\u043d\u043a\u0430 \u00b7 \u043f\u0430\u043a\u0435\u0442\u0438\u043a\u0438\" } },\n        { \"k\": { \"zh\": \"\u9002\u7528\u573a\u666f\", \"en\": \"Best for\", \"ru\": \"\u041a\u0430\u043d\u0430\u043b \u0441\u0431\u044b\u0442\u0430\" },\n          \"v\": { \"zh\": \"\u65e5\u5e38\u81ea\u996e \u00b7 \u5546\u8d85 \u00b7 \u7535\u5546\", \"en\": \"Everyday \u00b7 retail \u00b7 e-commerce\", \"ru\": \"\u0415\u0436\u0435\u0434\u043d\u0435\u0432\u043d\u043e \u00b7 \u0440\u0438\u0442\u0435\u0439\u043b \u00b7 \u043c\u0430\u0440\u043a\u0435\u0442\u043f\u043b\u0435\u0439\u0441\u044b\" } },\n        { \"k\": { \"zh\": \"\u51b2\u6ce1\u5efa\u8bae\", \"en\": \"Brewing\",  \"ru\": \"\u0417\u0430\u0432\u0430\u0440\u0438\u0432\u0430\u043d\u0438\u0435\" },\n          \"v\": { \"zh\": \"85\u2103 \u00b7 3g/150ml \u00b7 3\u20134 \u6b21\", \"en\": \"85\u00b0C \u00b7 3g per 150ml \u00b7 3\u20134 infusions\", \"ru\": \"85 \u00b0C \u00b7 3 \u0433 \u043d\u0430 150 \u043c\u043b \u00b7 3\u20134 \u0440\u0430\u0437\u0430\" } }\n      ]\n    },\n    {\n      \"id\": \"tea-lushan\",\n      \"category\": \"tea\",\n      \"published\": true,\n      \"order\": 3,\n      \"image\": \"assets/img/product-lushan.jpg\",\n      \"name\": { \"zh\": \"\u5e90\u5c71\u4e91\u96fe\u8336\", \"en\": \"Lushan Yunwu Tea\", \"ru\": \"\u0427\u0430\u0439 \u041b\u0443\u0448\u0430\u043d\u044c \u042e\u043d\u044c\u0443\" },\n      \"subtitle\": { \"zh\": \"\u4e2d\u56fd\u5341\u5927\u540d\u8336 \u00b7 \u9ad8\u5c71\u4e91\u96fe\", \"en\": \"Top-10 Chinese Tea \u00b7 Cloud-grown\", \"ru\": \"\u0422\u043e\u043f-10 \u0447\u0430\u0451\u0432 \u041a\u0438\u0442\u0430\u044f\" },\n      \"desc\": {\n        \"zh\": \"\u81ea 1959 \u5e74\u8d77\u4f4d\u5217\u4e2d\u56fd\u5341\u5927\u540d\u8336\u3002\u9999\u51db\u6301\u4e45\uff0c\u9187\u539a\u5473\u7518\uff0c\u662f\u9ad8\u7aef\u793c\u8d60\u6e20\u9053\u7684\u5e38\u9009\u54c1\u7c7b\u3002\",\n        \"en\": \"Listed among China's Top Ten Teas since 1959. A high, long-lasting aroma and a mellow sweet taste \u2014 a standard choice for premium gifting.\",\n        \"ru\": \"\u0421 1959 \u0433\u043e\u0434\u0430 \u0432\u0445\u043e\u0434\u0438\u0442 \u0432 \u0434\u0435\u0441\u044f\u0442\u043a\u0443 \u043b\u0443\u0447\u0448\u0438\u0445 \u0447\u0430\u0451\u0432 \u041a\u0438\u0442\u0430\u044f. \u0412\u044b\u0441\u043e\u043a\u0438\u0439 \u0434\u043e\u043b\u0433\u0438\u0439 \u0430\u0440\u043e\u043c\u0430\u0442, \u043c\u044f\u0433\u043a\u0438\u0439 \u0441\u043b\u0430\u0434\u043a\u0438\u0439 \u0432\u043a\u0443\u0441 \u2014 \u0441\u0442\u0430\u043d\u0434\u0430\u0440\u0442\u043d\u044b\u0439 \u0432\u044b\u0431\u043e\u0440 \u0434\u043b\u044f \u043f\u0440\u0435\u043c\u0438\u0430\u043b\u044c\u043d\u044b\u0445 \u043f\u043e\u0434\u0430\u0440\u043a\u043e\u0432.\"\n      },\n      \"specs\": [\n        { \"k\": { \"zh\": \"\u5e38\u89c1\u89c4\u683c\", \"en\": \"Sizes\",    \"ru\": \"\u0424\u0430\u0441\u043e\u0432\u043a\u0430\" },\n          \"v\": { \"zh\": \"100g / 125g / 250g\", \"en\": \"100g / 125g / 250g\", \"ru\": \"100 \u0433 / 125 \u0433 / 250 \u0433\" } },\n        { \"k\": { \"zh\": \"\u5f62\u6001\",     \"en\": \"Format\",   \"ru\": \"\u0424\u043e\u0440\u043c\u0430\" },\n          \"v\": { \"zh\": \"\u6563\u8336 \u00b7 \u793c\u76d2\", \"en\": \"Loose \u00b7 gift box\", \"ru\": \"\u0420\u0430\u0441\u0441\u044b\u043f\u043d\u043e\u0439 \u00b7 \u043d\u0430\u0431\u043e\u0440\" } },\n        { \"k\": { \"zh\": \"\u9002\u7528\u573a\u666f\", \"en\": \"Best for\", \"ru\": \"\u041a\u0430\u043d\u0430\u043b \u0441\u0431\u044b\u0442\u0430\" },\n          \"v\": { \"zh\": \"\u9ad8\u7aef\u793c\u8d60 \u00b7 \u4e13\u67dc \u00b7 \u793c\u54c1\u6e20\u9053\", \"en\": \"Premium gifting \u00b7 specialty counters\", \"ru\": \"\u041f\u0440\u0435\u043c\u0438\u0443\u043c-\u043f\u043e\u0434\u0430\u0440\u043a\u0438 \u00b7 \u0442\u043e\u0447\u043a\u0438 \u043f\u0440\u043e\u0434\u0430\u0436\" } },\n        { \"k\": { \"zh\": \"\u51b2\u6ce1\u5efa\u8bae\", \"en\": \"Brewing\",  \"ru\": \"\u0417\u0430\u0432\u0430\u0440\u0438\u0432\u0430\u043d\u0438\u0435\" },\n          \"v\": { \"zh\": \"85\u2103 \u00b7 3g/150ml \u00b7 3\u20134 \u6b21\", \"en\": \"85\u00b0C \u00b7 3g per 150ml \u00b7 3\u20134 infusions\", \"ru\": \"85 \u00b0C \u00b7 3 \u0433 \u043d\u0430 150 \u043c\u043b \u00b7 3\u20134 \u0440\u0430\u0437\u0430\" } }\n      ]\n    },\n    {\n      \"id\": \"tea-oem\",\n      \"category\": \"tea\",\n      \"published\": true,\n      \"order\": 4,\n      \"image\": \"assets/img/supply-1.jpg\",\n      \"name\": { \"zh\": \"\u888b\u6ce1\u8336 \u00b7 \u679c\u8336 \u00b7 \u82b1\u8349\u8336\", \"en\": \"Tea Bags \u00b7 Fruit \u00b7 Herbal\", \"ru\": \"\u041f\u0430\u043a\u0435\u0442\u0438\u043a\u0438 \u00b7 \u0444\u0440\u0443\u043a\u0442\u043e\u0432\u044b\u0435 \u00b7 \u0442\u0440\u0430\u0432\u044f\u043d\u044b\u0435\" },\n      \"subtitle\": { \"zh\": \"OEM / ODM \u8d34\u724c\u4ee3\u5de5\", \"en\": \"OEM / ODM Contract Manufacturing\", \"ru\": \"OEM / ODM \u043a\u043e\u043d\u0442\u0440\u0430\u043a\u0442\u043d\u043e\u0435 \u043f\u0440\u043e\u0438\u0437\u0432\u043e\u0434\u0441\u0442\u0432\u043e\" },\n      \"desc\": {\n        \"zh\": \"\u5408\u4f5c\u751f\u4ea7\u4f01\u4e1a\u6301\u6709\u98df\u54c1\u751f\u4ea7\u8bb8\u53ef\u8bc1\uff0c\u8bb8\u53ef\u8303\u56f4\u660e\u786e\u6db5\u76d6\u888b\u6ce1\u8336\u3001\u8c03\u5473\u8336\uff08\u6df7\u5408\u8c03\u5473\u8336\uff09\u3001\u4ee3\u7528\u8336\uff08\u53f6\u7c7b\uff0f\u82b1\u7c7b\uff0f\u6df7\u5408\u7c7b\uff09\u3002\u53ef\u505a\u6ee4\u7eb8\u5305\u3001\u4e09\u89d2\u5c3c\u9f99\u5305\u4e0e\u5b9a\u5236\u5916\u76d2\u3002\",\n        \"en\": \"Our partner manufacturer holds a food production licence explicitly covering tea bags, blended (flavoured) tea and herbal tea (leaf / flower / blended). Filter paper sachets, nylon pyramid bags and custom outer boxes available.\",\n        \"ru\": \"\u041f\u0440\u043e\u0438\u0437\u0432\u043e\u0434\u0441\u0442\u0432\u0435\u043d\u043d\u044b\u0439 \u043f\u0430\u0440\u0442\u043d\u0451\u0440 \u0438\u043c\u0435\u0435\u0442 \u043b\u0438\u0446\u0435\u043d\u0437\u0438\u044e, \u044f\u0432\u043d\u043e \u043f\u043e\u043a\u0440\u044b\u0432\u0430\u044e\u0449\u0443\u044e \u043f\u0430\u043a\u0435\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u043d\u044b\u0439, \u043a\u0443\u043f\u0430\u0436\u0438\u0440\u043e\u0432\u0430\u043d\u043d\u044b\u0439 \u0438 \u0442\u0440\u0430\u0432\u044f\u043d\u043e\u0439 \u0447\u0430\u0439 (\u043b\u0438\u0441\u0442\u043e\u0432\u043e\u0439 / \u0446\u0432\u0435\u0442\u043e\u0447\u043d\u044b\u0439 / \u0441\u043c\u0435\u0448\u0430\u043d\u043d\u044b\u0439). \u041f\u0430\u043a\u0435\u0442\u0438\u043a\u0438, \u043d\u0435\u0439\u043b\u043e\u043d\u043e\u0432\u044b\u0435 \u043f\u0438\u0440\u0430\u043c\u0438\u0434\u043a\u0438, \u0431\u0440\u0435\u043d\u0434\u0438\u0440\u043e\u0432\u0430\u043d\u043d\u044b\u0435 \u043a\u043e\u0440\u043e\u0431\u043a\u0438.\"\n      },\n      \"specs\": [\n        { \"k\": { \"zh\": \"\u5355\u5305\u89c4\u683c\", \"en\": \"Per sachet\",  \"ru\": \"\u041d\u0430 \u043f\u0430\u043a\u0435\u0442\u0438\u043a\" },\n          \"v\": { \"zh\": \"2g \u2013 5g / \u5305\", \"en\": \"2g \u2013 5g each\", \"ru\": \"2\u20135 \u0433\" } },\n        { \"k\": { \"zh\": \"\u5305\u88c5\u5f62\u5f0f\", \"en\": \"Packaging\",   \"ru\": \"\u0423\u043f\u0430\u043a\u043e\u0432\u043a\u0430\" },\n          \"v\": { \"zh\": \"\u6ee4\u7eb8\u5305 \u00b7 \u4e09\u89d2\u5c3c\u9f99\u5305 \u00b7 \u5b9a\u5236\u5916\u76d2\", \"en\": \"Filter paper \u00b7 nylon pyramid \u00b7 custom box\", \"ru\": \"\u0424\u0438\u043b\u044c\u0442\u0440 \u00b7 \u043d\u0435\u0439\u043b\u043e\u043d \u00b7 \u043a\u043e\u0440\u043e\u0431\u043a\u0430\" } },\n        { \"k\": { \"zh\": \"\u9002\u7528\u573a\u666f\", \"en\": \"Best for\",    \"ru\": \"\u041a\u0430\u043d\u0430\u043b \u0441\u0431\u044b\u0442\u0430\" },\n          \"v\": { \"zh\": \"\u9910\u996e \u00b7 \u9152\u5e97 \u00b7 \u65b0\u5f0f\u8336\u996e \u00b7 \u8d34\u724c\", \"en\": \"Food service \u00b7 hotels \u00b7 private label\", \"ru\": \"HoReCa \u00b7 \u043e\u0442\u0435\u043b\u0438 \u00b7 \u0421\u0422\u041c\" } },\n        { \"k\": { \"zh\": \"\u8d77\u8ba2\u91cf\",   \"en\": \"MOQ\",         \"ru\": \"\u041c\u0438\u043d. \u0437\u0430\u043a\u0430\u0437\" },\n          \"v\": { \"zh\": \"\u6309\u89c4\u683c\u4e0e\u5b9a\u5236\u7a0b\u5ea6\u800c\u5b9a\uff0c\u8bf7\u8be2\u76d8\u786e\u8ba4\", \"en\": \"Depends on spec and customisation\", \"ru\": \"\u0417\u0430\u0432\u0438\u0441\u0438\u0442 \u043e\u0442 \u0422\u0417\" } }\n      ]\n    }\n  ]\n}\n;<\/script>\n<script>\n/* ============================================================\n   \u4e5d\u6c5f\u662d\u76db\u5143\u79d1\u6280\u6709\u9650\u516c\u53f8 \u00b7 \u524d\u7aef\u903b\u8f91\n   \u6570\u636e\u6765\u81ea data/site.json \u4e0e data/products.json\uff08\u540e\u53f0\u7ba1\u7406\uff09\n   ============================================================ */\n(function () {\n  'use strict';\n\n  function $(s, root) { return (root || document).querySelector(s); }\n  function $$(s, root) { return Array.prototype.slice.call((root || document).querySelectorAll(s)); }\n  function esc(s) {\n    return String(s == null ? '' : s)\n      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')\n      .replace(/\"/g, '&quot;');\n  }\n  /* \u53d6\u4e09\u8bed\u503c\uff1a\u4f18\u5148\u5f53\u524d\u8bed\u8a00\uff0c\u56de\u9000\u4e2d\u6587\uff0c\u518d\u56de\u9000\u82f1\u6587 */\n  function t(v, lang) {\n    if (v == null) return '';\n    if (typeof v === 'string') return v;\n    if (typeof v === 'object') {\n      return v[lang] || v.zh || v.en || v.ru || '';\n    }\n    return String(v);\n  }\n\n  var cur = 'zh';\n  var SITE = null;   // data/site.json\n  var PROD = null;   // data/products.json\n  var filterCat = 'all';\n\n  /* \u5185\u8054\u5360\u4f4d\u56fe\uff1a\u4e0d\u4f9d\u8d56\u4efb\u4f55\u5916\u90e8\u670d\u52a1\uff0c\u4e2d\u4fc4\u90fd\u80fd\u663e\u793a */\n  var PH = 'data:image/svg+xml;charset=utf8,' + encodeURIComponent(\n    '<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"600\" height=\"450\">' +\n    '<rect width=\"600\" height=\"450\" fill=\"#eef1f5\"/>' +\n    '<circle cx=\"300\" cy=\"200\" r=\"52\" fill=\"#cfd8e2\"/>' +\n    '<text x=\"300\" y=\"300\" font-size=\"20\" fill=\"#8a96a4\" text-anchor=\"middle\" font-family=\"sans-serif\">Photo</text></svg>');\n\n  /* ============================================================\n     \u8bed\u8a00\n     ============================================================ */\n  function detect() {\n    try {\n      var s = localStorage.getItem('zsy_lang');\n      if (s && LANGS.indexOf(s) > -1) return s;\n    } catch (e) {}\n    var n = (navigator.language || 'zh').toLowerCase();\n    if (n.indexOf('ru') === 0) return 'ru';\n    if (n.indexOf('zh') === 0 || n.indexOf('cn') > -1) return 'zh';\n    return 'en';\n  }\n\n  function setLang(lang, noPersist) {\n    cur = LANGS.indexOf(lang) > -1 ? lang : 'zh';\n    if (!noPersist) { try { localStorage.setItem('zsy_lang', cur); } catch (e) {} }\n    document.documentElement.lang = LANG_META[cur].htmlLang;\n    document.documentElement.dir = LANG_META[cur].dir;\n    var d = I18N[cur];\n    if (d && d.meta) {\n      document.title = d.meta.title;\n      var md = $('meta[name=\"description\"]');\n      if (md) md.setAttribute('content', d.meta.desc);\n    }\n    $$('[data-i18n]').forEach(function (el) {\n      var v = getKey(d, el.getAttribute('data-i18n'));\n      if (v != null) el.textContent = v;\n    });\n    $$('[data-i18n-ph]').forEach(function (el) {\n      var v = getKey(d, el.getAttribute('data-i18n-ph'));\n      if (v != null) el.setAttribute('placeholder', v);\n    });\n    $$('#langswitch button').forEach(function (b) {\n      b.classList.toggle('on', b.getAttribute('data-lang') === cur);\n    });\n    renderData();\n  }\n\n  function getKey(obj, path) {\n    if (!obj) return null;\n    return path.split('.').reduce(function (o, k) { return (o == null) ? null : o[k]; }, obj);\n  }\n\n  /* ============================================================\n     \u6e32\u67d3 CMS \u6570\u636e\n     ============================================================ */\n  function renderData() {\n    if (!SITE) return;\n    var L = cur;\n\n    // \u9996\u5c4f\n    $('#heroTitle').textContent = t(SITE.hero_titles, L) || '\u4e5d\u6c5f\u662d\u76db\u5143\u79d1\u6280\u6709\u9650\u516c\u53f8';\n    $('#heroSub').textContent = t(SITE.hero_subs, L) || '';\n    if (SITE.hero_img) $('#heroBg').style.backgroundImage = 'url(\"' + SITE.hero_img + '\")';\n\n    // \u5173\u4e8e\n    $('#aboutTitle').textContent = t(SITE.about_titles, L) || t(I18N[L].about, 'label');\n    $('#aboutDesc').textContent = t(SITE.about_descs, L) || '';\n    var ai = $('#aboutImg');\n    if (SITE.about_img) { ai.src = SITE.about_img; ai.style.display = 'block'; }\n    else { ai.style.display = 'none'; }\n\n    $('#qualList').innerHTML = (SITE.qual_items || [])\n      .map(function (q) { return '<li>' + esc(t(q, L)) + '</li>'; }).join('');\n    $('#qualNote').textContent = t(SITE.qual_note, L) || '';\n\n    // \u80fd\u529b\n    $('#capTitle').textContent = t(SITE.cap_title, L) || '';\n    $('#capLead').textContent = t(SITE.cap_lead, L) || '';\n    $('#capList').innerHTML = (SITE.cap_items || [])\n      .map(function (c, i) { return '<li><b>' + (i + 1) + '</b><span>' + esc(t(c, L)) + '</span></li>'; }).join('');\n    $('#capNote').textContent = t(SITE.cap_note, L) || '';\n\n    // \u4e3a\u4ec0\u4e48\u9009\u62e9\u6211\u4eec\n    $('#whyTitle').textContent = t(SITE.why_title, L) || '';\n    $('#whyGrid').innerHTML = (SITE.why_items || [])\n      .map(function (w) {\n        return '<div class=\"mini-card\"><h4>' + esc(t(w.title, L)) + '</h4><p>' + esc(t(w.text, L)) + '</p></div>';\n      }).join('');\n\n    // \u5408\u4f5c\u6761\u6b3e\n    $('#termTitle').textContent = t(SITE.term_title, L) || '';\n    $('#termGrid').innerHTML = (SITE.term_items || [])\n      .map(function (x) {\n        return '<div class=\"mini-card\"><h4>' + esc(t(x.title, L)) + '</h4><p>' + esc(t(x.text, L)) + '</p></div>';\n      }).join('');\n    $('#termNote').textContent = t(SITE.term_note, L) || '';\n\n    // FAQ\n    $('#faqList').innerHTML = (SITE.faq_list || [])\n      .map(function (f) {\n        return '<details class=\"fq\"><summary>' + esc(t(f.q, L)) + '</summary><div class=\"fa\">' + esc(t(f.a, L)) + '</div></details>';\n      }).join('');\n\n    // \u8054\u7cfb\u4fe1\u606f\n    $('#cAddr').textContent = t(SITE.contact_addr, L) || '';\n    $('#cTelCn').textContent = SITE.contact_phone_cn || '';\n    $('#cTelRu').textContent = SITE.contact_phone_ru || '';\n    $('#cMail1').textContent = SITE.contact_email_1 || '';\n    $('#cMail2').textContent = SITE.contact_email_2 || '';\n    $('#wxCopy').textContent = SITE.contact_wechat || '';\n    $('#footerNote').textContent = t(SITE.footer_note, L) || '';\n    $('#footerCopy').textContent = '\u00a9 ' + new Date().getFullYear() + ' ' +\n      (L === 'ru' ? '\u041e\u041e\u041e \u00ab\u0426\u0437\u044e\u0446\u0437\u044f\u043d \u0427\u0436\u0430\u043e\u0448\u044d\u043d\u044a\u044e\u0430\u043d\u044c \u0422\u0435\u0445\u043d\u043e\u043b\u043e\u0433\u0438\u0438\u00bb' :\n       L === 'en' ? 'Jiujiang Zhaoshengyuan Technology Co., Ltd.' :\n       '\u4e5d\u6c5f\u662d\u76db\u5143\u79d1\u6280\u6709\u9650\u516c\u53f8');\n\n    var navKeys = ['about','products','capability','why','terms','faq','contact'];\n    $('#footerLinks').innerHTML = navKeys.map(function (k) {\n      return '<li><a href=\"#' + k + '\">' + esc(I18N[L].nav[k]) + '</a></li>';\n    }).join('');\n    $('#footContact').innerHTML =\n      '<li><a href=\"tel:' + (SITE.contact_phone_cn || '').replace(/\\s/g, '') + '\">' + esc(SITE.contact_phone_cn) + '</a></li>' +\n      '<li><a href=\"tel:' + (SITE.contact_phone_ru || '').replace(/\\s/g, '') + '\">' + esc(SITE.contact_phone_ru) + '</a></li>' +\n      '<li><a href=\"mailto:' + esc(SITE.contact_email_1) + '\">' + esc(SITE.contact_email_1) + '</a></li>';\n\n    renderProducts();\n  }\n\n  /* ============================================================\n     \u4ea7\u54c1\uff08\u540e\u53f0\u589e\u5220\u6539\u67e5\uff09\n     ============================================================ */\n  function renderProducts() {\n    if (!PROD) return;\n    var L = cur;\n    var cats = PROD.categories || [];\n    var items = (PROD.products || []).filter(function (p) { return p.published !== false; });\n\n    // \u5206\u7c7b\u6309\u94ae\uff1a\u53ea\u663e\u793a\u6709\u5546\u54c1\u7684\u5206\u7c7b\uff08+ \u5168\u90e8\uff09\n    var used = {};\n    items.forEach(function (p) { used[p.category] = (used[p.category] || 0) + 1; });\n    var html = '<button type=\"button\" class=\"catbtn' + (filterCat === 'all' ? ' on' : '') +\n               '\" data-cat=\"all\">' + (L === 'ru' ? '\u0412\u0441\u0435' : L === 'en' ? 'All' : '\u5168\u90e8') + '</button>';\n    cats.forEach(function (c) {\n      var n = used[c.key] || 0;\n      html += '<button type=\"button\" class=\"catbtn' + (filterCat === c.key ? ' on' : '') +\n              '\" data-cat=\"' + esc(c.key) + '\">' + esc(t(c.label, L)) +\n              (n ? ' <span class=\"cnt\">' + n + '</span>' : '') + '</button>';\n    });\n    $('#catFilter').innerHTML = html;\n    $$('#catFilter .catbtn').forEach(function (b) {\n      b.onclick = function () { filterCat = b.getAttribute('data-cat'); renderProducts(); };\n    });\n\n    var list = items.filter(function (p) { return filterCat === 'all' || p.category === filterCat; });\n    list.sort(function (a, b) { return (a.order || 99) - (b.order || 99); });\n\n    $('#prodGrid').innerHTML = list.map(function (p) {\n      var specs = (p.specs || []).map(function (s) {\n        return '<li><b>' + esc(t(s.k, L)) + '</b><span>' + esc(t(s.v, L)) + '</span></li>';\n      }).join('');\n      return '' +\n        '<article class=\"pcard\">' +\n          '<div class=\"pcard-img\"><img src=\"' + esc(p.image || PH) + '\" alt=\"' + esc(t(p.name, L)) + '\" loading=\"lazy\" onerror=\"this.src=\\'' + PH + '\\'\"></div>' +\n          '<div class=\"pcard-body\">' +\n            '<span class=\"pcard-cat\">' + esc(catLabel(p.category, L)) + '</span>' +\n            '<h3>' + esc(t(p.name, L)) + '</h3>' +\n            '<span class=\"pcard-sub\">' + esc(t(p.subtitle, L)) + '</span>' +\n            '<p>' + esc(t(p.desc, L)) + '</p>' +\n            (specs ? '<ul class=\"spec-list\">' + specs + '</ul>' : '') +\n            '<a class=\"btn outline sm\" href=\"#contact\" data-enq=\"' + esc(t(p.name, L)) + '\">' +\n              (L === 'ru' ? '\u0417\u0430\u043f\u0440\u043e\u0441\u0438\u0442\u044c \u0446\u0435\u043d\u0443' : L === 'en' ? 'Get a quote' : '\u83b7\u53d6\u62a5\u4ef7') + '</a>' +\n          '</div>' +\n        '</article>';\n    }).join('');\n\n    var empty = $('#prodEmpty');\n    if (!list.length) { empty.style.display = 'block'; empty.textContent = t(PROD.emptyText, L) || ''; }\n    else { empty.style.display = 'none'; }\n\n    // \u70b9\u201c\u83b7\u53d6\u62a5\u4ef7\u201d\u628a\u4ea7\u54c1\u540d\u5e26\u8fdb\u7559\u8a00\u6846\n    $$('#prodGrid [data-enq]').forEach(function (a) {\n      a.onclick = function () {\n        var ta = document.querySelector('#contactForm [name=msg]');\n        var nm = a.getAttribute('data-enq');\n        var pre = (L === 'ru' ? '\u0418\u043d\u0442\u0435\u0440\u0435\u0441\u0443\u044e\u0442: ' : L === 'en' ? 'Interested in: ' : '\u6211\u60f3\u4e86\u89e3\uff1a') + nm;\n        if (ta && ta.value.indexOf(pre) === -1) ta.value = pre + (ta.value ? '\\n' + ta.value : '');\n      };\n    });\n  }\n\n  function catLabel(key, L) {\n    var c = (PROD && PROD.categories || []).filter(function (x) { return x.key === key; })[0];\n    return c ? t(c.label, L) : key;\n  }\n\n  /* ============================================================\n     \u5bfc\u822a / \u4ea4\u4e92\n     ============================================================ */\n  function initNav() {\n    var bar = $('#topbar'), links = $('#navlinks'), tg = $('#navtoggle');\n    tg.onclick = function () { links.classList.toggle('open'); };\n    links.addEventListener('click', function (e) {\n      if (e.target.tagName === 'A') links.classList.remove('open');\n    });\n    var onScroll = function () { bar.classList.toggle('scrolled', window.scrollY > 30); };\n    window.addEventListener('scroll', onScroll, { passive: true });\n    onScroll();\n  }\n\n  function initReveal() {\n    if (!('IntersectionObserver' in window)) return;\n    var io = new IntersectionObserver(function (es) {\n      es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });\n    }, { threshold: 0.08 });\n    $$('section').forEach(function (s) { s.classList.add('reveal'); io.observe(s); });\n  }\n\n  function initWechat() {\n    var el = $('#wxCopy');\n    if (!el) return;\n    el.onclick = function () {\n      var txt = el.textContent.trim();\n      var done = function () {\n        var old = el.textContent;\n        el.textContent = I18N[cur].msg.copied;\n        el.classList.add('copied');\n        setTimeout(function () { el.textContent = old; el.classList.remove('copied'); }, 1500);\n      };\n      if (navigator.clipboard && navigator.clipboard.writeText) {\n        navigator.clipboard.writeText(txt).then(done, fb);\n      } else { fb(); }\n      function fb() {\n        var ta = document.createElement('textarea');\n        ta.value = txt; ta.style.position = 'fixed'; ta.style.opacity = '0';\n        document.body.appendChild(ta); ta.select();\n        try { document.execCommand('copy'); done(); } catch (e) {}\n        document.body.removeChild(ta);\n      }\n    };\n  }\n\n  /* ============================================================\n     \u8868\u5355 \u2192 Cloudflare Worker \u2192 Telegram + \u90ae\u4ef6\n     ============================================================ */\n  var ENDPOINT = 'https://gonghehou-form.tunnir243.workers.dev';\n\n  function initForm() {\n    var form = $('#contactForm'), msgEl = $('#formmsg');\n    if (!form) return;\n    form.addEventListener('submit', function (e) {\n      e.preventDefault();\n      var M = I18N[cur].msg;\n      var name = (form.name.value || '').trim();\n      var contact = (form.contact.value || '').trim();\n      if (!name || !contact) {\n        msgEl.className = 'formmsg bad'; msgEl.textContent = M.errFill; return;\n      }\n      var payload = {\n        name: name, contact: contact,\n        company: (form.company.value || '').trim(),\n        country: (form.country.value || '').trim(),\n        qty: form.qty.value, type: form.type.value,\n        msg: (form.msg.value || '').trim(),\n        lang: cur\n      };\n      msgEl.className = 'formmsg'; msgEl.textContent = M.send;\n      if (!ENDPOINT) {\n        setTimeout(function () { msgEl.className = 'formmsg ok'; msgEl.textContent = M.ok; form.reset(); }, 600);\n        return;\n      }\n      fetch(ENDPOINT, {\n        method: 'POST',\n        headers: { 'Content-Type': 'application/json' },\n        body: JSON.stringify(payload)\n      }).then(function (r) { return r.json(); })\n        .then(function (j) {\n          if (j && j.ok) { msgEl.className = 'formmsg ok'; msgEl.textContent = M.ok; form.reset(); }\n          else { msgEl.className = 'formmsg bad'; msgEl.textContent = M.errNetwork; }\n        })\n        .catch(function () { msgEl.className = 'formmsg bad'; msgEl.textContent = M.errNetwork; });\n    });\n  }\n\n  /* ============================================================\n     \u542f\u52a8\n     ============================================================ */\n  function loadJSON(url) {\n    /* \u5355\u6587\u4ef6\u7248\uff1a\u6570\u636e\u5df2\u5185\u8054\uff0c\u76f4\u63a5\u7528\uff0c\u907f\u514d file:// \u4e0b fetch \u88ab\u6d4f\u89c8\u5668\u62e6\u622a */\n    if (url.indexOf('site.json') > -1 && window.__ZSY_SITE__) return Promise.resolve(window.__ZSY_SITE__);\n    if (url.indexOf('products.json') > -1 && window.__ZSY_PROD__) return Promise.resolve(window.__ZSY_PROD__);\n    return fetch(url, { cache: 'no-store' }).then(function (r) {\n      if (!r.ok) throw new Error(url + ' ' + r.status);\n      return r.json();\n    });\n  }\n\n  /* ============================================================\n     \u5bf9\u5916\u94a9\u5b50\uff1a\u4f9b\u7ba1\u7406\u540e\u53f0\u5728 iframe \u91cc\u5b9e\u65f6\u5237\u65b0\u9884\u89c8\n     \u7528\u6cd5\uff1aiframe.contentWindow.ZSY.setData(siteObj, prodObj, 'zh')\n     ============================================================ */\n  window.ZSY = {\n    setData: function (site, prod, lang) {\n      if (site) SITE = site;\n      if (prod) PROD = prod;\n      if (lang && LANGS.indexOf(lang) > -1) cur = lang;\n      setLang(cur, true);\n    },\n    getLang: function () { return cur; }\n  };\n\n  function boot() {\n    setLang(detect(), true);\n    initNav(); initWechat(); initForm();\n\n    Promise.all([\n      loadJSON('data/site.json').catch(function (e) { console.warn(e); return null; }),\n      loadJSON('data/products.json').catch(function (e) { console.warn(e); return null; })\n    ]).then(function (res) {\n      SITE = res[0] || {};\n      PROD = res[1] || { categories: [], products: [] };\n      setLang(cur, true);\n      initReveal();\n    });\n\n    $$('#langswitch button').forEach(function (b) {\n      b.onclick = function () { setLang(b.getAttribute('data-lang')); };\n    });\n  }\n\n  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);\n  else boot();\n})();\n\n<\/script>\n</body>\n</html>\n";
+
+/* ============================================================
+   字段结构定义
+   ============================================================ */
+var SCHEMA = [
+  { id:'home', name:'首页 / 首屏', fields:[
+    { k:'hero_titles', label:'大标题', t:'trio' },
+    { k:'hero_subs',  label:'副标题', t:'trio' },
+    { k:'hero_img',   label:'首屏背景图', t:'img' }
+  ]},
+  { id:'about', name:'关于我们', fields:[
+    { k:'about_titles', label:'标题', t:'trio' },
+    { k:'about_descs',  label:'正文', t:'trio-a' },
+    { k:'about_img',    label:'配图', t:'img' },
+    { k:'qual_items',   label:'经营范围清单', t:'list-trio' },
+    { k:'qual_note',    label:'经营范围下方小字', t:'trio-a' }
+  ]},
+  { id:'cap', name:'服务能力', fields:[
+    { k:'cap_title', label:'标题', t:'trio' },
+    { k:'cap_lead',  label:'导语', t:'trio' },
+    { k:'cap_items', label:'流程步骤（按顺序自动编号）', t:'list-trio' },
+    { k:'cap_note',  label:'底部说明', t:'trio-a' }
+  ]},
+  { id:'why', name:'为什么选择我们', fields:[
+    { k:'why_title', label:'标题', t:'trio' },
+    { k:'why_items', label:'条目', t:'list-titled' }
+  ]},
+  { id:'terms', name:'合作条款', fields:[
+    { k:'term_title', label:'标题', t:'trio' },
+    { k:'term_items', label:'条目', t:'list-titled' },
+    { k:'term_note',  label:'底部说明', t:'trio-a' }
+  ]},
+  { id:'faq', name:'常见问题', fields:[
+    { k:'faq_list', label:'问答（可增删）', t:'list-qa' }
+  ]},
+  { id:'contact', name:'联系方式', fields:[
+    { k:'contact_addr',      label:'地址',       t:'trio' },
+    { k:'contact_phone_cn',  label:'中国电话',   t:'str' },
+    { k:'contact_phone_ru',  label:'俄罗斯电话', t:'str' },
+    { k:'contact_email_1',   label:'邮箱 1',     t:'str' },
+    { k:'contact_email_2',   label:'邮箱 2',     t:'str' },
+    { k:'contact_wechat',    label:'微信',       t:'str' },
+    { k:'footer_note',       label:'页脚版权说明', t:'trio' }
+  ]}
+];
+
+/* ============================================================
+   工具
+   ============================================================ */
+function $(id){ return document.getElementById(id); }
+function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function toast(m){ var t=$('toast'); t.textContent=m; t.classList.add('show'); clearTimeout(t._t); t._t=setTimeout(function(){t.classList.remove('show');},2200); }
+function trioVal(v,l){ if(v==null) return ''; if(typeof v==='string') return v; return v[l]||v.zh||''; }
+function setTrio(obj,l,val){ if(typeof obj!=='object'||obj==null) return; obj[l]=val; }
+function ensureTrio(o,k){ if(!o[k]||typeof o[k]!=='object') o[k]={zh:'',en:'',ru:''}; return o[k]; }
+
+/* ============================================================
+   渲染侧栏
+   ============================================================ */
+function renderSide(){
+  var h = '<div class="t">站点内容</div>';
+  SCHEMA.forEach(function(g){ h += '<a href="javascript:go(\''+g.id+'\')" data-g="'+g.id+'">'+esc(g.name)+'</a>'; });
+  h += '<div class="t">产品</div>';
+  h += '<a href="javascript:go(\'cats\')" data-g="cats">品类分组</a>';
+  h += '<a href="javascript:go(\'prods\')" data-g="prods">商品列表<span class="n">'+(PROD&&PROD.products?PROD.products.length:0)+'</span></a>';
+  $('side').innerHTML = h;
+  markSide();
+}
+function markSide(){
+  document.querySelectorAll('#side a').forEach(function(a){
+    a.classList.toggle('on', a.getAttribute('data-g')===CUR);
+  });
+}
+function go(id){ CUR=id; markSide(); renderEdit(); }
+
+/* ============================================================
+   渲染编辑区
+   ============================================================ */
+function renderEdit(){
+  var e = $('edit');
+  if(CUR==='cats'){ e.innerHTML = renderCats(); bindCats(); }
+  else if(CUR==='prods'){ e.innerHTML = renderProds(); bindProds(); }
+  else {
+    var g = SCHEMA.filter(function(x){return x.id===CUR;})[0];
+    if(!g){ e.innerHTML=''; return; }
+    var h = '<div class="grp"><h3>'+esc(g.name)+'</h3>';
+    g.fields.forEach(function(f){ h += fieldHTML(f); });
+    h += '</div>';
+    e.innerHTML = h;
+  }
+  pvUpdate();
+}
+
+function trioHTML(label, val, path, area){
+  var v = val||{};
+  var inp = area
+    ? '<textarea data-p="'+path+'" data-l="zh">'+esc(v.zh||'')+'</textarea>'
+      + '<textarea data-p="'+path+'" data-l="en">'+esc(v.en||'')+'</textarea>'
+      + '<textarea data-p="'+path+'" data-l="ru">'+esc(v.ru||'')+'</textarea>'
+    : '<input data-p="'+path+'" data-l="zh" value="'+esc(v.zh||'')+'">'
+      + '<input data-p="'+path+'" data-l="en" value="'+esc(v.en||'')+'">'
+      + '<input data-p="'+path+'" data-l="ru" value="'+esc(v.ru||'')+'">';
+  return '<div class="fld"><label>'+esc(label)+'</label>'
+    + '<div class="trio">'
+    +   '<div class="cell"><span>中文</span>'+ (area? '<textarea data-p="'+path+'" data-l="zh">'+esc(v.zh||'')+'</textarea>':'<input data-p="'+path+'" data-l="zh" value="'+esc(v.zh||'')+'">') +'</div>'
+    +   '<div class="cell"><span>English</span>'+ (area? '<textarea data-p="'+path+'" data-l="en">'+esc(v.en||'')+'</textarea>':'<input data-p="'+path+'" data-l="en" value="'+esc(v.en||'')+'">') +'</div>'
+    +   '<div class="cell"><span>Русский</span>'+ (area? '<textarea data-p="'+path+'" data-l="ru">'+esc(v.ru||'')+'</textarea>':'<input data-p="'+path+'" data-l="ru" value="'+esc(v.ru||'')+'">') +'</div>'
+    + '</div></div>';
+}
+function strHTML(label, val, path){
+  return '<div class="fld"><label>'+esc(label)+'</label>'
+    + '<input class="plain" data-p="'+path+'" value="'+esc(val||'')+'"></div>';
+}
+function imgHTML(label, val, path){
+  return '<div class="fld"><label>'+esc(label)+'</label><div class="imgrow">'
+    + '<div class="thumb" id="th_'+path.replace(/[.\[\]]/g,'_')+'" style="'+(val?'background-image:url('+esc(val)+')':'')+'"></div>'
+    + '<div class="r"><input class="plain" data-p="'+path+'" value="'+esc(val||'')+'" placeholder="assets/img/xxx.jpg">'
+    + '<div class="btns"><button onclick="pickImg(\''+path+'\')">上传图片</button>'
+    + '<button onclick="clearImg(\''+path+'\')">清除</button></div>'
+    + '<div class="hint">上传后自动转成内置图片，导出的单文件网页一定能显示。建议单张不超过 500KB。</div>'
+    + '</div></div></div>';
+}
+
+function fieldHTML(f){
+  var v = SITE ? SITE[f.k] : null;
+  if(f.t==='trio')    return trioHTML(f.label, v, f.k, false);
+  if(f.t==='trio-a')  return trioHTML(f.label, v, f.k, true);
+  if(f.t==='str')     return strHTML(f.label, v, f.k);
+  if(f.t==='img')     return imgHTML(f.label, v, f.k);
+  if(f.t==='list-trio')   return listTrioHTML(f.label, f.k);
+  if(f.t==='list-titled') return listTitledHTML(f.label, f.k);
+  if(f.t==='list-qa')     return listQAHTML(f.label, f.k);
+  return '';
+}
+
+/* --- 列表：每项是一组三语 --- */
+function listTrioHTML(label, key){
+  var arr = (SITE&&SITE[key])||[];
+  var h = '<div class="fld"><label>'+esc(label)+'（'+arr.length+' 条）</label><div data-list="'+key+'">';
+  arr.forEach(function(it,i){
+    h += '<div class="item"><div class="bar"><span class="idx">'+(i+1)+'</span><span class="sp"></span>'
+      + '<button onclick="mv(\''+key+'\','+i+',-1)">↑</button>'
+      + '<button onclick="mv(\''+key+'\','+i+',1)">↓</button>'
+      + '<button class="del" onclick="del(\''+key+'\','+i+')">✕</button></div>'
+      + '<div class="trio">'
+      + '<div class="cell"><span>中文</span><input data-lp="'+key+'.'+i+'" data-l="zh" value="'+esc(trioVal(it,'zh'))+'"></div>'
+      + '<div class="cell"><span>English</span><input data-lp="'+key+'.'+i+'" data-l="en" value="'+esc(trioVal(it,'en'))+'"></div>'
+      + '<div class="cell"><span>Русский</span><input data-lp="'+key+'.'+i+'" data-l="ru" value="'+esc(trioVal(it,'ru'))+'"></div>'
+      + '</div></div>';
+  });
+  h += '</div><button class="addbtn" onclick="addTrio(\''+key+'\')">＋ 新增一条</button></div>';
+  return h;
+}
+
+/* --- 列表：每项有标题+说明 --- */
+function listTitledHTML(label, key){
+  var arr = (SITE&&SITE[key])||[];
+  var h = '<div class="fld"><label>'+esc(label)+'（'+arr.length+' 条）</label><div data-list="'+key+'">';
+  arr.forEach(function(it,i){
+    h += '<div class="item"><div class="bar"><span class="idx">'+(i+1)+'</span><span class="sp"></span>'
+      + '<button onclick="mv(\''+key+'\','+i+',-1)">↑</button>'
+      + '<button onclick="mv(\''+key+'\','+i+',1)">↓</button>'
+      + '<button class="del" onclick="del(\''+key+'\','+i+')">✕</button></div>'
+      + '<div class="fld" style="margin-bottom:8px"><label style="font-size:.8rem">标题</label><div class="trio">'
+      + '<div class="cell"><span>中文</span><input data-lp="'+key+'.'+i+'.title" data-l="zh" value="'+esc(trioVal(it&&it.title,'zh'))+'"></div>'
+      + '<div class="cell"><span>English</span><input data-lp="'+key+'.'+i+'.title" data-l="en" value="'+esc(trioVal(it&&it.title,'en'))+'"></div>'
+      + '<div class="cell"><span>Русский</span><input data-lp="'+key+'.'+i+'.title" data-l="ru" value="'+esc(trioVal(it&&it.title,'ru'))+'"></div>'
+      + '</div></div>'
+      + '<div class="fld" style="margin-bottom:0"><label style="font-size:.8rem">说明</label><div class="trio">'
+      + '<div class="cell"><span>中文</span><textarea data-lp="'+key+'.'+i+'.text" data-l="zh">'+esc(trioVal(it&&it.text,'zh'))+'</textarea></div>'
+      + '<div class="cell"><span>English</span><textarea data-lp="'+key+'.'+i+'.text" data-l="en">'+esc(trioVal(it&&it.text,'en'))+'</textarea></div>'
+      + '<div class="cell"><span>Русский</span><textarea data-lp="'+key+'.'+i+'.text" data-l="ru">'+esc(trioVal(it&&it.text,'ru'))+'</textarea></div>'
+      + '</div></div></div>';
+  });
+  h += '</div><button class="addbtn" onclick="addTitled(\''+key+'\')">＋ 新增一条</button></div>';
+  return h;
+}
+
+/* --- 列表：问答 --- */
+function listQAHTML(label, key){
+  var arr = (SITE&&SITE[key])||[];
+  var h = '<div class="fld"><label>'+esc(label)+'（'+arr.length+' 条）</label><div data-list="'+key+'">';
+  arr.forEach(function(it,i){
+    h += '<div class="item"><div class="bar"><span class="idx">'+(i+1)+'</span><span class="sp"></span>'
+      + '<button onclick="mv(\''+key+'\','+i+',-1)">↑</button>'
+      + '<button onclick="mv(\''+key+'\','+i+',1)">↓</button>'
+      + '<button class="del" onclick="del(\''+key+'\','+i+')">✕</button></div>'
+      + '<div class="fld" style="margin-bottom:8px"><label style="font-size:.8rem">问题</label><div class="trio">'
+      + '<div class="cell"><span>中文</span><input data-lp="'+key+'.'+i+'.q" data-l="zh" value="'+esc(trioVal(it&&it.q,'zh'))+'"></div>'
+      + '<div class="cell"><span>English</span><input data-lp="'+key+'.'+i+'.q" data-l="en" value="'+esc(trioVal(it&&it.q,'en'))+'"></div>'
+      + '<div class="cell"><span>Русский</span><input data-lp="'+key+'.'+i+'.q" data-l="ru" value="'+esc(trioVal(it&&it.q,'ru'))+'"></div>'
+      + '</div></div>'
+      + '<div class="fld" style="margin-bottom:0"><label style="font-size:.8rem">答案</label><div class="trio">'
+      + '<div class="cell"><span>中文</span><textarea data-lp="'+key+'.'+i+'.a" data-l="zh">'+esc(trioVal(it&&it.a,'zh'))+'</textarea></div>'
+      + '<div class="cell"><span>English</span><textarea data-lp="'+key+'.'+i+'.a" data-l="en">'+esc(trioVal(it&&it.a,'en'))+'</textarea></div>'
+      + '<div class="cell"><span>Русский</span><textarea data-lp="'+key+'.'+i+'.a" data-l="ru">'+esc(trioVal(it&&it.a,'ru'))+'</textarea></div>'
+      + '</div></div></div>';
+  });
+  h += '</div><button class="addbtn" onclick="addQA(\''+key+'\')">＋ 新增问答</button></div>';
+  return h;
+}
+
+/* ============================================================
+   品类分组
+   ============================================================ */
+function renderCats(){
+  var arr = (PROD&&PROD.categories)||[];
+  var h = '<div class="grp"><h3>品类分组</h3>'
+    + '<div class="hint" style="margin-bottom:12px;font-size:.82rem;color:#6b7a8a">'
+    + '商品的「所属品类」必须填这里同样的英文标识。已有：'
+    + arr.map(function(c){return '<b>'+esc(c.key)+'</b>';}).join('、') + '</div>';
+  arr.forEach(function(c,i){
+    h += '<div class="item"><div class="bar"><span class="idx">'+(i+1)+'</span><span class="sp"></span>'
+      + '<button onclick="mvCat('+i+',-1)">↑</button><button onclick="mvCat('+i+',1)">↓</button>'
+      + '<button class="del" onclick="delCat('+i+')">✕</button></div>'
+      + '<div class="fld" style="margin-bottom:8px"><label style="font-size:.8rem">英文标识</label>'
+      + '<input class="plain" data-cat="'+i+'.key" value="'+esc(c.key||'')+'"></div>'
+      + '<div class="fld" style="margin-bottom:0"><label style="font-size:.8rem">显示名称</label><div class="trio">'
+      + '<div class="cell"><span>中文</span><input data-cat="'+i+'.zh" value="'+esc(c.zh||'')+'"></div>'
+      + '<div class="cell"><span>English</span><input data-cat="'+i+'.en" value="'+esc(c.en||'')+'"></div>'
+      + '<div class="cell"><span>Русский</span><input data-cat="'+i+'.ru" value="'+esc(c.ru||'')+'"></div>'
+      + '</div></div></div>';
+  });
+  h += '<button class="addbtn" onclick="addCat()">＋ 新增品类</button></div>';
+  return h;
+}
+function bindCats(){
+  document.querySelectorAll('#edit [data-cat]').forEach(function(el){
+    el.addEventListener('input', function(){
+      var p = el.getAttribute('data-cat').split('.');
+      PROD.categories[+p[0]][p[1]] = el.value;
+      pvUpdate();
+    });
+  });
+}
+
+/* ============================================================
+   商品列表
+   ============================================================ */
+function renderProds(){
+  var arr = (PROD&&PROD.products)||[];
+  var catOpt = ((PROD&&PROD.categories)||[]).map(function(c){
+    return '<option value="'+esc(c.key)+'">'+esc(c.key+' · '+(c.zh||''))+'</option>'; }).join('');
+  var h = '<div class="grp"><h3>商品列表（'+arr.length+'）</h3>';
+  arr.forEach(function(p,i){
+    var specs = p.specs||[];
+    h += '<div class="item" style="padding:14px"><div class="bar"><span class="idx">'+(i+1)+'</span>'
+      + '<b style="font-size:.9rem;color:#1a3a5c">'+esc(trioVal(p.name,'zh')||'(未命名)')+'</b>'
+      + '<span class="sp"></span>'
+      + '<button onclick="mvProd('+i+',-1)">↑</button><button onclick="mvProd('+i+',1)">↓</button>'
+      + '<button class="del" onclick="delProd('+i+')">✕</button></div>'
+      + '<div class="fld"><label style="font-size:.8rem">名称</label><div class="trio">'
+      + '<div class="cell"><span>中文</span><input data-pr="'+i+'.name.zh" value="'+esc(trioVal(p.name,'zh'))+'"></div>'
+      + '<div class="cell"><span>English</span><input data-pr="'+i+'.name.en" value="'+esc(trioVal(p.name,'en'))+'"></div>'
+      + '<div class="cell"><span>Русский</span><input data-pr="'+i+'.name.ru" value="'+esc(trioVal(p.name,'ru'))+'"></div>'
+      + '</div></div>'
+      + '<div class="fld"><label style="font-size:.8rem">副标题 / 卖点</label><div class="trio">'
+      + '<div class="cell"><span>中文</span><input data-pr="'+i+'.subtitle.zh" value="'+esc(trioVal(p.subtitle,'zh'))+'"></div>'
+      + '<div class="cell"><span>English</span><input data-pr="'+i+'.subtitle.en" value="'+esc(trioVal(p.subtitle,'en'))+'"></div>'
+      + '<div class="cell"><span>Русский</span><input data-pr="'+i+'.subtitle.ru" value="'+esc(trioVal(p.subtitle,'ru'))+'"></div>'
+      + '</div></div>'
+      + '<div class="fld"><label style="font-size:.8rem">描述</label><div class="trio">'
+      + '<div class="cell"><span>中文</span><textarea data-pr="'+i+'.desc.zh">'+esc(trioVal(p.desc,'zh'))+'</textarea></div>'
+      + '<div class="cell"><span>English</span><textarea data-pr="'+i+'.desc.en">'+esc(trioVal(p.desc,'en'))+'</textarea></div>'
+      + '<div class="cell"><span>Русский</span><textarea data-pr="'+i+'.desc.ru">'+esc(trioVal(p.desc,'ru'))+'</textarea></div>'
+      + '</div></div>'
+      + '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px">'
+      +   '<div style="flex:1;min-width:120px"><label style="font-size:.78rem;color:#1a3a5c;font-weight:700">内部标识</label>'
+      +   '<input class="plain" data-pr="'+i+'.id" value="'+esc(p.id||'')+'"></div>'
+      +   '<div style="flex:1;min-width:130px"><label style="font-size:.78rem;color:#1a3a5c;font-weight:700">所属品类</label>'
+      +   '<select class="plain" data-pr="'+i+'.category">'+catOpt.replace('value="'+esc(p.category||'')+'"','value="'+esc(p.category||'')+'" selected')+'</select></div>'
+      +   '<div style="width:92px"><label style="font-size:.78rem;color:#1a3a5c;font-weight:700">排序</label>'
+      +   '<input class="plain" type="number" data-pr="'+i+'.order" value="'+esc(p.order==null?99:p.order)+'"></div>'
+      +   '<div style="display:flex;align-items:flex-end"><label class="sw"><input type="checkbox" data-prpub="'+i+'"'+(p.published===false?'':' checked')+'>上架</label></div>'
+      + '</div>'
+      + '<div class="imgrow"><div class="thumb" id="pth_'+i+'" style="'+(p.image?'background-image:url('+esc(p.image)+')':'')+'"></div>'
+      + '<div class="r"><label style="font-size:.78rem;color:#1a3a5c;font-weight:700">商品主图</label>'
+      + '<input class="plain" data-pr="'+i+'.image" value="'+esc(p.image||'')+'" placeholder="assets/img/xxx.jpg">'
+      + '<div class="btns"><button onclick="pickImgProd('+i+')">上传图片</button>'
+      + '<button onclick="clearImgProd('+i+')">清除</button></div></div></div>'
+      + '<div style="margin-top:12px"><label style="font-size:.8rem;color:#1a3a5c;font-weight:700">参数表（可增删行）</label>';
+    specs.forEach(function(s,j){
+      h += '<div class="item" style="background:#fff;margin-top:7px"><div class="bar"><span class="idx">参数 '+(j+1)+'</span><span class="sp"></span>'
+        + '<button class="del" onclick="delSpec('+i+','+j+')">✕</button></div><div class="trio">'
+        + '<div class="cell"><span>中文</span><input data-sp="'+i+'.'+j+'.k.zh" value="'+esc(trioVal(s.k,'zh'))+'"></div>'
+        + '<div class="cell"><span>English</span><input data-sp="'+i+'.'+j+'.k.en" value="'+esc(trioVal(s.k,'en'))+'"></div>'
+        + '<div class="cell"><span>Русский</span><input data-sp="'+i+'.'+j+'.k.ru" value="'+esc(trioVal(s.k,'ru'))+'"></div>'
+        + '</div><div class="trio" style="margin-top:7px">'
+        + '<div class="cell"><span>中文</span><input data-sp="'+i+'.'+j+'.v.zh" value="'+esc(trioVal(s.v,'zh'))+'"></div>'
+        + '<div class="cell"><span>English</span><input data-sp="'+i+'.'+j+'.v.en" value="'+esc(trioVal(s.v,'en'))+'"></div>'
+        + '<div class="cell"><span>Русский</span><input data-sp="'+i+'.'+j+'.v.ru" value="'+esc(trioVal(s.v,'ru'))+'"></div>'
+        + '</div></div>';
+    });
+    h += '<button class="addbtn" style="margin-top:7px" onclick="addSpec('+i+')">＋ 新增参数行</button></div>';
+    h += '</div>';
+  });
+  h += '<button class="addbtn" onclick="addProd()">＋ 新增商品</button></div>';
+  return h;
+}
+function bindProds(){
+  document.querySelectorAll('#edit [data-pr]').forEach(function(el){
+    el.addEventListener('input', function(){
+      setPath(PROD.products, el.getAttribute('data-pr'), el.value);
+      pvUpdate();
+    });
+    el.addEventListener('change', function(){
+      setPath(PROD.products, el.getAttribute('data-pr'), el.value);
+      pvUpdate();
+    });
+  });
+  document.querySelectorAll('#edit [data-prpub]').forEach(function(el){
+    el.addEventListener('change', function(){
+      PROD.products[+el.getAttribute('data-prpub')].published = el.checked;
+      pvUpdate();
+    });
+  });
+  document.querySelectorAll('#edit [data-sp]').forEach(function(el){
+    el.addEventListener('input', function(){
+      setPath(PROD.products, 'specs.'+el.getAttribute('data-sp'), el.value);
+      pvUpdate();
+    });
+  });
+}
+function setPath(root, path, val){
+  var parts = path.split('.');
+  var o = root;
+  for(var i=0;i<parts.length-1;i++){
+    var k = parts[i];
+    if(/^\d+$/.test(k)) k = +k;
+    if(o[k]==null) o[k] = (/^\d+$/.test(parts[i+1]) ? [] : {});
+    o = o[k];
+  }
+  o[parts[parts.length-1]] = val;
+}
+
+/* ============================================================
+   增删改
+   ============================================================ */
+function mv(key,i,d){
+  var a=SITE[key]; var j=i+d; if(j<0||j>=a.length) return;
+  var t=a[i]; a[i]=a[j]; a[j]=t; renderEdit();
+}
+function del(key,i){ SITE[key].splice(i,1); renderEdit(); }
+function addTrio(key){ SITE[key]=SITE[key]||[]; SITE[key].push({zh:'',en:'',ru:''}); renderEdit(); }
+function addTitled(key){ SITE[key]=SITE[key]||[]; SITE[key].push({title:{zh:'',en:'',ru:''},text:{zh:'',en:'',ru:''}}); renderEdit(); }
+function addQA(key){ SITE[key]=SITE[key]||[]; SITE[key].push({q:{zh:'',en:'',ru:''},a:{zh:'',en:'',ru:''}}); renderEdit(); }
+
+function mvCat(i,d){ var a=PROD.categories,j=i+d; if(j<0||j>=a.length)return; var t=a[i];a[i]=a[j];a[j]=t; renderEdit(); }
+function delCat(i){ PROD.categories.splice(i,1); renderEdit(); }
+function addCat(){ PROD.categories=PROD.categories||[]; PROD.categories.push({key:'new-cat',zh:'新品类',en:'New',ru:'Новое'}); renderEdit(); }
+
+function mvProd(i,d){ var a=PROD.products,j=i+d; if(j<0||j>=a.length)return; var t=a[i];a[i]=a[j];a[j]=t; renderEdit(); }
+function delProd(i){ if(!confirm('确定删除这个商品？')) return; PROD.products.splice(i,1); renderEdit(); }
+function addProd(){
+  PROD.products=PROD.products||[];
+  var cats=(PROD.categories||[]); 
+  PROD.products.push({ id:'item-'+(Date.now()+'').slice(-6), category:(cats[0]&&cats[0].key)||'tea',
+    order:PROD.products.length+1, published:true, image:'',
+    name:{zh:'新商品',en:'New item',ru:'Новый товар'},
+    subtitle:{zh:'',en:'',ru:''}, desc:{zh:'',en:'',ru:''}, specs:[] });
+  renderEdit();
+}
+function addSpec(i){ PROD.products[i].specs=PROD.products[i].specs||[];
+  PROD.products[i].specs.push({k:{zh:'',en:'',ru:''},v:{zh:'',en:'',ru:''}}); renderEdit(); }
+function delSpec(i,j){ PROD.products[i].specs.splice(j,1); renderEdit(); }
+
+/* ============================================================
+   图片
+   ============================================================ */
+function pickImg(path){ imgTarget={t:'site',p:path}; $('fileImg').click(); }
+function pickImgProd(i){ imgTarget={t:'prod',i:i}; $('fileImg').click(); }
+function clearImg(path){ setPath(SITE,path,''); renderEdit(); }
+function clearImgProd(i){ PROD.products[i].image=''; renderEdit(); }
+$('fileImg').addEventListener('change', function(e){
+  var f=e.target.files[0]; if(!f) return;
+  if(f.size>2*1024*1024){ toast('图片超过 2MB，请先压缩'); return; }
+  var r=new FileReader();
+  r.onload=function(){
+    var d=r.result;
+    if(imgTarget.t==='site'){ setPath(SITE,imgTarget.p,d); }
+    else { PROD.products[imgTarget.i].image=d; }
+    renderEdit(); toast('图片已嵌入');
+  };
+  r.readAsDataURL(f);
+  e.target.value='';
+});
+
+/* ============================================================
+   编辑区事件（顶层字段）
+   ============================================================ */
+document.addEventListener('input', function(e){
+  var el=e.target;
+  if(el.hasAttribute && el.hasAttribute('data-p')){
+    var p=el.getAttribute('data-p'), l=el.getAttribute('data-l');
+    if(l){ var o=ensureTrio(SITE,p); o[l]=el.value; }
+    else setPath(SITE,p,el.value);
+    pvUpdate();
+  } else if(el.hasAttribute && el.hasAttribute('data-lp')){
+    var pp=el.getAttribute('data-lp').split('.'), ll=el.getAttribute('data-l');
+    var key=pp[0], idx=+pp[1];
+    var it=SITE[key][idx];
+    if(pp.length===3){ it[ll]=el.value; }
+    else { var sub=pp[2]; if(!it[sub]||typeof it[sub]!=='object') it[sub]={zh:'',en:'',ru:''}; it[sub][ll]=el.value; }
+    pvUpdate();
+  }
+});
+
+/* ============================================================
+   预览（iframe srcdoc + ZSY.setData 实时刷新）
+   ============================================================ */
+var pvReady=false;
+function pvInit(){
+  if(!PREVIEW_HTML){ $('pvFrame').srcdoc='<p style="padding:20px;font-family:sans-serif">预览源未注入</p>'; return; }
+  $('pvFrame').srcdoc = PREVIEW_HTML;
+  $('pvFrame').onload = function(){
+    pvReady=true;
+    try{ $('pvFrame').contentWindow.ZSY.setData(SITE,PROD,PV_LANG); }catch(e){}
+  };
+}
+function pvUpdate(){
+  if(!pvReady) return;
+  try{ $('pvFrame').contentWindow.ZSY.setData(SITE,PROD,PV_LANG); }catch(e){}
+}
+function pvReload(){ pvReady=false; pvInit(); }
+function pvLang(l,btn){
+  PV_LANG=l;
+  document.querySelectorAll('.prevbar button').forEach(function(b){ b.classList.remove('on'); });
+  if(btn) btn.classList.add('on');
+  pvUpdate();
+}
+
+/* ============================================================
+   载入 / 导出
+   ============================================================ */
+function loadFiles(){
+  if(!confirm('先选择 site.json，再选择 products.json')) return;
+  $('fileSite').click();
+}
+$('fileSite').addEventListener('change', function(e){
+  var f=e.target.files[0]; if(!f) return;
+  var r=new FileReader();
+  r.onload=function(){ SITE=JSON.parse(r.result); $('fileProd').click(); };
+  r.readAsText(f); e.target.value='';
+});
+$('fileProd').addEventListener('change', function(e){
+  var f=e.target.files[0]; if(!f) return;
+  var r=new FileReader();
+  r.onload=function(){ PROD=JSON.parse(r.result); renderSide(); renderEdit(); toast('已载入'); };
+  r.readAsText(f); e.target.value='';
+});
+
+function download(name, text, mime){
+  var b=new Blob([text],{type:mime||'application/json;charset=utf-8'});
+  var a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download=name;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(function(){URL.revokeObjectURL(a.href);},1000);
+}
+function exportJSON(which){
+  if(which==='site'){ if(!SITE){toast('还没有数据');return;} download('site.json', JSON.stringify(SITE,null,2)); }
+  else { if(!PROD){toast('还没有数据');return;} download('products.json', JSON.stringify(PROD,null,2)); }
+  toast('已导出 '+which+'.json —— 放进 data/ 目录覆盖即可');
+}
+function exportSingle(){
+  if(!PREVIEW_HTML){ toast('预览源缺失，无法导出'); return; }
+  var h = PREVIEW_HTML
+    .replace('window.__ZSY_SITE__=null','window.__ZSY_SITE__='+JSON.stringify(SITE))
+    .replace(/window\.__ZSY_SITE__=\{[\s\S]*?\};/, 'window.__ZSY_SITE__='+JSON.stringify(SITE)+';')
+    .replace(/window\.__ZSY_PROD__=\{[\s\S]*?\};/, 'window.__ZSY_PROD__='+JSON.stringify(PROD)+';');
+  download('昭盛元官网.html', h, 'text/html;charset=utf-8');
+  toast('已导出单文件网页（图片已内嵌，可直接发给客户）');
+}
+
+/* ============================================================
+   启动
+   ============================================================ */
+(function boot(){
+  /* 优先尝试从同目录 fetch（用本地服务器打开时可用） */
+  var p1 = fetch('data/site.json').then(function(r){return r.json();}).catch(function(){return null;});
+  var p2 = fetch('data/products.json').then(function(r){return r.json();}).catch(function(){return null;});
+  Promise.all([p1,p2]).then(function(r){
+    var useIn = window.__ZSY_SITE__ && window.__ZSY_PROD__;
+    SITE = r[0] || (useIn?window.__ZSY_SITE__:null);
+    PROD = r[1] || (useIn?window.__ZSY_PROD__:null);
+    if(SITE||PROD){
+      SITE = SITE||{}; PROD = PROD||{categories:[],products:[]};
+      renderSide(); renderEdit();
+    } else {
+      $('edit').innerHTML = '<div class="intro"><h2>先载入数据</h2>'
+        + '<p>点右上角的「📂 载入 JSON」，依次选择 <b>data/site.json</b> 和 <b>data/products.json</b>。</p>'
+        + '<ol><li>在这个文件夹里执行 <code>python -m http.server 8000</code> 再打开，可自动载入并显示图片</li>'
+        + '<li>直接双击打开也能用，只是图片要手动上传</li></ol></div>';
+    }
+    pvInit();
+  });
+})();
+</script>
+</body>
+</html>
