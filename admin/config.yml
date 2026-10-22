@@ -13,16 +13,13 @@ collections:
         name: "content"
         file: "data/content.json"
         fields:
-          - { label: "【中文】首屏大标题", name: "zh.hero_title", widget: "string" }
-          - { label: "【中文】首屏副标题", name: "zh.hero_sub", widget: "string" }
-          - { label: "首屏背景图 (三语通用)", name: "zh.hero_img", widget: "image", required: false }
-          - { label: "【中文】关于我们介绍", name: "zh.about_desc", widget: "text" }
-          - { label: "关于我们配图 (三语通用)", name: "zh.about_img", widget: "image", required: false }
+          - { label: "【基础】首屏大标题 (中/英/俄)", name: "hero_titles", widget: "object", fields: [ {name: zh, widget: string}, {name: en, widget: string}, {name: ru, widget: string} ] }
+          - { label: "【基础】首屏副标题 (中/英/俄)", name: "hero_subs", widget: "object", fields: [ {name: zh, widget: string}, {name: en, widget: string}, {name: ru, widget: string} ] }
+          - { label: "🖼️ 首屏大背景图", name: "hero_img", widget: "image", required: false }
           
-          - { label: "【英文】首屏大标题", name: "en.hero_title", widget: "string" }
-          - { label: "【英文】首屏副标题", name: "en.hero_sub", widget: "string" }
-          - { label: "【英文】关于我们介绍", name: "en.about_desc", widget: "text" }
-          
-          - { label: "【俄文】首屏大标题", name: "ru.hero_title", widget: "string" }
-          - { label: "【俄文】首屏副标题", name: "ru.hero_sub", widget: "string" }
-          - { label: "【俄文】关于我们介绍", name: "ru.about_desc", widget: "text" }
+          - { label: "【介绍】关于我们正文 (中/英/俄)", name: "about_descs", widget: "object", fields: [ {name: zh, widget: text}, {name: en, widget: text}, {name: ru, widget: text} ] }
+          - { label: "🖼️ 关于我们配图", name: "about_img", widget: "image", required: false }
+
+          - { label: "🖼️ 核心产品 1 - 宁红茶 (图片)", name: "p1_img", widget: "image", required: false }
+          - { label: "🖼️ 核心产品 2 - 双井绿茶 (图片)", name: "p2_img", widget: "image", required: false }
+          - { label: "🖼️ 核心产品 3 - 庐山云雾茶 (图片)", name: "p3_img", widget: "image", required: false }
