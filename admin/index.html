@@ -39,6 +39,77 @@ body { -webkit-font-smoothing: antialiased; }
 /* 3) 视觉微调：让编辑区更紧凑、更好读 */
 form { max-width: 100%; }
 input, textarea, select { font-size: 14px !important; }
+
+/* ============================================================
+   4) 简约高端皮肤
+      深色顶栏 + 暖白内容区 + 金铜色强调
+      Decap 内部用的是 CSS Modules（类名带哈希），
+      因此这里主要靠「语义化标签 + 结构层级」来命中，
+      选择器没命中的部分会自动保持默认观感，不影响功能。
+   ============================================================ */
+
+/* 顶栏 */
+header, [class*="StyledTopBar"], nav[class*="TopBar"] {
+  background: #171a1d !important;
+  border-bottom: 0 !important;
+  box-shadow: 0 1px 0 rgba(0,0,0,.06) !important;
+}
+header *, [class*="StyledTopBar"] * { color: rgba(255,255,255,.85) !important; }
+
+/* 主背景 */
+main, [class*="StyledMain"], body > div > div {
+  background: #faf9f7 !important;
+}
+
+/* 侧栏（集合列表） */
+[class*="Sidebar"], aside, [class*="StyledSidebar"] {
+  background: #fff !important;
+  border-right: 1px solid #e9e6e1 !important;
+}
+[class*="Sidebar"] a, aside a,
+[class*="Collection"] li > a, [class*="StyledCollection"] a {
+  border-radius: 8px !important;
+  transition: all .16s ease !important;
+}
+
+/* 卡片 / 条目 */
+[class*="StyledCard"], [class*="Card"], article {
+  background: #fff !important;
+  border: 1px solid #e9e6e1 !important;
+  border-radius: 11px !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,.03) !important;
+}
+
+/* 按钮 */
+button {
+  border-radius: 8px !important;
+  letter-spacing: .2px;
+  transition: all .18s ease !important;
+}
+[class*="StyledButton"], button[class*="button"] {
+  font-weight: 500 !important;
+}
+
+/* 输入框 */
+input, textarea, select {
+  border-radius: 8px !important;
+  border-color: #e9e6e1 !important;
+  background: #fff !important;
+}
+input:focus, textarea:focus, select:focus {
+  border-color: #b8894a !important;
+  box-shadow: 0 0 0 3px rgba(184,137,74,.10) !important;
+  outline: none !important;
+}
+
+/* 标题层级更克制 */
+h1, h2, h3 { letter-spacing: .3px !important; font-weight: 600 !important; }
+
+/* 滚动条 */
+::-webkit-scrollbar { width: 9px; height: 9px; }
+::-webkit-scrollbar-thumb { background: #d8d4ce; border-radius: 6px; }
+::-webkit-scrollbar-thumb:hover { background: #b8894a; }
+::-webkit-scrollbar-track { background: transparent; }
 </style>
 </head>
 <body>
