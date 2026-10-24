@@ -26,6 +26,7 @@
   var SITE = null;   // data/site.json
   var PROD = null;   // data/products.json
   var filterCat = 'all';
+  var filterSub = 'all';
 
   /* 内联占位图：不依赖任何外部服务，中俄都能显示 */
   var PH = 'data:image/svg+xml;charset=utf8,' + encodeURIComponent(
@@ -152,18 +153,27 @@
       '<li><a href="mailto:' + esc(SITE.contact_email_1) + '">' + esc(SITE.contact_email_1) + '</a></li>';
 
     renderProducts();
+    renderStories();
   }
 
   /* ============================================================
-     产品（后台增删改查）
+     产品（后台增删改查）+ 一二级分类
      ============================================================ */
+  function subCats(parent) {
+    return (PROD.subcategories || []).filter(function (x) { return x.parent === parent; });
+  }
+  function subLabel(key, L) {
+    var c = (PROD.subcategories || []).filter(function (x) { return x.key === key; })[0];
+    return c ? t(c.label, L) : key;
+  }
+
   function renderProducts() {
     if (!PROD) return;
     var L = cur;
     var cats = PROD.categories || [];
     var items = (PROD.products || []).filter(function (p) { return p.published !== false; });
 
-    // 分类按钮：只显示有商品的分类（+ 全部）
+    // 一级：品类
     var used = {};
     items.forEach(function (p) { used[p.category] = (used[p.category] || 0) + 1; });
     var html = '<button type="button" class="catbtn' + (filterCat === 'all' ? ' on' : '') +
@@ -176,10 +186,46 @@
     });
     $('#catFilter').innerHTML = html;
     $$('#catFilter .catbtn').forEach(function (b) {
-      b.onclick = function () { filterCat = b.getAttribute('data-cat'); renderProducts(); };
+      b.onclick = function () {
+        filterCat = b.getAttribute('data-cat');
+        filterSub = 'all';          // 换一级分类时，二级重置
+        renderProducts();
+      };
     });
 
-    var list = items.filter(function (p) { return filterCat === 'all' || p.category === filterCat; });
+    // 二级：子目录。只在选中具体品类时出现（"全部"时不显示，避免和一级重复）
+    var subEl = $('#subFilter');
+    if (!subEl) return;
+    if (filterCat === 'all') { subEl.innerHTML = ''; subEl.style.display = 'none'; }
+    else {
+      var subs = subCats(filterCat);
+      var pool = items.filter(function (p) { return p.category === filterCat; });
+      if (subs.length && pool.length) {
+        var cnt = {};
+        pool.forEach(function (p) { cnt[p.subcategory || '_'] = (cnt[p.subcategory || '_'] || 0) + 1; });
+        var sh = '<button type="button" class="subbtn' + (filterSub === 'all' ? ' on' : '') +
+                 '" data-sub="all">' + esc(I18N[L].prod.subAll) +
+                 ' <span class="cnt">' + pool.length + '</span></button>';
+        subs.forEach(function (sc) {
+          var n = cnt[sc.key] || 0;
+          if (!n) return;          // 该子类暂无商品则隐藏，加商品后自动出现
+          sh += '<button type="button" class="subbtn' + (filterSub === sc.key ? ' on' : '') +
+                '" data-sub="' + esc(sc.key) + '">' + esc(t(sc.label, L)) +
+                ' <span class="cnt">' + n + '</span></button>';
+        });
+        subEl.innerHTML = sh;
+        subEl.style.display = 'flex';
+        $$('#subFilter .subbtn').forEach(function (b) {
+          b.onclick = function () { filterSub = b.getAttribute('data-sub'); renderProducts(); };
+        });
+      } else { subEl.innerHTML = ''; subEl.style.display = 'none'; }
+    }
+
+    var list = items.filter(function (p) {
+      if (filterCat !== 'all' && p.category !== filterCat) return false;
+      if (filterCat !== 'all' && filterSub !== 'all' && p.subcategory !== filterSub) return false;
+      return true;
+    });
     list.sort(function (a, b) { return (a.order || 99) - (b.order || 99); });
 
     $('#prodGrid').innerHTML = list.map(function (p) {
@@ -212,6 +258,67 @@
         var nm = a.getAttribute('data-enq');
         var pre = (L === 'ru' ? 'Интересуют: ' : L === 'en' ? 'Interested in: ' : '我想了解：') + nm;
         if (ta && ta.value.indexOf(pre) === -1) ta.value = pre + (ta.value ? '\n' + ta.value : '');
+      };
+    });
+  }
+
+  /* ============================================================
+     产品故事：每张卡片一段来历，可展开全文
+     参考做法：TWG / Fortnum & Mason / Tao of Tea 都用「编辑式长文 + 年代标签」
+     而不是参数罗列——故事负责建立信任，参数负责成交，两者分开。
+     ============================================================ */
+  var storyOpen = {};
+
+  function renderStories() {
+    var el = $('#storyList');
+    if (!el || !PROD) return;
+    var L = cur, D = I18N[L].story;
+    var items = (PROD.products || []).filter(function (p) {
+      return p.published !== false && p.story && t(p.story.title, L);
+    });
+    items.sort(function (a, b) { return (a.order || 99) - (b.order || 99); });
+
+    var emp = $('#storyEmpty');
+    if (!items.length) {
+      el.innerHTML = '';
+      if (emp) { emp.style.display = 'block'; emp.textContent = D.empty || ''; }
+      return;
+    }
+    if (emp) emp.style.display = 'none';
+
+    el.innerHTML = items.map(function (p) {
+      var st = p.story;
+      var open = !!storyOpen[p.id];
+      var tags = (st.tags && st.tags[L] || []).map(function (x) {
+        return '<span class="stag">' + esc(x) + '</span>';
+      }).join('');
+      // 正文按空行分段
+      var paras = (t(st.body, L) || '').split(/\n\s*\n/).map(function (x) {
+        return '<p>' + esc(x.trim()) + '</p>';
+      }).join('');
+
+      return '' +
+        '<article class="scard' + (open ? ' open' : '') + '" data-sid="' + esc(p.id) + '">' +
+          '<div class="scard-top">' +
+            '<div class="scard-img"><img src="' + esc(p.image || PH) + '" alt="' + esc(t(p.name, L)) + '" loading="lazy" onerror="this.src=\'' + PH + '\'"></div>' +
+            '<div class="scard-head">' +
+              '<span class="sera">' + esc(t(st.era, L)) + '</span>' +
+              '<h3>' + esc(t(p.name, L)) + '</h3>' +
+              '<div class="stitle">' + esc(t(st.title, L)) + '</div>' +
+              (tags ? '<div class="stags">' + tags + '</div>' : '') +
+            '</div>' +
+          '</div>' +
+          '<div class="sbody">' + paras + '</div>' +
+          '<button type="button" class="stoggle" data-toggle="' + esc(p.id) + '">' +
+            (open ? D.readLess : D.readMore) + '</button>' +
+        '</article>';
+    }).join('');
+
+    $$('#storyList .stoggle').forEach(function (b) {
+      b.onclick = function () {
+        var id = b.getAttribute('data-toggle');
+        storyOpen[id] = !storyOpen[id];
+        renderStories();
       };
     });
   }
@@ -270,18 +377,41 @@
   /* ============================================================
      表单 → Cloudflare Worker → Telegram + 邮件
      ============================================================ */
-  var ENDPOINT = 'https://gonghehou-form.tunnir243.workers.dev';
+  /* 接口地址常量。
+     俄区（Beget / Timeweb，数据落在俄境内）优先，失败自动回退 Cloudflare。 */
+  var ENDPOINTS = [
+    'https://здесь-ваш-домен.ru/form.php',   // ← 换成你的俄区接口地址
+    'https://gonghehou-form.tunnir243.workers.dev'
+  ];
 
   function initForm() {
     var form = $('#contactForm'), msgEl = $('#formmsg');
     if (!form) return;
+    var box = $('#consentBox'), boxWrap = form.querySelector('.consent');
+    /* 勾选后去掉警示态（实时反馈，但不同步触发提交） */
+    if (box) box.addEventListener('change', function () {
+      if (box.checked && boxWrap) boxWrap.classList.remove('warn');
+    });
+
+    var fbk = $('#fbk');
+    function showFbk() { if (fbk) { fbk.hidden = false; fbk.scrollIntoView({ behavior:'smooth', block:'center' }); } }
+    function hideFbk() { if (fbk) fbk.hidden = true; }
+
     form.addEventListener('submit', function (e) {
       e.preventDefault();
+      hideFbk();
       var M = I18N[cur].msg;
       var name = (form.name.value || '').trim();
       var contact = (form.contact.value || '').trim();
       if (!name || !contact) {
         msgEl.className = 'formmsg bad'; msgEl.textContent = M.errFill; return;
+      }
+      /* 152-ФЗ：同意是独立动作，未勾选则拒绝提交 */
+      if (box && !box.checked) {
+        if (boxWrap) boxWrap.classList.add('warn');
+        msgEl.className = 'formmsg bad'; msgEl.textContent = M.errConsent;
+        box.focus();
+        return;
       }
       var payload = {
         name: name, contact: contact,
@@ -289,23 +419,38 @@
         country: (form.country.value || '').trim(),
         qty: form.qty.value, type: form.type.value,
         msg: (form.msg.value || '').trim(),
-        lang: cur
+        lang: cur,
+        consent: 1, consent_at: new Date().toISOString(),
+        page: location.href
       };
       msgEl.className = 'formmsg'; msgEl.textContent = M.send;
-      if (!ENDPOINT) {
+      var list = ENDPOINTS.filter(function (u) { return u && u.indexOf('здесь') === -1; });
+      /* 极老浏览器没有 fetch，直接引导到兜底联系卡，不让它白等 */
+      if (typeof fetch !== 'function') {
+        msgEl.className = 'formmsg bad'; msgEl.textContent = M.errNetwork;
+        showFbk(); return;
+      }
+      if (!list.length) {
         setTimeout(function () { msgEl.className = 'formmsg ok'; msgEl.textContent = M.ok; form.reset(); }, 600);
         return;
       }
-      fetch(ENDPOINT, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      }).then(function (r) { return r.json(); })
-        .then(function (j) {
-          if (j && j.ok) { msgEl.className = 'formmsg ok'; msgEl.textContent = M.ok; form.reset(); }
-          else { msgEl.className = 'formmsg bad'; msgEl.textContent = M.errNetwork; }
-        })
-        .catch(function () { msgEl.className = 'formmsg bad'; msgEl.textContent = M.errNetwork; });
+      /* 依次尝试：俄区优先，失败自动回退，客户永远能提交成功 */
+      (function attempt(i) {
+        if (i >= list.length) {
+          msgEl.className = 'formmsg bad'; msgEl.textContent = M.errNetwork;
+          showFbk(); return;
+        }
+        fetch(list[i], {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        }).then(function (r) { return r.json(); })
+          .then(function (j) {
+            if (j && j.ok) { msgEl.className = 'formmsg ok'; msgEl.textContent = M.ok; form.reset(); if (boxWrap) boxWrap.classList.remove('warn'); hideFbk(); }
+            else attempt(i + 1);
+          })
+          .catch(function () { attempt(i + 1); });
+      })(0);
     });
   }
 

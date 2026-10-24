@@ -45,6 +45,7 @@
     <nav class="navlinks" id="navlinks">
       <a href="#about"      data-i18n="nav.about"></a>
       <a href="#products"   data-i18n="nav.products"></a>
+      <a href="#stories"    data-i18n="nav.stories"></a>
       <a href="#capability" data-i18n="nav.capability"></a>
       <a href="#why"        data-i18n="nav.why"></a>
       <a href="#terms"      data-i18n="nav.terms"></a>
@@ -109,10 +110,27 @@
     <p class="lead" data-i18n="prod.lead"></p>
   </div>
   <div class="container">
+    <!-- 一级：品类 -->
     <div class="catfilter" id="catFilter"></div>
+    <!-- 二级：子目录（红茶 / 绿茶 / 青花瓷 …），选中一级后自动出现 -->
+    <div class="subfilter" id="subFilter"></div>
     <div class="prodgrid" id="prodGrid"></div>
     <div class="empty-note" id="prodEmpty" style="display:none"></div>
     <p class="note" data-i18n="prod.note"></p>
+  </div>
+</section>
+
+<!-- ================= 产品故事 ================= -->
+<section id="stories" class="alt">
+  <div class="container wrap-center">
+    <p class="eyebrow" data-i18n="story.label"></p>
+    <h2 class="title" data-i18n="story.title"></h2>
+    <div class="divider"></div>
+    <p class="lead" data-i18n="story.lead"></p>
+  </div>
+  <div class="container">
+    <div class="storylist" id="storyList"></div>
+    <div class="empty-note" id="storyEmpty" style="display:none"></div>
   </div>
 </section>
 
@@ -211,8 +229,35 @@
         <option data-i18n="contact.t5"></option>
       </select>
       <textarea name="msg" rows="4" data-i18n-ph="contact.fMsg"></textarea>
+
+      <!-- 152-ФЗ：独立的同意勾选框。
+           不得默认勾选、不得与提交按钮同步触发、不得嵌入隐私政策文本。
+           default unchecked + 拒绝提交 = 合规最低要求。 -->
+      <div class="consent">
+        <label class="consent-row">
+          <input type="checkbox" id="consentBox" name="consent" value="yes">
+          <span data-i18n="contact.consent"></span>
+        </label>
+        <details class="consent-more">
+          <summary data-i18n="contact.consentOpen"></summary>
+          <p data-i18n="contact.consentText"></p>
+        </details>
+      </div>
+
       <button type="submit" class="btn primary" data-i18n="contact.btn"></button>
       <p class="formmsg" id="formmsg"></p>
+
+      <!-- 兜底联系卡：接口失败时自动展开，客户照样能找到我们 -->
+      <div class="fbk" id="fbk" hidden>
+        <div class="fbk-t" data-i18n="msg.fbTitle"></div>
+        <div class="fbk-b">
+          <a class="qbtn tg" href="https://t.me/Fan2399" target="_blank" rel="noopener">Telegram @Fan2399</a>
+          <a class="qbtn wa" href="https://wa.me/79117067084" target="_blank" rel="noopener">WhatsApp</a>
+          <a class="qbtn em" href="mailto:fanwh188@gmail.com">Email</a>
+          <a class="qbtn ph" href="tel:+79117067084">+7 911 706 7084</a>
+        </div>
+        <div class="fbk-tip" data-i18n="msg.fbTip"></div>
+      </div>
     </form>
   </div>
 </section>
