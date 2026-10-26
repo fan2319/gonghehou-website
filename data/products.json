@@ -6,7 +6,10 @@
         "zh": "茶叶与茶制品",
         "en": "Tea & Tea Products",
         "ru": "Чай и чайная продукция"
-      }
+      },
+      "zh": "茶",
+      "ru": "Чай",
+      "en": "tea"
     },
     {
       "key": "porcelain",
@@ -14,15 +17,10 @@
         "zh": "瓷器与工艺品",
         "en": "Porcelain & Crafts",
         "ru": "Фарфор и изделия"
-      }
-    },
-    {
-      "key": "machinery",
-      "label": {
-        "zh": "机电泵阀",
-        "en": "Pumps & Valves",
-        "ru": "Насосы и арматура"
-      }
+      },
+      "zh": "瓷器",
+      "en": "porcelain",
+      "ru": "фарфор"
     }
   ],
   "emptyText": {
@@ -32,25 +30,51 @@
   },
   "products": [
     {
-      "id": "tea-ninghong",
-      "category": "tea",
-      "published": true,
-      "order": 1,
-      "image": "assets/img/product-ninghong.jpg",
       "name": {
         "zh": "宁红茶",
         "en": "Ninghong Black Tea",
         "ru": "Красный чай Нинхун"
       },
-      "subtitle": {
-        "zh": "修水原产地 · 工夫红茶",
-        "en": "Origin Xiushui · Gongfu Black Tea",
-        "ru": "Родина Сюшуй · Гунфу"
-      },
+      "published": true,
+      "order": 1,
       "desc": {
         "zh": "修水是中国工夫红茶发源地之一。宁红茶香气甜香馥郁，滋味鲜嫩浓醇，汤色红艳明亮，适合礼盒、商超与电商渠道。",
         "en": "Xiushui is one of the birthplaces of Chinese Gongfu black tea. Ninghong offers a sweet, rich aroma with a fresh, mellow taste and brilliant red liquor — suited to gift boxes, retail and e-commerce.",
         "ru": "Сюшуй — одна из родин китайского красного чая гунфу. Нинхун: сладкий насыщенный аромат, свежий мягкий вкус, ярко-красный настой. Подходит для подарков, ритейла и маркетплейсов."
+      },
+      "story": {
+        "era": {
+          "zh": "清 · 道光年间（1820s 起）",
+          "en": "Qing Dynasty, from the 1820s",
+          "ru": "Династия Цин, с 1820-х"
+        },
+        "title": {
+          "zh": "一片叶子，走了一万里路",
+          "en": "A Leaf That Travelled Ten Thousand Li",
+          "ru": "Лист, что прошёл десять тысяч ли"
+        },
+        "body": {
+          "zh": "修水的茶，最早不是用船运出去的，是靠人背马驮。\n\n清道光年间，宁红茶在修水漫江创制。清人叶湍延《纯蒲随笔》记载：「（宁）红茶起自道光季年，江西估客收茶义宁州，因进峒教以红茶做法」。\n\n成茶后，从修水出发，经九江或汉口中转，一路北上，抵达中俄边境的恰克图——这条商道，后来被称作「万里茶道」。一篓茶从修水到俄国，要走几个月。\n\n到 19 世纪 90 年代，宁红茶年出口量达三十万箱；销往俄国的宁红，占当时江西茶叶出口的八成。光绪十七年（1891 年），商人将宁红茶进献给俄国皇太子，获赠匾额「茶盖中华、价高天下」。1915 年，宁红茶在巴拿马万国博览会获甲级大奖章。\n\n当年茶市有行规：「宁红不到庄，茶叶不开箱」——茶叶定价，以宁红为基准。\n\n一百多年后，我们重新把这条路走了回来。工艺没变：轻萎凋、重揉捻、足发酵。变的是，现在不用再走几个月了。",
+          "en": "Tea from Xiushui did not leave by ship at first — it left on human backs and horse loads.\n\nNinghong was created in Manjiang, Xiushui, during the Daoguang reign of the Qing. The Qing scholar Ye Tuanyan recorded in Chunpu Suibi: \"Ninghong began in the later Daoguang years; merchants from Jiangxi bought tea in Yining Prefecture and taught the local people how to make black tea.\"\n\nFrom Xiushui the tea travelled via Jiujiang or Hankou, then north all the way to Kyakhta on the Russian border — the route later known as the \"Great Tea Road\". A basket of tea took months to reach Russia.\n\nBy the 1890s, annual Ninghong exports reached 300,000 chests, and Ninghong shipped to Russia accounted for about 80% of Jiangxi's total tea exports. In 1891, the tea was presented to the Russian Tsarevich, who conferred a plaque reading \"Foremost tea of China, highest price under heaven.\" In 1915, Ninghong won the highest medal at the Panama-Pacific International Exposition.\n\nA trade custom of the day held: \"Until Ninghong arrives at the market, no tea chest is opened\" — Ninghong set the benchmark for pricing.\n\nMore than a century later, we are walking this road again. The craft has not changed: light withering, heavy rolling, full oxidation. What has changed is that the journey no longer takes months.",
+          "ru": "Чай из Сюшуй поначалу вывозили не кораблями, а на спинах людей и на лошадях.\n\nНинхун был создан в Маньцзяне (уезд Сюшуй) в годы правления Даогуан династии Цин. В записках цинского учёного Е Туаньяня «Чуньпу суйби» говорится: «Нинхун появился в последние годы Даогуан; цзянсийские купцы закупали чай в области Инин и научили местных жителей готовить красный чай».\n\nИз Сюшуй чай шёл через Цзюцзян или Ханькоу, затем на север — до Кяхты на российской границе. Этот путь позже назвали «Великим чайным путём». Корзина чая добиралась до России несколько месяцев.\n\nК 1890-м годам ежегодный экспорт Нинхуна достиг 300 000 ящиков, и на чай, отправляемый в Россию, приходилось около 80% всего экспорта чая из Цзянси. В 1891 году чай преподнесли российскому цесаревичу, который пожаловал табличку с надписью «Чай — лучший в Китае, цена — высшая в Поднебесной». В 1915 году Нинхун получил высшую медаль на Панамской всемирной выставке.\n\nСуществовало торговое правило: «Пока Нинхун не пришёл на рынок, ящики с чаем не вскрывают» — именно по Нинхуну устанавливали цену.\n\nСпустя более ста лет мы снова идем этим путём. Технология не изменилась: лёгкое завяливание, сильное скручивание, полная ферментация. Изменилось лишь то, что дорога больше не занимает месяцев."
+        },
+        "tags": {
+          "zh": [
+            "万里茶道",
+            "工夫红茶",
+            "百年外销"
+          ],
+          "en": [
+            "Great Tea Road",
+            "Gongfu Black Tea",
+            "A Century of Export"
+          ],
+          "ru": [
+            "Великий чайный путь",
+            "Красный чай гунфу",
+            "Век экспорта"
+          ]
+        }
       },
       "specs": [
         {
@@ -102,62 +126,62 @@
           }
         }
       ],
-      "subcategory": "black",
-      "story": {
-        "era": {
-          "zh": "清 · 道光年间（1820s 起）",
-          "en": "Qing Dynasty, from the 1820s",
-          "ru": "Династия Цин, с 1820-х"
-        },
-        "title": {
-          "zh": "一片叶子，走了一万里路",
-          "en": "A Leaf That Travelled Ten Thousand Li",
-          "ru": "Лист, что прошёл десять тысяч ли"
-        },
-        "body": {
-          "zh": "修水的茶，最早不是用船运出去的，是靠人背马驮。\n\n清道光年间，宁红茶在修水漫江创制。清人叶湍延《纯蒲随笔》记载：「（宁）红茶起自道光季年，江西估客收茶义宁州，因进峒教以红茶做法」。\n\n成茶后，从修水出发，经九江或汉口中转，一路北上，抵达中俄边境的恰克图——这条商道，后来被称作「万里茶道」。一篓茶从修水到俄国，要走几个月。\n\n到 19 世纪 90 年代，宁红茶年出口量达三十万箱；销往俄国的宁红，占当时江西茶叶出口的八成。光绪十七年（1891 年），商人将宁红茶进献给俄国皇太子，获赠匾额「茶盖中华、价高天下」。1915 年，宁红茶在巴拿马万国博览会获甲级大奖章。\n\n当年茶市有行规：「宁红不到庄，茶叶不开箱」——茶叶定价，以宁红为基准。\n\n一百多年后，我们重新把这条路走了回来。工艺没变：轻萎凋、重揉捻、足发酵。变的是，现在不用再走几个月了。",
-          "en": "Tea from Xiushui did not leave by ship at first — it left on human backs and horse loads.\n\nNinghong was created in Manjiang, Xiushui, during the Daoguang reign of the Qing. The Qing scholar Ye Tuanyan recorded in Chunpu Suibi: \"Ninghong began in the later Daoguang years; merchants from Jiangxi bought tea in Yining Prefecture and taught the local people how to make black tea.\"\n\nFrom Xiushui the tea travelled via Jiujiang or Hankou, then north all the way to Kyakhta on the Russian border — the route later known as the \"Great Tea Road\". A basket of tea took months to reach Russia.\n\nBy the 1890s, annual Ninghong exports reached 300,000 chests, and Ninghong shipped to Russia accounted for about 80% of Jiangxi's total tea exports. In 1891, the tea was presented to the Russian Tsarevich, who conferred a plaque reading \"Foremost tea of China, highest price under heaven.\" In 1915, Ninghong won the highest medal at the Panama-Pacific International Exposition.\n\nA trade custom of the day held: \"Until Ninghong arrives at the market, no tea chest is opened\" — Ninghong set the benchmark for pricing.\n\nMore than a century later, we are walking this road again. The craft has not changed: light withering, heavy rolling, full oxidation. What has changed is that the journey no longer takes months.",
-          "ru": "Чай из Сюшуй поначалу вывозили не кораблями, а на спинах людей и на лошадях.\n\nНинхун был создан в Маньцзяне (уезд Сюшуй) в годы правления Даогуан династии Цин. В записках цинского учёного Е Туаньяня «Чуньпу суйби» говорится: «Нинхун появился в последние годы Даогуан; цзянсийские купцы закупали чай в области Инин и научили местных жителей готовить красный чай».\n\nИз Сюшуй чай шёл через Цзюцзян или Ханькоу, затем на север — до Кяхты на российской границе. Этот путь позже назвали «Великим чайным путём». Корзина чая добиралась до России несколько месяцев.\n\nК 1890-м годам ежегодный экспорт Нинхуна достиг 300 000 ящиков, и на чай, отправляемый в Россию, приходилось около 80% всего экспорта чая из Цзянси. В 1891 году чай преподнесли российскому цесаревичу, который пожаловал табличку с надписью «Чай — лучший в Китае, цена — высшая в Поднебесной». В 1915 году Нинхун получил высшую медаль на Панамской всемирной выставке.\n\nСуществовало торговое правило: «Пока Нинхун не пришёл на рынок, ящики с чаем не вскрывают» — именно по Нинхуну устанавливали цену.\n\nСпустя более ста лет мы снова идем этим путём. Технология не изменилась: лёгкое завяливание, сильное скручивание, полная ферментация. Изменилось лишь то, что дорога больше не занимает месяцев."
-        },
-        "tags": {
-          "zh": [
-            "万里茶道",
-            "工夫红茶",
-            "百年外销"
-          ],
-          "en": [
-            "Great Tea Road",
-            "Gongfu Black Tea",
-            "A Century of Export"
-          ],
-          "ru": [
-            "Великий чайный путь",
-            "Красный чай гунфу",
-            "Век экспорта"
-          ]
-        }
-      }
+      "subtitle": {
+        "zh": "修水原产地 · 工夫红茶",
+        "en": "Origin Xiushui · Gongfu Black Tea",
+        "ru": "Родина Сюшуй · Гунфу"
+      },
+      "id": "tea-ninghong",
+      "image": "assets/img/product-ninghong.jpg",
+      "category": "tea",
+      "subcategory": "black"
     },
     {
-      "id": "tea-shuangjing",
-      "category": "tea",
-      "published": true,
-      "order": 2,
-      "image": "assets/img/product-shuangjing.jpg",
       "name": {
         "zh": "双井绿茶",
         "en": "Shuangjing Green Tea",
         "ru": "Зелёный чай Шуанцзин"
       },
-      "subtitle": {
-        "zh": "高山云雾 · 清香回甘",
-        "en": "High-mountain · Clean & Sweet",
-        "ru": "Высокогорный · чистый вкус"
-      },
+      "published": true,
+      "order": 2,
       "desc": {
         "zh": "出自修水双井一带的高山茶园。清香持久，鲜爽回甘，汤色嫩绿明亮，适合日常饮用与商超渠道。",
         "en": "From the high-mountain gardens around Shuangjing in Xiushui. A clean, lasting aroma with a fresh sweet finish and tender green liquor — for everyday drinking and retail.",
         "ru": "Из высокогорных садов Шуанцзин в Сюшуй. Чистый стойкий аромат, свежее сладкое послевкусие, нежно-зелёный настой. Для ежедневного чаепития и ритейла."
+      },
+      "story": {
+        "era": {
+          "zh": "北宋 · 黄庭坚故里",
+          "en": "Northern Song · Home of Huang Tingjian",
+          "ru": "Северная Сун · родина Хуан Тинцзяня"
+        },
+        "title": {
+          "zh": "一口井，写了一千年的诗",
+          "en": "A Well That Inspired a Thousand Years of Poetry",
+          "ru": "Колодец, что вдохновил тысячу лет поэзии"
+        },
+        "body": {
+          "zh": "双井村在修水城西，村口有口古井，井水清冽，村民分上下游各取一井，故名「双井」。\n\n北宋大诗人黄庭坚就出生在这里。他是江西诗派的开山之祖，一生爱茶，写过大量咏茶诗，尤其推崇家乡的茶。他写：「山谷家乡双井茶，一啜犹须三日夸。」——喝一口，值得夸上三天。\n\n他把双井茶分赠给老师苏轼、友人欧阳修与司马光。欧阳修在《归田录》里记载：「自景祐已后，洪州双井白芽渐盛……其品远出日注上，遂为草茶第一。」他还专门写过一首《双井茶》：「西江水清江石老，石上生茶如凤爪……十斤茶养一两芽。」\n\n宋人叶梦得《避暑录话》称：「草茶极品惟双井、顾渚。」《宋史·食货志》列南宋初年名茶仅六种，其中便有「隆兴之黄龙、双井，皆号绝品也」。双井茶在宋代即为贡茶之一。\n\n那时候的双井茶，是文人之间往来的礼物。它不是靠广告卖出去的，是靠一句一句诗传出去的。\n\n一千年过去，井还在，村子还在，制茶的手艺也还在。我们做的，只是把这份茶重新拿出来。",
+          "en": "Shuangjing Village lies west of Xiushui town. At its entrance is an ancient well of clear, cold water; villagers drew from two wells upstream and downstream, and the place took its name from them — \"Twin Wells\".\n\nThe great Northern Song poet Huang Tingjian was born here. Founder of the Jiangxi School of Poetry, he loved tea all his life and wrote many poems about it, above all in praise of the tea of his home. He wrote: \"The twin-well tea of my mountain-valley home — one sip deserves three days of praise.\"\n\nHe sent Shuangjing tea as a gift to his teacher Su Shi and to his friends Ouyang Xiu and Sima Guang. In Guitian Lu, Ouyang Xiu recorded: \"After the Jingyou era, the white-bud tea of Hongzhou's Twin Wells steadily rose… its quality far surpassed Rizhu, and it became the finest grass tea.\" Ouyang Xiu also wrote a poem, \"Twin Wells Tea\": \"Clear the West River water, old the river stones; tea grows on the stone like phoenix claws… ten jin of tea nourish one liang of bud.\"\n\nThe Song scholar Ye Mengde wrote in Bishu Luhua: \"The utmost grade of grass tea is only Twin Wells and Guzhu.\" The Song Shi (Treatise on Food and Commodities) lists just six famous teas of the early Southern Song, among them \"Huanglong and Shuangjing of Longxing, both called unsurpassed.\" Shuangjing was tribute tea in the Song.\n\nIn those days, Twin Wells tea was a gift exchanged among men of letters. It was not sold by advertising; it travelled on line after line of poetry.\n\nA thousand years on, the wells remain, the village remains, and the craft remains. What we do is simply bring this tea out again.",
+          "ru": "Деревня Шуанцзин лежит к западу от города Сюшуй. У её входа — древний колодец с чистой холодной водой; жители брали воду из двух колодцев — выше и ниже по течению, отсюда и название «Два колодца».\n\nЗдесь родился великий поэт Северной Сун Хуан Тинцзянь. Основоположник цзянсийской поэтической школы, он всю жизнь любил чай и написал множество стихов о нём, особенно прославляя чай своей родины. Он писал: «Чай „Шуанцзин“ с родины в горной долине — один глоток, и три дня хвалы».\n\nОн отправлял чай Шуанцзин в дар своему учителю Су Ши, а также друзьям Оуян Сю и Сыма Гуану. Оуян Сю в «Гуйтянь лу» записал: «После годов Цзинъю белопочечный чай Шуанцзин из Хунчжоу постепенно возвысился… его качество намного превзошло Жичжу, и он стал лучшим травяным чаем». Он же написал стихотворение «Чай Шуанцзин»: «Чиста вода Западной реки, стары речные камни; чай растёт на камне, словно когти феникса… десять цзинь чая взращивают один лян почки».\n\nСунский учёный Е Мэндэ писал в «Бишу лухуа»: «Высший сорт травяного чая — только Шуанцзин и Гучжу». В «Сун ши» (трактат о продовольствии и товарах) названо всего шесть знаменитых чаёв начала Южной Сун, и среди них — «Хуанлун и Шуанцзин из Лунсина, оба называемые непревзойдёнными». Шуанцзин был податным чаем при династии Сун.\n\nВ те времена чай Шуанцзин был даром, которым обменивались учёные люди. Его продавали не рекламой — он расходился строка стихов.\n\nПрошло тысячу лет: колодцы остались, деревня осталась, осталось и мастерство. Мы лишь снова выносим этот чай к людям."
+        },
+        "tags": {
+          "zh": [
+            "黄庭坚",
+            "《归田录》",
+            "草茶第一"
+          ],
+          "en": [
+            "Huang Tingjian",
+            "Guitian Lu",
+            "Finest Grass Tea"
+          ],
+          "ru": [
+            "Хуан Тинцзянь",
+            "Гуйтянь лу",
+            "Лучший травяной чай"
+          ]
+        }
       },
       "specs": [
         {
@@ -209,62 +233,62 @@
           }
         }
       ],
-      "subcategory": "green",
-      "story": {
-        "era": {
-          "zh": "北宋 · 黄庭坚故里",
-          "en": "Northern Song · Home of Huang Tingjian",
-          "ru": "Северная Сун · родина Хуан Тинцзяня"
-        },
-        "title": {
-          "zh": "一口井，写了一千年的诗",
-          "en": "A Well That Inspired a Thousand Years of Poetry",
-          "ru": "Колодец, что вдохновил тысячу лет поэзии"
-        },
-        "body": {
-          "zh": "双井村在修水城西，村口有口古井，井水清冽，村民分上下游各取一井，故名「双井」。\n\n北宋大诗人黄庭坚就出生在这里。他是江西诗派的开山之祖，一生爱茶，写过大量咏茶诗，尤其推崇家乡的茶。他写：「山谷家乡双井茶，一啜犹须三日夸。」——喝一口，值得夸上三天。\n\n他把双井茶分赠给老师苏轼、友人欧阳修与司马光。欧阳修在《归田录》里记载：「自景祐已后，洪州双井白芽渐盛……其品远出日注上，遂为草茶第一。」他还专门写过一首《双井茶》：「西江水清江石老，石上生茶如凤爪……十斤茶养一两芽。」\n\n宋人叶梦得《避暑录话》称：「草茶极品惟双井、顾渚。」《宋史·食货志》列南宋初年名茶仅六种，其中便有「隆兴之黄龙、双井，皆号绝品也」。双井茶在宋代即为贡茶之一。\n\n那时候的双井茶，是文人之间往来的礼物。它不是靠广告卖出去的，是靠一句一句诗传出去的。\n\n一千年过去，井还在，村子还在，制茶的手艺也还在。我们做的，只是把这份茶重新拿出来。",
-          "en": "Shuangjing Village lies west of Xiushui town. At its entrance is an ancient well of clear, cold water; villagers drew from two wells upstream and downstream, and the place took its name from them — \"Twin Wells\".\n\nThe great Northern Song poet Huang Tingjian was born here. Founder of the Jiangxi School of Poetry, he loved tea all his life and wrote many poems about it, above all in praise of the tea of his home. He wrote: \"The twin-well tea of my mountain-valley home — one sip deserves three days of praise.\"\n\nHe sent Shuangjing tea as a gift to his teacher Su Shi and to his friends Ouyang Xiu and Sima Guang. In Guitian Lu, Ouyang Xiu recorded: \"After the Jingyou era, the white-bud tea of Hongzhou's Twin Wells steadily rose… its quality far surpassed Rizhu, and it became the finest grass tea.\" Ouyang Xiu also wrote a poem, \"Twin Wells Tea\": \"Clear the West River water, old the river stones; tea grows on the stone like phoenix claws… ten jin of tea nourish one liang of bud.\"\n\nThe Song scholar Ye Mengde wrote in Bishu Luhua: \"The utmost grade of grass tea is only Twin Wells and Guzhu.\" The Song Shi (Treatise on Food and Commodities) lists just six famous teas of the early Southern Song, among them \"Huanglong and Shuangjing of Longxing, both called unsurpassed.\" Shuangjing was tribute tea in the Song.\n\nIn those days, Twin Wells tea was a gift exchanged among men of letters. It was not sold by advertising; it travelled on line after line of poetry.\n\nA thousand years on, the wells remain, the village remains, and the craft remains. What we do is simply bring this tea out again.",
-          "ru": "Деревня Шуанцзин лежит к западу от города Сюшуй. У её входа — древний колодец с чистой холодной водой; жители брали воду из двух колодцев — выше и ниже по течению, отсюда и название «Два колодца».\n\nЗдесь родился великий поэт Северной Сун Хуан Тинцзянь. Основоположник цзянсийской поэтической школы, он всю жизнь любил чай и написал множество стихов о нём, особенно прославляя чай своей родины. Он писал: «Чай „Шуанцзин“ с родины в горной долине — один глоток, и три дня хвалы».\n\nОн отправлял чай Шуанцзин в дар своему учителю Су Ши, а также друзьям Оуян Сю и Сыма Гуану. Оуян Сю в «Гуйтянь лу» записал: «После годов Цзинъю белопочечный чай Шуанцзин из Хунчжоу постепенно возвысился… его качество намного превзошло Жичжу, и он стал лучшим травяным чаем». Он же написал стихотворение «Чай Шуанцзин»: «Чиста вода Западной реки, стары речные камни; чай растёт на камне, словно когти феникса… десять цзинь чая взращивают один лян почки».\n\nСунский учёный Е Мэндэ писал в «Бишу лухуа»: «Высший сорт травяного чая — только Шуанцзин и Гучжу». В «Сун ши» (трактат о продовольствии и товарах) названо всего шесть знаменитых чаёв начала Южной Сун, и среди них — «Хуанлун и Шуанцзин из Лунсина, оба называемые непревзойдёнными». Шуанцзин был податным чаем при династии Сун.\n\nВ те времена чай Шуанцзин был даром, которым обменивались учёные люди. Его продавали не рекламой — он расходился строка стихов.\n\nПрошло тысячу лет: колодцы остались, деревня осталась, осталось и мастерство. Мы лишь снова выносим этот чай к людям."
-        },
-        "tags": {
-          "zh": [
-            "黄庭坚",
-            "《归田录》",
-            "草茶第一"
-          ],
-          "en": [
-            "Huang Tingjian",
-            "Guitian Lu",
-            "Finest Grass Tea"
-          ],
-          "ru": [
-            "Хуан Тинцзянь",
-            "Гуйтянь лу",
-            "Лучший травяной чай"
-          ]
-        }
-      }
+      "subtitle": {
+        "zh": "高山云雾 · 清香回甘",
+        "en": "High-mountain · Clean & Sweet",
+        "ru": "Высокогорный · чистый вкус"
+      },
+      "id": "tea-shuangjing",
+      "image": "assets/img/img_7940.jpg",
+      "category": "tea",
+      "subcategory": "green"
     },
     {
-      "id": "tea-lushan",
-      "category": "tea",
-      "published": true,
-      "order": 3,
-      "image": "assets/img/product-lushan.jpg",
       "name": {
         "zh": "庐山云雾茶",
         "en": "Lushan Yunwu Tea",
         "ru": "Чай Лушань Юньу"
       },
-      "subtitle": {
-        "zh": "中国十大名茶 · 高山云雾",
-        "en": "Top-10 Chinese Tea · Cloud-grown",
-        "ru": "Топ-10 чаёв Китая"
-      },
+      "published": true,
+      "order": 3,
       "desc": {
         "zh": "自 1959 年起位列中国十大名茶。香凛持久，醇厚味甘，是高端礼赠渠道的常选品类。",
         "en": "Listed among China's Top Ten Teas since 1959. A high, long-lasting aroma and a mellow sweet taste — a standard choice for premium gifting.",
         "ru": "С 1959 года входит в десятку лучших чаёв Китая. Высокий долгий аромат, мягкий сладкий вкус — стандартный выбор для премиальных подарков."
+      },
+      "story": {
+        "era": {
+          "zh": "晋 · 慧远法师以来",
+          "en": "Since the Jin Dynasty",
+          "ru": "С династии Цзинь"
+        },
+        "title": {
+          "zh": "云雾里长出来的茶",
+          "en": "Tea Grown Inside the Clouds",
+          "ru": "Чай, выросший в облаках"
+        },
+        "body": {
+          "zh": "庐山北临长江，南靠鄱阳湖。水汽常年往山上走，一年有两百多天云雾不散。\n\n茶树种在这样的环境里，日照被云雾筛过，变得温和。茶树因此长得慢，叶片厚，内含物质积累得多。做出来的绿茶，滋味鲜爽，回甘明显，香气清高带豆香。\n\n庐山云雾的名字，不是包装出来的，是地理条件直接给的。\n\n晋代慧远法师在庐山东林寺结社，此后山中寺院多有种茶传统。僧人采茶制茶，自饮亦待客，这个传统延续了一千多年。",
+          "en": "Lushan faces the Yangtze to the north and Poyang Lake to the south. Moisture rises into the mountain year-round; cloud and mist linger more than two hundred days a year.\n\nTea bushes growing here receive sunlight filtered through cloud — gentler, softer. The plants grow slowly, leaves thicken, and more compounds accumulate. The resulting green tea is fresh and brisk with a pronounced sweet aftertaste and a clean, bean-like aroma.\n\nThe name 'Lushan Cloud and Mist' is not a marketing invention. It comes directly from the geography.\n\nSince the Jin dynasty monk Huiyuan founded his community at Donglin Temple on Lushan, the mountain's monasteries have kept a tradition of growing tea. Monks picked and made tea for themselves and for guests — a practice that continued for over a thousand years.",
+          "ru": "Лушань обращён к Янцзы на севере и к озеру Поянху на юге. Влага поднимается в горы круглый год; облака и туман держатся более двухсот дней в году.\n\nЧайные кусты здесь получают солнечный свет, отфильтрованный облаками, — более мягкий. Растения растут медленно, листья утолщаются, накапливается больше веществ. Зелёный чай получается свежим, с ярким сладким послевкусием и чистым бобовым ароматом.\n\nНазвание «Лушань Юньу» («Облака и туман Лушани») — не маркетинговая выдумка. Оно дано самой географией.\n\nС времён монаха Хуэйюань, основавшего общину в храме Дунлинь на Лушани, горные монастыри хранят традицию выращивания чая. Монахи собирали и готовили чай для себя и для гостей — эта практика продолжалась более тысячи лет."
+        },
+        "tags": {
+          "zh": [
+            "高山云雾",
+            "寺院茶传统",
+            "地理标志"
+          ],
+          "en": [
+            "Cloud & Mist",
+            "Monastery Tea Tradition",
+            "Terroir"
+          ],
+          "ru": [
+            "Облака и туман",
+            "Монастырская традиция",
+            "Терруар"
+          ]
+        }
       },
       "specs": [
         {
@@ -316,62 +340,62 @@
           }
         }
       ],
-      "subcategory": "green",
-      "story": {
-        "era": {
-          "zh": "晋 · 慧远法师以来",
-          "en": "Since the Jin Dynasty",
-          "ru": "С династии Цзинь"
-        },
-        "title": {
-          "zh": "云雾里长出来的茶",
-          "en": "Tea Grown Inside the Clouds",
-          "ru": "Чай, выросший в облаках"
-        },
-        "body": {
-          "zh": "庐山北临长江，南靠鄱阳湖。水汽常年往山上走，一年有两百多天云雾不散。\n\n茶树种在这样的环境里，日照被云雾筛过，变得温和。茶树因此长得慢，叶片厚，内含物质积累得多。做出来的绿茶，滋味鲜爽，回甘明显，香气清高带豆香。\n\n庐山云雾的名字，不是包装出来的，是地理条件直接给的。\n\n晋代慧远法师在庐山东林寺结社，此后山中寺院多有种茶传统。僧人采茶制茶，自饮亦待客，这个传统延续了一千多年。",
-          "en": "Lushan faces the Yangtze to the north and Poyang Lake to the south. Moisture rises into the mountain year-round; cloud and mist linger more than two hundred days a year.\n\nTea bushes growing here receive sunlight filtered through cloud — gentler, softer. The plants grow slowly, leaves thicken, and more compounds accumulate. The resulting green tea is fresh and brisk with a pronounced sweet aftertaste and a clean, bean-like aroma.\n\nThe name 'Lushan Cloud and Mist' is not a marketing invention. It comes directly from the geography.\n\nSince the Jin dynasty monk Huiyuan founded his community at Donglin Temple on Lushan, the mountain's monasteries have kept a tradition of growing tea. Monks picked and made tea for themselves and for guests — a practice that continued for over a thousand years.",
-          "ru": "Лушань обращён к Янцзы на севере и к озеру Поянху на юге. Влага поднимается в горы круглый год; облака и туман держатся более двухсот дней в году.\n\nЧайные кусты здесь получают солнечный свет, отфильтрованный облаками, — более мягкий. Растения растут медленно, листья утолщаются, накапливается больше веществ. Зелёный чай получается свежим, с ярким сладким послевкусием и чистым бобовым ароматом.\n\nНазвание «Лушань Юньу» («Облака и туман Лушани») — не маркетинговая выдумка. Оно дано самой географией.\n\nС времён монаха Хуэйюань, основавшего общину в храме Дунлинь на Лушани, горные монастыри хранят традицию выращивания чая. Монахи собирали и готовили чай для себя и для гостей — эта практика продолжалась более тысячи лет."
-        },
-        "tags": {
-          "zh": [
-            "高山云雾",
-            "寺院茶传统",
-            "地理标志"
-          ],
-          "en": [
-            "Cloud & Mist",
-            "Monastery Tea Tradition",
-            "Terroir"
-          ],
-          "ru": [
-            "Облака и туман",
-            "Монастырская традиция",
-            "Терруар"
-          ]
-        }
-      }
+      "subtitle": {
+        "zh": "中国十大名茶 · 高山云雾",
+        "en": "Top-10 Chinese Tea · Cloud-grown",
+        "ru": "Топ-10 чаёв Китая"
+      },
+      "id": "tea-lushan",
+      "image": "assets/img/庐山云雾茶5.jpg",
+      "category": "tea",
+      "subcategory": "green"
     },
     {
-      "id": "tea-oem",
-      "category": "tea",
-      "published": true,
-      "order": 4,
-      "image": "assets/img/supply-1.jpg",
       "name": {
         "zh": "袋泡茶 · 果茶 · 花草茶",
         "en": "Tea Bags · Fruit · Herbal",
         "ru": "Пакетики · фруктовые · травяные"
       },
-      "subtitle": {
-        "zh": "OEM / ODM 贴牌代工",
-        "en": "OEM / ODM Contract Manufacturing",
-        "ru": "OEM / ODM контрактное производство"
-      },
+      "published": true,
+      "order": 4,
       "desc": {
         "zh": "合作生产企业持有食品生产许可证，许可范围明确涵盖袋泡茶、调味茶（混合调味茶）、代用茶（叶类／花类／混合类）。可做滤纸包、三角尼龙包与定制外盒。",
         "en": "Our partner manufacturer holds a food production licence explicitly covering tea bags, blended (flavoured) tea and herbal tea (leaf / flower / blended). Filter paper sachets, nylon pyramid bags and custom outer boxes available.",
         "ru": "Производственный партнёр имеет лицензию, явно покрывающую пакетированный, купажированный и травяной чай (листовой / цветочный / смешанный). Пакетики, нейлоновые пирамидки, брендированные коробки."
+      },
+      "story": {
+        "era": {
+          "zh": "现代 · 许可品类",
+          "en": "Modern · Licensed Categories",
+          "ru": "Современность · Лицензированные категории"
+        },
+        "title": {
+          "zh": "许可证上写着的，不是我们编的",
+          "en": "Written on the Licence, Not Invented by Us",
+          "ru": "Написано в лицензии, а не придумано нами"
+        },
+        "body": {
+          "zh": "很多供应商说「我们也能做果茶、花草茶」，但拿不出依据。\n\n我们的生产许可证 SC11436042410016 上，明确列着四类：茶叶、袋泡茶、调味茶、代用茶（叶类 / 花类 / 混合类）。\n\n这意味着果茶、花茶、茶包不是口头承诺，是许可范围内白纸黑字写着的品类。\n\n对代工客户来说，这省掉了尽调环节中最麻烦的一步——不用去核实我们到底有没有资质做这个东西。",
+          "en": "Many suppliers say 'we can also do fruit and herbal teas' — but cannot produce evidence.\n\nOur production licence SC11436042410016 lists four categories explicitly: tea, bagged tea, flavoured tea, and substitute tea (leaf / flower / blended).\n\nThis means fruit teas, flower teas and tea bags are not verbal promises. They are categories written in black and white within the licensed scope.\n\nFor OEM clients, this removes the most tedious step in due diligence — no need to verify whether we are actually licensed to make the product.",
+          "ru": "Многие поставщики говорят: «Мы тоже можем делать фруктовый и травяной чай», — но не могут это подтвердить.\n\nВ нашей лицензии на производство SC11436042410016 чётко указаны четыре категории: чай, пакетированный чай, ароматизированный чай и чай-заменитель (листовой / цветочный / смешанный).\n\nЭто значит, что фруктовый чай, цветочный чай и пакетированный чай — не устные обещания, а категории, чёрным по белому прописанные в лицензии.\n\nДля OEM-клиентов это устраняет самый трудоёмкий этап проверки — не нужно выяснять, есть ли у нас лицензия на такой продукт."
+        },
+        "tags": {
+          "zh": [
+            "SC11436042410016",
+            "四类许可",
+            "OEM/ODM"
+          ],
+          "en": [
+            "SC11436042410016",
+            "Four Licensed Categories",
+            "OEM/ODM"
+          ],
+          "ru": [
+            "SC11436042410016",
+            "Четыре категории",
+            "OEM/ODM"
+          ]
+        }
       },
       "specs": [
         {
@@ -423,41 +447,15 @@
           }
         }
       ],
-      "subcategory": "fruit",
-      "story": {
-        "era": {
-          "zh": "现代 · 许可品类",
-          "en": "Modern · Licensed Categories",
-          "ru": "Современность · Лицензированные категории"
-        },
-        "title": {
-          "zh": "许可证上写着的，不是我们编的",
-          "en": "Written on the Licence, Not Invented by Us",
-          "ru": "Написано в лицензии, а не придумано нами"
-        },
-        "body": {
-          "zh": "很多供应商说「我们也能做果茶、花草茶」，但拿不出依据。\n\n我们的生产许可证 SC11436042410016 上，明确列着四类：茶叶、袋泡茶、调味茶、代用茶（叶类 / 花类 / 混合类）。\n\n这意味着果茶、花茶、茶包不是口头承诺，是许可范围内白纸黑字写着的品类。\n\n对代工客户来说，这省掉了尽调环节中最麻烦的一步——不用去核实我们到底有没有资质做这个东西。",
-          "en": "Many suppliers say 'we can also do fruit and herbal teas' — but cannot produce evidence.\n\nOur production licence SC11436042410016 lists four categories explicitly: tea, bagged tea, flavoured tea, and substitute tea (leaf / flower / blended).\n\nThis means fruit teas, flower teas and tea bags are not verbal promises. They are categories written in black and white within the licensed scope.\n\nFor OEM clients, this removes the most tedious step in due diligence — no need to verify whether we are actually licensed to make the product.",
-          "ru": "Многие поставщики говорят: «Мы тоже можем делать фруктовый и травяной чай», — но не могут это подтвердить.\n\nВ нашей лицензии на производство SC11436042410016 чётко указаны четыре категории: чай, пакетированный чай, ароматизированный чай и чай-заменитель (листовой / цветочный / смешанный).\n\nЭто значит, что фруктовый чай, цветочный чай и пакетированный чай — не устные обещания, а категории, чёрным по белому прописанные в лицензии.\n\nДля OEM-клиентов это устраняет самый трудоёмкий этап проверки — не нужно выяснять, есть ли у нас лицензия на такой продукт."
-        },
-        "tags": {
-          "zh": [
-            "SC11436042410016",
-            "四类许可",
-            "OEM/ODM"
-          ],
-          "en": [
-            "SC11436042410016",
-            "Four Licensed Categories",
-            "OEM/ODM"
-          ],
-          "ru": [
-            "SC11436042410016",
-            "Четыре категории",
-            "OEM/ODM"
-          ]
-        }
-      }
+      "subtitle": {
+        "zh": "OEM / ODM 贴牌代工",
+        "en": "OEM / ODM Contract Manufacturing",
+        "ru": "OEM / ODM контрактное производство"
+      },
+      "id": "tea-oem",
+      "image": "assets/img/茶包.jpg",
+      "category": "tea",
+      "subcategory": "fruit"
     }
   ],
   "subcategories": [
