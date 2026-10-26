@@ -37,53 +37,52 @@ collections:
             required: false
             summary: "{{fields.key}}"
             fields:
-              - { required: false,  label: "英文标识（例：tea / porcelain / machinery，不要用中文）", name: "key", widget: "string"  }
-              - { required: false,  label: "中文名", name: "zh", widget: "string"  }
-              - { required: false,  label: "🇬🇧 English", name: "en", widget: "string"  }
-              - { required: false,  label: "🇷🇺 Русский", name: "ru", widget: "string"  }
+              - { label: "英文标识（例：tea / porcelain / machinery，不要用中文）", name: "key", widget: "string" }
+              - { label: "中文名", name: "zh", widget: "string" }
+              - { label: "🇬🇧 English", name: "en", widget: "string" }
+              - { label: "🇷🇺 Русский", name: "ru", widget: "string" }
           - label: "空分类提示语"
             name: "emptyText"
             widget: "object"
             required: false
             fields:
-              - { required: false,  label: "🇨🇳 中文", name: "zh", widget: "string"  }
-              - { required: false,  label: "🇬🇧 English", name: "en", widget: "string"  }
-              - { required: false,  label: "🇷🇺 Русский", name: "ru", widget: "string"  }
+              - { label: "🇨🇳 中文", name: "zh", widget: "string" }
+              - { label: "🇬🇧 English", name: "en", widget: "string" }
+              - { label: "🇷🇺 Русский", name: "ru", widget: "string" }
           - label: "商品列表"
             name: "products"
             widget: "list"
             required: false
             summary: "{{fields.name.zh}}"
             fields:
-              - { required: false,  label: "内部标识（英文数字，唯一即可）", name: "id", widget: "string"  }
-              - { required: false,  label: "所属品类（填上面的英文标识，例：tea）", name: "category", widget: "string", default: "tea"  }
-              - { required: false,  label: "排序（数字小的排前面）", name: "order", widget: "number", default: 99  }
-              - { required: false,  label: "上架（取消勾选即从前台隐藏，不删除）", name: "published", widget: "boolean", default: True  }
+              - { label: "内部标识（英文数字，唯一即可）", name: "id", widget: "string" }
+              - { label: "所属品类（填上面的英文标识，例：tea）", name: "category", widget: "string", default: "tea" }
+              - { label: "排序（数字小的排前面）", name: "order", widget: "number", default: 99 }
+              - { label: "上架（取消勾选即从前台隐藏，不删除）", name: "published", widget: "boolean", default: True }
               - { label: "🖼️ 商品主图", name: "image", widget: "image", required: false }
               - label: "商品名称（中 / 英 / 俄）"
                 name: "name"
                 widget: "object"
-                required: false
                 fields:
-                  - { required: false,  label: "🇨🇳 中文", name: "zh", widget: "string"  }
-                  - { required: false,  label: "🇬🇧 English", name: "en", widget: "string"  }
-                  - { required: false,  label: "🇷🇺 Русский", name: "ru", widget: "string"  }
+                  - { label: "🇨🇳 中文", name: "zh", widget: "string" }
+                  - { label: "🇬🇧 English", name: "en", widget: "string" }
+                  - { label: "🇷🇺 Русский", name: "ru", widget: "string" }
               - label: "副标题 / 卖点"
                 name: "subtitle"
                 widget: "object"
                 required: false
                 fields:
-                  - { required: false,  label: "🇨🇳 中文", name: "zh", widget: "string"  }
-                  - { required: false,  label: "🇬🇧 English", name: "en", widget: "string"  }
-                  - { required: false,  label: "🇷🇺 Русский", name: "ru", widget: "string"  }
+                  - { label: "🇨🇳 中文", name: "zh", widget: "string" }
+                  - { label: "🇬🇧 English", name: "en", widget: "string" }
+                  - { label: "🇷🇺 Русский", name: "ru", widget: "string" }
               - label: "商品描述"
                 name: "desc"
                 widget: "object"
                 required: false
                 fields:
-                  - { required: false,  label: "🇨🇳 中文", name: "zh", widget: "text"  }
-                  - { required: false,  label: "🇬🇧 English", name: "en", widget: "text"  }
-                  - { required: false,  label: "🇷🇺 Русский", name: "ru", widget: "text"  }
+                  - { label: "🇨🇳 中文", name: "zh", widget: "text" }
+                  - { label: "🇬🇧 English", name: "en", widget: "text" }
+                  - { label: "🇷🇺 Русский", name: "ru", widget: "text" }
               - label: "参数表（可增删行；瓷器、泵可自由定义参数名）"
                 name: "specs"
                 widget: "list"
@@ -93,19 +92,17 @@ collections:
                   - label: "参数名"
                     name: "k"
                     widget: "object"
-                    required: false
                     fields:
-                      - { required: false,  label: "🇨🇳 中文", name: "zh", widget: "string"  }
-                      - { required: false,  label: "🇬🇧 English", name: "en", widget: "string"  }
-                      - { required: false,  label: "🇷🇺 Русский", name: "ru", widget: "string"  }
+                      - { label: "🇨🇳 中文", name: "zh", widget: "string" }
+                      - { label: "🇬🇧 English", name: "en", widget: "string" }
+                      - { label: "🇷🇺 Русский", name: "ru", widget: "string" }
                   - label: "参数值"
                     name: "v"
                     widget: "object"
-                    required: false
                     fields:
-                      - { required: false,  label: "🇨🇳 中文", name: "zh", widget: "string"  }
-                      - { required: false,  label: "🇬🇧 English", name: "en", widget: "string"  }
-                      - { required: false,  label: "🇷🇺 Русский", name: "ru", widget: "string"  }
+                      - { label: "🇨🇳 中文", name: "zh", widget: "string" }
+                      - { label: "🇬🇧 English", name: "en", widget: "string" }
+                      - { label: "🇷🇺 Русский", name: "ru", widget: "string" }
 
   - name: "site"
     label: "⚙️ 站点内容"
@@ -119,34 +116,34 @@ collections:
             widget: "object"
             required: false
             fields:
-              - { required: false,  label: "🇨🇳 中文", name: "zh", widget: "string"  }
-              - { required: false,  label: "🇬🇧 English", name: "en", widget: "string"  }
-              - { required: false,  label: "🇷🇺 Русский", name: "ru", widget: "string"  }
+              - { label: "🇨🇳 中文", name: "zh", widget: "string" }
+              - { label: "🇬🇧 English", name: "en", widget: "string" }
+              - { label: "🇷🇺 Русский", name: "ru", widget: "string" }
           - label: "【首屏】副标题"
             name: "hero_subs"
             widget: "object"
             required: false
             fields:
-              - { required: false,  label: "🇨🇳 中文", name: "zh", widget: "string"  }
-              - { required: false,  label: "🇬🇧 English", name: "en", widget: "string"  }
-              - { required: false,  label: "🇷🇺 Русский", name: "ru", widget: "string"  }
+              - { label: "🇨🇳 中文", name: "zh", widget: "string" }
+              - { label: "🇬🇧 English", name: "en", widget: "string" }
+              - { label: "🇷🇺 Русский", name: "ru", widget: "string" }
           - { label: "🖼️ 首屏背景图", name: "hero_img", widget: "image", required: false }
           - label: "【关于】标题"
             name: "about_titles"
             widget: "object"
             required: false
             fields:
-              - { required: false,  label: "🇨🇳 中文", name: "zh", widget: "string"  }
-              - { required: false,  label: "🇬🇧 English", name: "en", widget: "string"  }
-              - { required: false,  label: "🇷🇺 Русский", name: "ru", widget: "string"  }
+              - { label: "🇨🇳 中文", name: "zh", widget: "string" }
+              - { label: "🇬🇧 English", name: "en", widget: "string" }
+              - { label: "🇷🇺 Русский", name: "ru", widget: "string" }
           - label: "【关于】正文"
             name: "about_descs"
             widget: "object"
             required: false
             fields:
-              - { required: false,  label: "🇨🇳 中文", name: "zh", widget: "text"  }
-              - { required: false,  label: "🇬🇧 English", name: "en", widget: "text"  }
-              - { required: false,  label: "🇷🇺 Русский", name: "ru", widget: "text"  }
+              - { label: "🇨🇳 中文", name: "zh", widget: "text" }
+              - { label: "🇬🇧 English", name: "en", widget: "text" }
+              - { label: "🇷🇺 Русский", name: "ru", widget: "text" }
           - { label: "🖼️ 关于配图", name: "about_img", widget: "image", required: false }
           - label: "【关于】经营范围清单（可增删）"
             name: "qual_items"
@@ -154,58 +151,58 @@ collections:
             required: false
             summary: "{{fields.zh}}"
             fields:
-              - { required: false,  label: "🇨🇳 中文", name: "zh", widget: "string"  }
-              - { required: false,  label: "🇬🇧 English", name: "en", widget: "string"  }
-              - { required: false,  label: "🇷🇺 Русский", name: "ru", widget: "string"  }
+              - { label: "🇨🇳 中文", name: "zh", widget: "string" }
+              - { label: "🇬🇧 English", name: "en", widget: "string" }
+              - { label: "🇷🇺 Русский", name: "ru", widget: "string" }
           - label: "【关于】经营范围下方小字"
             name: "qual_note"
             widget: "object"
             required: false
             fields:
-              - { required: false,  label: "🇨🇳 中文", name: "zh", widget: "text"  }
-              - { required: false,  label: "🇬🇧 English", name: "en", widget: "text"  }
-              - { required: false,  label: "🇷🇺 Русский", name: "ru", widget: "text"  }
+              - { label: "🇨🇳 中文", name: "zh", widget: "text" }
+              - { label: "🇬🇧 English", name: "en", widget: "text" }
+              - { label: "🇷🇺 Русский", name: "ru", widget: "text" }
           - label: "【能力】标题"
             name: "cap_title"
             widget: "object"
             required: false
             fields:
-              - { required: false,  label: "🇨🇳 中文", name: "zh", widget: "string"  }
-              - { required: false,  label: "🇬🇧 English", name: "en", widget: "string"  }
-              - { required: false,  label: "🇷🇺 Русский", name: "ru", widget: "string"  }
+              - { label: "🇨🇳 中文", name: "zh", widget: "string" }
+              - { label: "🇬🇧 English", name: "en", widget: "string" }
+              - { label: "🇷🇺 Русский", name: "ru", widget: "string" }
           - label: "【能力】导语"
             name: "cap_lead"
             widget: "object"
             required: false
             fields:
-              - { required: false,  label: "🇨🇳 中文", name: "zh", widget: "string"  }
-              - { required: false,  label: "🇬🇧 English", name: "en", widget: "string"  }
-              - { required: false,  label: "🇷🇺 Русский", name: "ru", widget: "string"  }
+              - { label: "🇨🇳 中文", name: "zh", widget: "string" }
+              - { label: "🇬🇧 English", name: "en", widget: "string" }
+              - { label: "🇷🇺 Русский", name: "ru", widget: "string" }
           - label: "【能力】流程步骤（可增删，按顺序自动编号）"
             name: "cap_items"
             widget: "list"
             required: false
             summary: "{{fields.zh}}"
             fields:
-              - { required: false,  label: "🇨🇳 中文", name: "zh", widget: "string"  }
-              - { required: false,  label: "🇬🇧 English", name: "en", widget: "string"  }
-              - { required: false,  label: "🇷🇺 Русский", name: "ru", widget: "string"  }
+              - { label: "🇨🇳 中文", name: "zh", widget: "string" }
+              - { label: "🇬🇧 English", name: "en", widget: "string" }
+              - { label: "🇷🇺 Русский", name: "ru", widget: "string" }
           - label: "【能力】底部说明"
             name: "cap_note"
             widget: "object"
             required: false
             fields:
-              - { required: false,  label: "🇨🇳 中文", name: "zh", widget: "text"  }
-              - { required: false,  label: "🇬🇧 English", name: "en", widget: "text"  }
-              - { required: false,  label: "🇷🇺 Русский", name: "ru", widget: "text"  }
+              - { label: "🇨🇳 中文", name: "zh", widget: "text" }
+              - { label: "🇬🇧 English", name: "en", widget: "text" }
+              - { label: "🇷🇺 Русский", name: "ru", widget: "text" }
           - label: "【为什么选我们】标题"
             name: "why_title"
             widget: "object"
             required: false
             fields:
-              - { required: false,  label: "🇨🇳 中文", name: "zh", widget: "string"  }
-              - { required: false,  label: "🇬🇧 English", name: "en", widget: "string"  }
-              - { required: false,  label: "🇷🇺 Русский", name: "ru", widget: "string"  }
+              - { label: "🇨🇳 中文", name: "zh", widget: "string" }
+              - { label: "🇬🇧 English", name: "en", widget: "string" }
+              - { label: "🇷🇺 Русский", name: "ru", widget: "string" }
           - label: "【为什么选我们】条目（可增删）"
             name: "why_items"
             widget: "list"
@@ -215,27 +212,25 @@ collections:
               - label: "标题"
                 name: "title"
                 widget: "object"
-                required: false
                 fields:
-                  - { required: false,  label: "🇨🇳 中文", name: "zh", widget: "string"  }
-                  - { required: false,  label: "🇬🇧 English", name: "en", widget: "string"  }
-                  - { required: false,  label: "🇷🇺 Русский", name: "ru", widget: "string"  }
+                  - { label: "🇨🇳 中文", name: "zh", widget: "string" }
+                  - { label: "🇬🇧 English", name: "en", widget: "string" }
+                  - { label: "🇷🇺 Русский", name: "ru", widget: "string" }
               - label: "说明"
                 name: "text"
                 widget: "object"
-                required: false
                 fields:
-                  - { required: false,  label: "🇨🇳 中文", name: "zh", widget: "text"  }
-                  - { required: false,  label: "🇬🇧 English", name: "en", widget: "text"  }
-                  - { required: false,  label: "🇷🇺 Русский", name: "ru", widget: "text"  }
+                  - { label: "🇨🇳 中文", name: "zh", widget: "text" }
+                  - { label: "🇬🇧 English", name: "en", widget: "text" }
+                  - { label: "🇷🇺 Русский", name: "ru", widget: "text" }
           - label: "【合作条款】标题"
             name: "term_title"
             widget: "object"
             required: false
             fields:
-              - { required: false,  label: "🇨🇳 中文", name: "zh", widget: "string"  }
-              - { required: false,  label: "🇬🇧 English", name: "en", widget: "string"  }
-              - { required: false,  label: "🇷🇺 Русский", name: "ru", widget: "string"  }
+              - { label: "🇨🇳 中文", name: "zh", widget: "string" }
+              - { label: "🇬🇧 English", name: "en", widget: "string" }
+              - { label: "🇷🇺 Русский", name: "ru", widget: "string" }
           - label: "【合作条款】条目（可增删）"
             name: "term_items"
             widget: "list"
@@ -245,27 +240,25 @@ collections:
               - label: "标题"
                 name: "title"
                 widget: "object"
-                required: false
                 fields:
-                  - { required: false,  label: "🇨🇳 中文", name: "zh", widget: "string"  }
-                  - { required: false,  label: "🇬🇧 English", name: "en", widget: "string"  }
-                  - { required: false,  label: "🇷🇺 Русский", name: "ru", widget: "string"  }
+                  - { label: "🇨🇳 中文", name: "zh", widget: "string" }
+                  - { label: "🇬🇧 English", name: "en", widget: "string" }
+                  - { label: "🇷🇺 Русский", name: "ru", widget: "string" }
               - label: "说明"
                 name: "text"
                 widget: "object"
-                required: false
                 fields:
-                  - { required: false,  label: "🇨🇳 中文", name: "zh", widget: "text"  }
-                  - { required: false,  label: "🇬🇧 English", name: "en", widget: "text"  }
-                  - { required: false,  label: "🇷🇺 Русский", name: "ru", widget: "text"  }
+                  - { label: "🇨🇳 中文", name: "zh", widget: "text" }
+                  - { label: "🇬🇧 English", name: "en", widget: "text" }
+                  - { label: "🇷🇺 Русский", name: "ru", widget: "text" }
           - label: "【合作条款】底部说明"
             name: "term_note"
             widget: "object"
             required: false
             fields:
-              - { required: false,  label: "🇨🇳 中文", name: "zh", widget: "text"  }
-              - { required: false,  label: "🇬🇧 English", name: "en", widget: "text"  }
-              - { required: false,  label: "🇷🇺 Русский", name: "ru", widget: "text"  }
+              - { label: "🇨🇳 中文", name: "zh", widget: "text" }
+              - { label: "🇬🇧 English", name: "en", widget: "text" }
+              - { label: "🇷🇺 Русский", name: "ru", widget: "text" }
           - label: "常见问题（可增删）"
             name: "faq_list"
             widget: "list"
@@ -275,27 +268,25 @@ collections:
               - label: "问题"
                 name: "q"
                 widget: "object"
-                required: false
                 fields:
-                  - { required: false,  label: "🇨🇳 中文", name: "zh", widget: "string"  }
-                  - { required: false,  label: "🇬🇧 English", name: "en", widget: "string"  }
-                  - { required: false,  label: "🇷🇺 Русский", name: "ru", widget: "string"  }
+                  - { label: "🇨🇳 中文", name: "zh", widget: "string" }
+                  - { label: "🇬🇧 English", name: "en", widget: "string" }
+                  - { label: "🇷🇺 Русский", name: "ru", widget: "string" }
               - label: "答案"
                 name: "a"
                 widget: "object"
-                required: false
                 fields:
-                  - { required: false,  label: "🇨🇳 中文", name: "zh", widget: "text"  }
-                  - { required: false,  label: "🇬🇧 English", name: "en", widget: "text"  }
-                  - { required: false,  label: "🇷🇺 Русский", name: "ru", widget: "text"  }
+                  - { label: "🇨🇳 中文", name: "zh", widget: "text" }
+                  - { label: "🇬🇧 English", name: "en", widget: "text" }
+                  - { label: "🇷🇺 Русский", name: "ru", widget: "text" }
           - label: "【联系】地址"
             name: "contact_addr"
             widget: "object"
             required: false
             fields:
-              - { required: false,  label: "🇨🇳 中文", name: "zh", widget: "string"  }
-              - { required: false,  label: "🇬🇧 English", name: "en", widget: "string"  }
-              - { required: false,  label: "🇷🇺 Русский", name: "ru", widget: "string"  }
+              - { label: "🇨🇳 中文", name: "zh", widget: "string" }
+              - { label: "🇬🇧 English", name: "en", widget: "string" }
+              - { label: "🇷🇺 Русский", name: "ru", widget: "string" }
           - { label: "【联系】中国电话", name: "contact_phone_cn", widget: "string", required: false }
           - { label: "【联系】俄罗斯电话", name: "contact_phone_ru", widget: "string", required: false }
           - { label: "【联系】邮箱 1", name: "contact_email_1", widget: "string", required: false }
@@ -306,6 +297,6 @@ collections:
             widget: "object"
             required: false
             fields:
-              - { required: false,  label: "🇨🇳 中文", name: "zh", widget: "string"  }
-              - { required: false,  label: "🇬🇧 English", name: "en", widget: "string"  }
-              - { required: false,  label: "🇷🇺 Русский", name: "ru", widget: "string"  }
+              - { label: "🇨🇳 中文", name: "zh", widget: "string" }
+              - { label: "🇬🇧 English", name: "en", widget: "string" }
+              - { label: "🇷🇺 Русский", name: "ru", widget: "string" }
